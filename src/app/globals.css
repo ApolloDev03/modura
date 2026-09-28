@@ -1,26 +1,120 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* ========================================
+     MODURA BRAND COLORS
+  ======================================== */
+
+  --modura-primary: #0b1d33;
+  --modura-primary-light: #1d3349;
+  --modura-primary-dark: #061322;
+
+  --modura-secondary: #596a79;
+  --modura-secondary-light: #84919c;
+  --modura-secondary-dark: #3e4d5a;
+
+  /* Base */
+  --modura-white: #ffffff;
+  --modura-black: #090d12;
+
+  /* Backgrounds */
+  --modura-off-white: #f7f8f8;
+  --modura-light: #eef1f3;
+
+  /* Gray scale */
+  --modura-gray-100: #f3f4f5;
+  --modura-gray-200: #e5e8ea;
+  --modura-gray-300: #cbd1d5;
+  --modura-gray-400: #9ca6ae;
+  --modura-gray-500: #6f7b84;
+  --modura-gray-600: #4b5660;
+  --modura-gray-700: #303a43;
+
+  /* Borders */
+  --modura-border: #dce1e4;
+
+  /* Fonts */
+  --font-body: var(--font-manrope);
+  --font-heading: var(--font-barlow-condensed);
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  /* Primary */
+
+  --color-modura-primary: var(--modura-primary);
+  --color-modura-primary-light: var(--modura-primary-light);
+  --color-modura-primary-dark: var(--modura-primary-dark);
+
+  /* Secondary */
+
+  --color-modura-secondary: var(--modura-secondary);
+  --color-modura-secondary-light: var(--modura-secondary-light);
+  --color-modura-secondary-dark: var(--modura-secondary-dark);
+
+  /* Base */
+
+  --color-modura-white: var(--modura-white);
+  --color-modura-black: var(--modura-black);
+
+  /* Background */
+
+  --color-modura-off-white: var(--modura-off-white);
+  --color-modura-light: var(--modura-light);
+
+  /* Gray */
+
+  --color-modura-gray-100: var(--modura-gray-100);
+  --color-modura-gray-200: var(--modura-gray-200);
+  --color-modura-gray-300: var(--modura-gray-300);
+  --color-modura-gray-400: var(--modura-gray-400);
+  --color-modura-gray-500: var(--modura-gray-500);
+  --color-modura-gray-600: var(--modura-gray-600);
+  --color-modura-gray-700: var(--modura-gray-700);
+
+  --color-modura-border: var(--modura-border);
+
+  /* Fonts */
+
+  --font-sans: var(--font-body);
+  --font-heading: var(--font-heading);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+/* ========================================
+   BASE
+======================================== */
+
+html {
+  scroll-behavior: smooth;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  margin: 0;
+  background: var(--modura-white);
+  color: var(--modura-black);
+  font-family: var(--font-body), sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+button,
+a,
+input,
+textarea,
+select {
+  font-family: inherit;
+}
+
+a {
+  text-decoration: none;
+}
+
+button {
+  cursor: pointer;
+}
+
+/* ========================================
+   TYPOGRAPHY
+======================================== */
+
+.font-heading {
+  font-family: var(--font-heading), sans-serif;
 }
