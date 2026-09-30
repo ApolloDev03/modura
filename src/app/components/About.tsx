@@ -139,6 +139,7 @@ gap-3
 uppercase
 tracking-[5px]
 text-xs
+font-bold
 text-modura-secondary
 mb-4
 ">
@@ -158,9 +159,10 @@ About Us
 
 
 <h2 className="
-text-5xl
-leading-[1.1]
+mt-4
 font-heading
+text-5xl
+lg:text-6xl
 font-semibold
 text-modura-primary
 ">

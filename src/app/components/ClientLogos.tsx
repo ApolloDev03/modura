@@ -9,46 +9,44 @@ import {
 
 import {
   Autoplay,
-  FreeMode
 } from "swiper/modules";
-
 
 import "swiper/css";
 
 
+import logo1 from "../assets/logo1.jpg";
+import logo2 from "../assets/logo2.jpg";
+import logo3 from "../assets/logo3.png";
+import logo4 from "../assets/logo4.jpg";
+import logo5 from "../assets/logo5.webp";
+import logo6 from "../assets/logo6.jpg";
+import logo7 from "../assets/logo7.jpg";
+import { DraftingCompass } from "lucide-react";
+
+
 
 const clients = [
-
 {
-image:
-"https://images.unsplash.com/photo-1497366811353-6870744d04b2?w=800&q=90"
+logo:logo1
 },
-
 {
-image:
-"https://images.unsplash.com/photo-1503387762-592deb58ef4e?w=800&q=90"
+logo:logo2
 },
-
 {
-image:
-"https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=800&q=90"
+logo:logo3
 },
-
 {
-image:
-"https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=800&q=90"
+logo:logo4
 },
-
 {
-image:
-"https://images.unsplash.com/photo-1511818966892-d7d671e672a2?w=800&q=90"
+logo:logo5
 },
-
 {
-image:
-"https://images.unsplash.com/photo-1497366754035-f200968a6e72?w=800&q=90"
-}
-
+logo:logo6
+},
+{
+logo:logo7
+},
 ];
 
 
@@ -60,18 +58,124 @@ export default function ClientLogoSlider(){
 
 return(
 
-
-<section className="
+<section
+className="
 relative
-w-full
-
 overflow-hidden
-
 bg-white
-
 py-16
+"
 
+>
+
+
+{/* Background Blueprint */}
+
+<div
+className="
+absolute
+right-0
+bottom-0
+h-[300px]
+w-[300px]
+
+bg-modura-light
+
+opacity-40
+
+rounded-full
+
+blur-3xl
+
+"
+/>
+
+
+
+<div
+className="
+relative
+z-10
+max-w-7xl
+mx-auto
+px-6
+lg:px-10
+"
+
+>
+
+
+{/* Heading */}
+
+<div
+className="
+text-center
+mb-14
+"
+
+>
+
+
+<div className="
+flex
+items-center
+gap-3
+font-body
+justify-center
+text-xs
+uppercase
+font-bold
+tracking-[5px]
+text-modura-secondary
 ">
+
+
+<DraftingCompass
+size={20}
+strokeWidth={1.5}
+className="
+text-modura-secondary
+"
+/>
+
+
+<span>
+Our Clients
+</span>
+
+
+</div>
+
+
+
+<h2
+className="
+mt-4
+font-heading
+text-5xl
+lg:text-6xl
+font-semibold
+text-modura-primary
+"
+>
+
+Trusted By
+
+<span
+className="
+text-modura-secondary ml-2
+"
+>
+ Global Brands
+</span>
+
+
+</h2>
+
+
+
+</div>
+
 
 
 
@@ -79,71 +183,40 @@ py-16
 
 <Swiper
 
-modules={[
 
-Autoplay,
-
-FreeMode
-
-]}
-
+modules={[Autoplay]}
 
 
 loop={true}
 
 
-
-freeMode={{
-
-enabled:true,
-
-momentum:false
-
-}}
+slidesPerView={"auto"}
 
 
+spaceBetween={30}
 
-speed={6000}
 
+speed={5000}
 
 
 autoplay={{
 
 delay:0,
 
-disableOnInteraction:false,
-
-pauseOnMouseEnter:false
+disableOnInteraction:false
 
 }}
 
 
-
-slidesPerView={"auto"}
-
-
-
-spaceBetween={30}
-
-
-
-allowTouchMove={false}
-
-
-
 className="
-client-logo-slider
-!overflow-visible
+client-swiper
 "
 
 >
 
 
 
-
-
 {
-
 [...clients,...clients].map((item,index)=>(
 
 
@@ -152,7 +225,7 @@ client-logo-slider
 key={index}
 
 className="
-!w-[260px]
+!w-[240px]
 "
 
 >
@@ -161,64 +234,66 @@ className="
 <div
 
 className="
-client-card
-
 group
 
 relative
 
-h-[170px]
+h-[130px]
 
-w-[240px]
+w-[220px]
+
+
+bg-white
+
+
+border
+
+border-modura-gray-200
+
+
+shadow-sm
+
+
+flex
+
+items-center
+
+justify-center
 
 
 overflow-hidden
 
-cursor-pointer
-
 
 transition-all
 
-duration-700
+duration-500
 
 
-hover:-translate-y-3
+hover:-translate-y-2
+
+hover:shadow-xl
 
 "
 
 >
 
 
+{/* Cut Corner */}
 
-
-
-
-
-{/* Main Image */}
-
-<Image
-
-src={item.image}
-
-alt="client"
-
-fill
-
+<div
 
 className="
-object-cover
+absolute
+top-0
+right-0
 
+border-t-[25px]
 
-transition-all
+border-t-modura-primary-light
 
-duration-[1200ms]
+border-l-[25px]
 
-ease-out
-
-
-group-hover:scale-110
-
-group-hover:rotate-1
+border-l-transparent
 
 "
 
@@ -228,195 +303,32 @@ group-hover:rotate-1
 
 
 
+<Image
+
+src={item.logo}
+
+alt="client"
+
+width={150}
+
+height={80}
 
 
+className="
+object-contain
 
-{/* Dark Glass Overlay */}
-
-<div className="
-absolute
-
-inset-0
-
-
-bg-modura-primary/40
-
-
-opacity-0
-
-
-group-hover:opacity-100
-
+max-h-[90px]
 
 transition-all
-
-duration-700
-
-"/>
-
-
-
-
-
-
-
-
-{/* Glass Shine Effect */}
-
-<div className="
-
-absolute
-
-top-[-120%]
-
-left-[-80%]
-
-
-h-[250%]
-
-w-[50%]
-
-
-rotate-[35deg]
-
-
-bg-white/30
-
-
-blur-xl
-
-
-transition-all
-
-duration-[1200ms]
-
-
-group-hover:left-[150%]
-
-"
-
-></div>
-
-
-
-
-
-
-
-
-{/* Inner Frame */}
-
-<div className="
-
-absolute
-
-inset-4
-
-
-border
-
-border-white/0
-
-
-group-hover:border-white/70
-
-
-transition-all
-
-duration-700
-
-"
-
-></div>
-
-
-
-
-
-
-
-
-{/* Top Left Corner */}
-
-<div className="
-
-absolute
-
-top-0
-
-left-0
-
-
-h-10
-
-w-10
-
-
-border-t-2
-
-border-l-2
-
-border-modura-secondary
-
-
-scale-0
-
-
-group-hover:scale-100
-
-
-transition-transform
 
 duration-500
 
-"
 
-></div>
-
-
-
-
-
-
-
-
-{/* Bottom Right Corner */}
-
-<div className="
-
-absolute
-
-bottom-0
-
-right-0
-
-
-h-10
-
-w-10
-
-
-border-b-2
-
-border-r-2
-
-border-modura-secondary
-
-
-scale-0
-
-
-group-hover:scale-100
-
-
-transition-transform
-
-duration-500
+group-hover:scale-110
 
 "
 
-></div>
-
+ />
 
 
 
@@ -430,8 +342,6 @@ duration-500
 
 
 ))
-
-
 }
 
 
@@ -440,6 +350,7 @@ duration-500
 
 
 
+</div>
 
 
 </section>

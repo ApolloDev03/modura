@@ -444,7 +444,7 @@ return(
 
 <section className="
 bg-white
-pb-16
+py-16
 overflow-hidden
 ">
 
@@ -481,6 +481,7 @@ gap-3
 font-body
 text-xs
 uppercase
+font-bold
 tracking-[5px]
 text-modura-secondary
 ">
@@ -506,7 +507,8 @@ Portfolio
 <h2 className="
 mt-4
 font-heading
-text-6xl
+text-5xl
+lg:text-6xl
 font-semibold
 text-modura-primary
 ">
@@ -515,7 +517,7 @@ Our
 
 <span className="
 font-heading
-text-modura-secondary
+text-modura-secondary ml-2
 ">
 
 Projects

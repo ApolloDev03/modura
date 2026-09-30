@@ -70,7 +70,7 @@ export default function TopBar() {
                 h-full
                 items-center
                 gap-7
-                bg-modura-secondary
+                bg-[#a57952]
                 pl-16
                 pr-8
                 before:absolute
@@ -79,7 +79,7 @@ export default function TopBar() {
                 before:h-full
                 before:w-[58px]
                 before:-skew-x-[32deg]
-                before:bg-modura-secondary
+                before:bg-[#a57952]
               "
             >
 

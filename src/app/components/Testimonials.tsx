@@ -187,6 +187,7 @@ gap-3
 font-body
 text-xs
 uppercase
+font-bold
 tracking-[5px]
 text-modura-secondary
 ">
@@ -212,17 +213,12 @@ Testimonials
 
 
 <h2 className="
-mt-5
-
+mt-4
 font-heading
-
-text-6xl
-
+text-5xl
+lg:text-6xl
 font-semibold
-
 text-modura-primary
-
-leading-tight
 
 ">
 
@@ -230,7 +226,7 @@ leading-tight
 Trusted By
 
 <span className="
-text-modura-secondary
+text-modura-secondary ml-2
 ">
 
  Industry Leaders

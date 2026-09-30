@@ -9,6 +9,8 @@ import Projects from "./components/Projects";
 import Counter from "./components/Counter";
 import Testimonials from "./components/Testimonials";
 import ClientLogos from "./components/ClientLogos";
+import Industries from "./components/Industries";
+import BlogSection from "./components/BlogSection";
 
 export default function Home() {
   return (
@@ -21,7 +23,9 @@ export default function Home() {
       <Projects/>
       <Counter/>
       <Testimonials/>
+      <Industries />
       <ClientLogos />
+      <BlogSection/>
       <Footer />
     </>
   );

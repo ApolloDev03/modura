@@ -2,6 +2,9 @@ import type { Metadata } from "next";
 import { Manrope, Barlow_Condensed } from "next/font/google";
 import "./globals.css";
 
+import GetInTouch from "./components/GetInTouch";
+import PageLoader from "./components/PageLoader";
+
 const manrope = Manrope({
   variable: "--font-manrope",
   subsets: ["latin"],
@@ -31,7 +34,15 @@ export default function RootLayout({
       lang="en"
       className={`${manrope.variable} ${barlowCondensed.variable}`}
     >
-      <body className="font-sans antialiased">{children}</body>
+      <body className="font-sans antialiased">
+
+        <PageLoader />
+
+        {children}
+
+        <GetInTouch />
+
+      </body>
     </html>
   );
 }

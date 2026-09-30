@@ -295,8 +295,8 @@ export default function Services(){
 return(
 
 <section className="
-bg-white
-pb-16
+bg-modura-off-white
+py-16
 overflow-hidden
 ">
 
@@ -329,6 +329,7 @@ gap-3
 font-body
 text-xs
 uppercase
+font-semibold
 tracking-[5px]
 text-modura-secondary
 ">
@@ -356,6 +357,7 @@ Our Expertise
 mt-4
 font-heading
 text-5xl
+lg:text-6xl
 font-semibold
 text-modura-primary
 ">
