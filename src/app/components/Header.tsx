@@ -30,7 +30,7 @@ import {
     PiStack,
 } from "react-icons/pi";
 
-import logo from "../assets/logo.jpeg";
+import logo from "../assets/logo.png";
 import AnimatedButton from "./AnimatedButton";
 
 /* =========================================================

@@ -1,126 +1,68 @@
 "use client";
 
 import Image from "next/image";
-import Link from "next/link";
-import { useRef } from "react";
 
 import {
-    FiMail,
-    FiPhone,
-    FiMapPin,
-    FiArrowUpRight,
-} from "react-icons/fi";
+Mail,
+Phone,
+MapPin
+} from "lucide-react";
+
 
 import {
-    FaLinkedinIn,
-    FaInstagram,
-    FaFacebookF,
-} from "react-icons/fa";
+LiaLinkedin
+} from "react-icons/lia";
+
+import {
+BsInstagram
+} from "react-icons/bs";
+
+import {
+FaFacebookF
+} from "react-icons/fa6";
+
+
+import {
+useLayoutEffect,
+useRef
+} from "react";
 
 
 import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { useGSAP } from "@gsap/react";
 
 
-import logo from "../assets/logo.jpeg";
-
-
-gsap.registerPlugin(
-    ScrollTrigger
-);
-
-
-
-const menus = [
-
-    {
-        title:"Services",
-        links:[
-            "Architecture",
-            "Structural Engineering",
-            "BIM Services",
-            "MEP Engineering"
-        ]
-    },
-
-    {
-        title:"Company",
-        links:[
-            "About Us",
-            "Our Team",
-            "Career",
-            "Contact"
-        ]
-    },
-
-    {
-        title:"Explore",
-        links:[
-            "Portfolio",
-            "Blog",
-            "FAQ",
-            "Inquiry"
-        ]
-    }
-
-];
-
+import logo from "../assets/logo.png";
 
 
 
 export default function Footer(){
 
-const footerRef = useRef(null);
+
+const footerRef = useRef<HTMLDivElement|null>(null);
 
 
 
-useGSAP(()=>{
+useLayoutEffect(()=>{
 
 
 const ctx = gsap.context(()=>{
 
 
-gsap.from(
-".blue-line",
-{
-scaleX:0,
-duration:1.2,
-ease:"power4.out",
-scrollTrigger:{
-trigger:footerRef.current,
-start:"top 85%"
-}
-}
-);
-
-
-
-gsap.from(
-".footer-animate",
+gsap.from(".footer-item",
 {
 opacity:0,
-y:35,
-duration:.9,
-stagger:.08,
-ease:"power4.out",
+y:50,
+duration:1,
+stagger:.15,
+ease:"power3.out"
+});
 
-scrollTrigger:{
-trigger:footerRef.current,
-start:"top 80%"
-}
 
-}
-);
+},footerRef);
 
 
 
-},
-footerRef);
-
-
-
-return ()=>ctx.revert();
+return()=>ctx.revert();
 
 
 
@@ -130,62 +72,59 @@ return ()=>ctx.revert();
 
 
 
-return (
+return(
 
 <footer
+
 ref={footerRef}
 
 className="
-bg-white
+relative
 overflow-hidden
+bg-white
 text-modura-primary
 "
->
 
+>
 
 
 <div
 className="
-max-w-[1500px]
-mx-auto
-px-6
-lg:px-12
-"
->
-
-
-{/* TOP BLUEPRINT LINE */}
-
-<div
-className="
-relative
-h-[30px]
-"
->
-
-<span
-className="
-blue-line
 absolute
 top-0
 left-0
-right-0
-h-px
-bg-modura-border
+w-full
+h-[35px]
+overflow-hidden
 "
-/>
+>
 
-
-<span
+<svg
+viewBox="0 0 1440 80"
 className="
 absolute
-right-0
 top-0
-h-[15px]
-w-px
-bg-modura-secondary
+left-0
+w-full
+h-full
 "
+preserveAspectRatio="none"
+>
+
+<path
+d="
+M0,20 
+C180,80 320,0 520,35 
+C720,70 850,10 1050,40 
+C1220,70 1350,20 1440,35
+L1440,0
+L0,0
+Z
+"
+fill="var(--modura-secondary)"
 />
+
+</svg>
 
 
 </div>
@@ -194,55 +133,67 @@ bg-modura-secondary
 
 
 
-{/* MAIN FOOTER */}
+
+{/* FOOTER CONTENT */}
+
 
 
 <div
+
 className="
+relative
+z-10
+max-w-7xl
+mx-auto
+px-6
+pt-16
+pb-12
 grid
-gap-12
+lg:grid-cols-12
+gap-10
 
-lg:grid-cols-[1.1fr_1.8fr_1fr]
-
-py-10
 "
+
 >
 
 
 
-{/* =====================
- BRAND
-===================== */}
+
+
+
+
+
+{/* LOGO */}
+
 
 
 <div
-className="
-footer-animate
-relative
 
-lg:pr-12
+className="
+footer-item
+lg:col-span-4
 "
+
 >
 
 
 <div
+
 className="
 relative
-
-h-[70px]
-w-[230px]
+w-[240px]
+h-[100px]
 "
+
 >
 
 <Image
 
 src={logo}
 
-alt="Modura"
+alt="MVNL Engineering"
 
 fill
-
-sizes="230px"
 
 className="
 object-contain
@@ -251,131 +202,39 @@ object-left
 
 />
 
+
 </div>
 
-
-
-
 <p
+
 className="
 mt-6
-
-max-w-[330px]
-
+max-w-sm
 text-sm
 leading-7
-
 text-modura-gray-600
 "
+
 >
 
-Architecture, engineering,
-BIM and detailing solutions
-built for precise project
-delivery.
+Delivering innovative and reliable engineering solutions through advanced technology, precision design and sustainable construction practices.
 
 </p>
 
 
 
-
-<div
-className="
-mt-7
-flex
-gap-3
-"
->
-
-
-<Social>
-<FaLinkedinIn/>
-</Social>
-
-
-<Social>
-<FaInstagram/>
-</Social>
-
-
-<Social>
-<FaFacebookF/>
-</Social>
-
-
-</div>
-
-
-
-
-
-<div
-className="
-absolute
-right-0
-top-0
-hidden
-lg:block
-
-h-full
-w-px
-bg-modura-border
-"
-/>
-
-
-</div>
-
-
-
-
-
-
-
-
-{/* =====================
-MENU GRID
-===================== */}
-
-
-<div
-className="
-grid
-
-grid-cols-3
-
-gap-8
-
-footer-animate
-
-lg:px-10
-"
->
-
-
-{
-menus.map((menu)=>(
-
-<div
-key={menu.title}
->
-
-
 <h4
+
 className="
-mb-6
-
-text-[10px]
-
+my-3
+font-heading
+text-lg
 font-bold
-
-uppercase
-
-tracking-[0.2em]
 "
+
 >
 
-{menu.title}
+FOLLOW US
 
 </h4>
 
@@ -383,95 +242,36 @@ tracking-[0.2em]
 
 
 <div
+
 className="
 flex
-flex-col
 gap-4
 "
+
 >
 
 
 {
-menu.links.map((item)=>(
 
-<Link
+[
+LiaLinkedin,
+BsInstagram,
+FaFacebookF
 
-href="#"
+].map((Icon,index)=>(
 
-key={item}
+
+<div
+
+key={index}
 
 className="
-group
-
-flex
-items-center
-
-text-sm
-
-text-modura-gray-600
-
-hover:text-modura-primary
-
-transition-all
-
+social-reference
 "
+
 >
 
-
-<span
-className="
-w-0
-
-h-px
-
-bg-modura-secondary
-
-transition-all
-
-duration-500
-
-group-hover:w-5
-
-group-hover:mr-2
-
-"
-/>
-
-
-{item}
-
-
-
-<FiArrowUpRight
-
-className="
-ml-1
-
-opacity-0
-
-text-xs
-
-transition-all
-
-group-hover:opacity-100
-
-"
-
-/>
-
-
-
-</Link>
-
-
-))
-
-}
-
-
-
-</div>
-
+<Icon size={18}/>
 
 
 </div>
@@ -479,9 +279,11 @@ group-hover:opacity-100
 
 ))
 
+
 }
 
 
+</div>
 
 </div>
 
@@ -492,167 +294,90 @@ group-hover:opacity-100
 
 
 
-{/* =====================
-CONTACT
-===================== */}
+
+{/* SERVICES */}
 
 
 
 <div
+
 className="
-footer-animate
-
-relative
-
-lg:pl-10
-"
->
-
-
-<div
-className="
-absolute
-left-0
-top-0
-
-hidden
-lg:block
-
-h-full
-w-px
-
-bg-modura-border
-"
-/>
-
-
-
-
-
-<h4
-className="
-mb-7
-
-text-[10px]
-
-font-bold
-
-uppercase
-
-tracking-[0.2em]
-"
->
-
-Contact
-
-</h4>
-
-
-
-
-<Contact
-
-icon={<FiMail/>}
-
-title="Email"
-
-value="info@modura.com"
-
-/>
-
-
-
-<Contact
-
-icon={<FiPhone/>}
-
-title="Phone"
-
-value="+1 000 000 000"
-
-/>
-
-
-
-
-<Contact
-
-icon={<FiMapPin/>}
-
-title="Location"
-
-value="USA Project Support"
-
-/>
-
-
-
-
-</div>
-
-
-
-</div>
-
-
-
-
-
-
-
-
-{/* =====================
-BOTTOM
-===================== */}
-
-
-
-<div
-className="
-footer-animate
-
-border-t
-
+footer-item
+lg:col-span-3
+border-l
 border-modura-border
-
-py-5
-
-flex
-
-flex-col
-
-gap-4
-
-md:flex-row
-
-md:justify-between
-
-md:items-center
-
+pl-8
 "
+
 >
 
 
+<h3
 
-<div
 className="
-flex
-gap-6
-
-text-xs
-
-text-modura-gray-500
+font-heading
+text-xl
+font-bold
 "
+
 >
 
-<Link href="#">
-Privacy Policy
-</Link>
+SERVICES
+
+</h3>
 
 
-<Link href="#">
-Terms
-</Link>
+
+<div className="
+footer-title-line
+"/>
+
+
+
+
+<ul
+
+className="
+space-y-4
+text-sm
+text-modura-gray-600
+"
+
+>
+
+
+<li className="footer-link">
+Architecture Design
+</li>
+
+
+<li className="footer-link">
+Structural Engineering
+</li>
+
+
+<li className="footer-link">
+BIM Solutions
+</li>
+
+
+<li className="footer-link">
+Project Management
+</li>
+
+
+<li className="footer-link">
+MEP Engineering
+</li>
+
+
+<li className="footer-link">
+Industrial Design
+</li>
+
+
+</ul>
+
 
 
 </div>
@@ -661,51 +386,276 @@ Terms
 
 
 
+
+
+
+
+{/* COMPANY */}
+
+
+
 <div
+
 className="
-flex
-items-center
-gap-5
+footer-item
+lg:col-span-2
+border-l
+border-modura-border
+pl-8
 "
+
 >
 
 
-<span
-className="
-text-xs
+<h3
 
-text-modura-gray-500
+className="
+font-heading
+text-xl
+font-bold
 "
+
 >
 
-© 2026 Modura Design Group
+COMPANY
+
+</h3>
+
+
+<div className="
+footer-title-line
+"/>
+
+
+
+<ul
+
+className="
+space-y-4
+text-sm
+text-modura-gray-600
+"
+
+>
+
+
+<li className="footer-link">
+About Us
+</li>
+
+
+<li className="footer-link">
+Projects
+</li>
+
+
+<li className="footer-link">
+Career
+</li>
+
+
+<li className="footer-link">
+Contact
+</li>
+
+
+</ul>
+
+
+
+</div>
+
+
+
+
+
+
+
+
+
+{/* CONTACT */}
+
+
+
+<div
+
+className="
+footer-item
+lg:col-span-3
+border-l
+border-modura-border
+pl-8
+"
+
+>
+
+
+<h3
+
+className="
+font-heading
+text-xl
+font-bold
+"
+
+>
+
+CONTACT
+
+</h3>
+
+
+<div className="
+footer-title-line
+"/>
+
+
+
+
+
+<div
+
+className="
+space-y-5
+text-sm
+text-modura-gray-600
+"
+
+>
+
+
+
+<div className="flex gap-3 items-center">
+
+<span className="contact-icon">
+
+<Mail size={16}/>
 
 </span>
 
 
+info@mvnengineering.com
+
+
+</div>
+
+
+
+
+
+<div className="flex gap-3 items-center">
+
+
+<span className="contact-icon">
+
+<Phone size={16}/>
+
+</span>
+
+
++91 00000 00000
+
+
+</div>
+
+
+
+
+
+
+
+<div className="flex gap-3">
+
+
+<span className="contact-icon">
+
+<MapPin size={16}/>
+
+</span>
+
+
+<span>
+
+Ahmedabad, Gujarat
+<br/>
+India
+
+</span>
+
+
+</div>
+
+
+
+</div>
+
+
+
+
+
+
+
+
+
+
+</div>
+
+
+
+
+
+
+</div>
+
+
+
+
+
+
+
+
+
+
+{/* BOTTOM */}
+
 
 
 <div
+
 className="
-flex
-gap-3
+relative
+z-10
+border-t
+border-modura-border
 "
+
 >
 
 
-<Social>
-<FaLinkedinIn/>
-</Social>
+<div
+
+className="
+max-w-7xl
+mx-auto
+px-6
+py-5
+flex
+justify-center
+text-sm
+text-modura-gray-600
+"
+
+>
 
 
-<Social>
-<FaInstagram/>
-</Social>
+<p>
+
+© 2026 MVNL Engineering. All Rights Reserved.
+
+</p>
 
 
-<Social>
-<FaFacebookF/>
-</Social>
+
 
 
 </div>
@@ -717,171 +667,10 @@ gap-3
 
 
 
-</div>
-
-
-
-
-
-
-</div>
 
 
 
 </footer>
-
-
-)
-
-}
-
-
-
-
-
-
-/* =========================
-CONTACT COMPONENT
-========================= */
-
-
-function Contact({
-icon,
-title,
-value
-}:any){
-
-
-return (
-
-<div
-className="
-flex
-gap-4
-mb-5
-"
->
-
-
-<div
-className="
-h-10
-w-10
-
-flex
-items-center
-justify-center
-
-border
-
-border-modura-border
-
-text-modura-secondary
-"
->
-
-{icon}
-
-</div>
-
-
-
-<div>
-
-
-<p
-className="
-text-[9px]
-
-uppercase
-
-tracking-widest
-
-text-modura-gray-400
-"
->
-
-{title}
-
-</p>
-
-
-<p
-className="
-text-sm
-
-font-medium
-
-mt-1
-"
->
-
-{value}
-
-</p>
-
-
-</div>
-
-
-
-</div>
-
-)
-
-}
-
-
-
-
-
-
-/* =========================
-SOCIAL
-========================= */
-
-
-function Social({
-children
-}:{
-children:React.ReactNode
-}){
-
-
-return (
-
-<a
-
-href="#"
-
-className="
-h-9
-w-9
-
-flex
-items-center
-justify-center
-
-border
-
-border-modura-border
-
-text-sm
-
-transition-all
-
-hover:bg-modura-primary
-
-hover:text-white
-
-"
-
->
-
-{children}
-
-</a>
-
 
 )
 

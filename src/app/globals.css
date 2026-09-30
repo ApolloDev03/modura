@@ -1,41 +1,55 @@
 @import "tailwindcss";
 
 :root {
+
   /* ========================================
-     MODURA BRAND COLORS
+     MVNL ENGINEERING BRAND COLORS
   ======================================== */
 
-  --modura-primary: #0b1d33;
-  --modura-primary-light: #1d3349;
-  --modura-primary-dark: #061322;
 
-  --modura-secondary: #596a79;
-  --modura-secondary-light: #84919c;
-  --modura-secondary-dark: #3e4d5a;
+  --modura-primary: #111111;
+  --modura-primary-light: #2b2b2b;
+  --modura-primary-dark: #000000;
+
+
+  --modura-secondary: #f58220;
+  --modura-secondary-light: #ffb300;
+  --modura-secondary-dark: #d95f00;
+
 
   /* Base */
-  --modura-white: #ffffff;
-  --modura-black: #090d12;
 
-  /* Backgrounds */
-  --modura-off-white: #f7f8f8;
-  --modura-light: #eef1f3;
+  --modura-white: #ffffff;
+  --modura-black: #0a0a0a;
+
+
+  /* Background */
+
+  --modura-off-white: #fafafa;
+  --modura-light: #f3f3f3;
+
 
   /* Gray scale */
-  --modura-gray-100: #f3f4f5;
-  --modura-gray-200: #e5e8ea;
-  --modura-gray-300: #cbd1d5;
-  --modura-gray-400: #9ca6ae;
-  --modura-gray-500: #6f7b84;
-  --modura-gray-600: #4b5660;
-  --modura-gray-700: #303a43;
+
+  --modura-gray-100: #f5f5f5;
+  --modura-gray-200: #e8e8e8;
+  --modura-gray-300: #d1d1d1;
+  --modura-gray-400: #a3a3a3;
+  --modura-gray-500: #737373;
+  --modura-gray-600: #525252;
+  --modura-gray-700: #262626;
+
 
   /* Borders */
-  --modura-border: #dce1e4;
+
+  --modura-border: #dddddd;
+
 
   /* Fonts */
+
   --font-body: var(--font-manrope);
   --font-heading: var(--font-barlow-condensed);
+
 }
 
 @theme inline {
@@ -117,4 +131,463 @@ button {
 
 .font-heading {
   font-family: var(--font-heading), sans-serif;
+}
+.about-frame{
+
+clip-path:polygon(
+0 0,
+90% 0,
+100% 8%,
+100% 100%,
+0 100%
+);
+
+}
+.animate-project{
+animation:projectFade .8s ease;
+}
+
+
+@keyframes projectFade{
+
+from{
+opacity:0;
+transform:scale(1.05);
+}
+
+to{
+opacity:1;
+transform:scale(1);
+}
+
+}
+
+.client-logo-slider .swiper-wrapper{
+  transition-timing-function: linear !important;
+}
+
+.scrollbar-hide::-webkit-scrollbar{
+display:none;
+}
+
+.scrollbar-hide{
+-ms-overflow-style:none;
+scrollbar-width:none;
+}.clip-card{
+
+clip-path:polygon(
+15% 0,
+85% 0,
+100% 25%,
+85% 100%,
+15% 100%,
+0 75%
+);
+
+}
+
+
+.scrollbar-hide::-webkit-scrollbar{
+display:none;
+}
+
+.scrollbar-hide{
+scrollbar-width:none;
+-ms-overflow-style:none;
+}
+/* OIL & GAS - Diagonal Industrial */
+.clip-oil{
+clip-path: polygon(
+15% 0,
+100% 0,
+85% 100%,
+0 100%
+);
+}
+
+
+/* INFRASTRUCTURE - Modern Wave */
+.clip-infra{
+clip-path: polygon(
+0 15%,
+85% 0,
+100% 25%,
+90% 85%,
+65% 100%,
+0 85%
+);
+}
+
+
+/* STEEL - Sharp Metal */
+.clip-steel{
+clip-path: polygon(
+0 20%,
+25% 0,
+100% 0,
+85% 100%,
+20% 90%
+);
+}
+
+
+/* WATER - Smooth Shape */
+.clip-water{
+clip-path: polygon(
+20% 0,
+80% 0,
+100% 35%,
+85% 100%,
+15% 100%,
+0 35%
+);
+}
+
+
+/* TRANSPORT - Arrow Style */
+.clip-transport{
+clip-path: polygon(
+0 20%,
+75% 0,
+100% 50%,
+75% 100%,
+0 80%,
+20% 50%
+);
+}
+
+
+/* MANUFACTURING - Hex Style */
+.clip-manufacture{
+clip-path: polygon(
+25% 0,
+75% 0,
+100% 30%,
+90% 100%,
+10% 100%,
+0 30%
+);
+}
+
+.clip-industry{
+
+clip-path:polygon(
+18% 0,
+82% 0,
+100% 28%,
+90% 80%,
+70% 100%,
+30% 100%,
+10% 80%,
+0 28%
+);
+
+}
+
+
+.scrollbar-hide::-webkit-scrollbar{
+display:none;
+}
+
+
+.scrollbar-hide{
+scrollbar-width:none;
+-ms-overflow-style:none;
+}
+.blog-card-shape{
+clip-path:polygon(
+0 0,
+92% 0,
+100% 10%,
+100% 90%,
+92% 100%,
+8% 100%,
+0 90%
+);
+}
+
+
+.blog-image-shape{
+clip-path:polygon(
+0 0,
+92% 0,
+100% 12%,
+100% 100%,
+0 100%
+);
+}
+
+
+.blog-date-shape{
+clip-path:polygon(
+0 0,
+100% 0,
+100% 80%,
+70% 100%,
+0 100%
+);
+}
+
+
+.blog-top-shape{
+clip-path:polygon(
+0 0,
+70% 0,
+0 100%
+);
+}
+
+
+.blog-bottom-shape{
+clip-path:polygon(
+100% 0,
+100% 100%,
+0 100%
+);
+}
+.clip-read-btn{
+
+clip-path:polygon(
+0 0,
+92% 0,
+100% 35%,
+100% 100%,
+8% 100%,
+0 65%
+);
+
+}
+
+
+
+.clip-arrow-box{
+
+clip-path:polygon(
+20% 0,
+100% 0,
+80% 100%,
+0 100%
+);
+
+}.footer-shape{
+
+clip-path:polygon(
+0 45%,
+75% 0,
+100% 0,
+100% 100%,
+0 100%
+);
+
+}
+
+
+
+.footer-orange-shape{
+
+clip-path:polygon(
+40% 0,
+100% 0,
+100% 100%,
+0 100%
+);
+
+}
+
+
+
+.footer-title-line{
+
+width:40px;
+height:3px;
+background:#f58220;
+margin-top:12px;
+margin-bottom:22px;
+
+}
+
+
+
+.footer-link{
+
+cursor:pointer;
+transition:.4s ease;
+
+}
+
+
+
+.footer-link:hover{
+
+color:#f58220;
+transform:translateX(8px);
+
+}
+
+
+
+.contact-icon{
+
+width:34px;
+height:34px;
+
+border-radius:50%;
+
+display:flex;
+align-items:center;
+justify-content:center;
+
+background:#fff1e6;
+
+color:#f58220;
+
+}
+
+
+
+.social-reference{
+
+width:44px;
+height:44px;
+
+display:flex;
+align-items:center;
+justify-content:center;
+
+border:2px solid #f58220;
+
+clip-path:polygon(
+25% 0,
+75% 0,
+100% 25%,
+100% 75%,
+75% 100%,
+25% 100%,
+0 75%,
+0 25%
+);
+
+
+cursor:pointer;
+
+transition:.5s ease;
+
+}
+
+
+
+.social-reference:hover{
+
+background:#f58220;
+color:white;
+transform:
+translateY(-8px)
+rotate(8deg);
+
+}
+
+.writing-mode{
+writing-mode:vertical-rl;
+transform:rotate(180deg);
+}
+
+
+.clip-contact{
+
+clip-path:polygon(
+0 0,
+100% 8%,
+100% 92%,
+0 100%
+);
+
+}
+
+
+.clip-form{
+
+clip-path:polygon(
+0 0,
+96% 0,
+100% 8%,
+100% 100%,
+4% 100%,
+0 92%
+);
+
+}
+
+
+
+.clip-submit{
+
+clip-path:polygon(
+0 0,
+95% 0,
+100% 50%,
+95% 100%,
+0 100%
+);
+
+}
+/* =========================================================
+   GET IN TOUCH
+========================================================= */
+
+.cta-blueprint {
+  clip-path: polygon(
+    0 15%,
+    15% 0,
+    100% 0,
+    100% 85%,
+    85% 100%,
+    0 100%
+  );
+}
+
+
+.clip-form {
+  clip-path: polygon(
+    0 0,
+    96% 0,
+    100% 4%,
+    100% 96%,
+    96% 100%,
+    0 100%
+  );
+}
+
+
+
+
+/* Hide scrollbar but keep scrolling */
+
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+  width: 0;
+  height: 0;
+}
+.clip-submit {
+  clip-path: polygon(
+    0 0,
+    92% 0,
+    100% 50%,
+    92% 100%,
+    0 100%,
+    5% 50%
+  );
+}
+
+.clip-submit-arrow {
+  clip-path: polygon(
+    20% 0,
+    100% 0,
+    80% 100%,
+    0 100%
+  );
 }
