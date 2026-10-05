@@ -1,15 +1,10 @@
 import Image from "next/image";
 import {
-  Building2,
-  Cuboid,
-  Layers3,
-  Settings,
-  ArrowRight,
   DraftingCompass,
 } from "lucide-react";
 
-import about_building from "../assets/about-building.jpeg";
-import blueprint from "../assets/blueprint.jpeg";
+import about_building from "../assets/images/about-building.jpeg";
+import blueprint from "../assets/images/blueprint.jpeg";
 import AnimatedButton from "./AnimatedButton";
 
 

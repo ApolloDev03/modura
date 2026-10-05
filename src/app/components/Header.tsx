@@ -8,6 +8,7 @@ import {
     FiArrowRight,
     FiArrowUpRight,
     FiAward,
+    FiBriefcase,
     FiChevronDown,
     FiChevronRight,
     FiFileText,
@@ -15,6 +16,7 @@ import {
     FiHelpCircle,
     FiHome,
     FiLayers,
+    FiMail,
     FiMenu,
     FiShield,
     FiUsers,
@@ -30,7 +32,7 @@ import {
     PiStack,
 } from "react-icons/pi";
 
-import logo from "../assets/logo.png";
+import logo from "../assets/images/logo.png";
 import AnimatedButton from "./AnimatedButton";
 
 /* =========================================================
@@ -88,6 +90,16 @@ const companyLinks = [
         title: "FAQs",
         href: "/company/faqs",
         icon: FiHelpCircle,
+    },
+        {
+        title: "Careers",
+        href: "/company/careers",
+        icon: FiBriefcase,
+    },
+    {
+        title: "Contact Us",
+        href: "/company/contact",
+        icon: FiMail,
     },
 ];
 

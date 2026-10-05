@@ -4,7 +4,6 @@ import { useEffect, useRef, useState } from "react";
 
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { DraftingCompass } from "lucide-react";
 
 
 gsap.registerPlugin(ScrollTrigger);

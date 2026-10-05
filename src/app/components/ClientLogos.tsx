@@ -14,13 +14,13 @@ import {
 import "swiper/css";
 
 
-import logo1 from "../assets/logo1.jpg";
-import logo2 from "../assets/logo2.jpg";
-import logo3 from "../assets/logo3.png";
-import logo4 from "../assets/logo4.jpg";
-import logo5 from "../assets/logo5.webp";
-import logo6 from "../assets/logo6.jpg";
-import logo7 from "../assets/logo7.jpg";
+import logo1 from "../assets/images/logo1.jpg";
+import logo2 from "../assets/images/logo2.jpg";
+import logo3 from "../assets/images/logo3.png";
+import logo4 from "../assets/images/logo4.jpg";
+import logo5 from "../assets/images/logo5.webp";
+import logo6 from "../assets/images/logo6.jpg";
+import logo7 from "../assets/images/logo7.jpg";
 import { DraftingCompass } from "lucide-react";
 
 

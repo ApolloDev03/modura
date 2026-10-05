@@ -31,7 +31,7 @@ useRef
 import gsap from "gsap";
 
 
-import logo from "../assets/logo.png";
+import logo from "../assets/images/logo.png";
 
 
 
