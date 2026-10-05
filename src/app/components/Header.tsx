@@ -627,14 +627,17 @@ export default function Header() {
     };
 
     return (
-        <header
-            className="
-                relative z-50
-                border-b
-                border-modura-gray-200
-                bg-modura-white
-            "
-        >
+       <header
+    className="
+        sticky
+        top-0
+        z-[100]
+        border-b
+        border-modura-gray-200
+        bg-modura-white
+        shadow-[0_4px_20px_rgba(11,29,51,0.06)]
+    "
+>
             <div
                 className="
                     mx-auto
