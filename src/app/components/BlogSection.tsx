@@ -11,6 +11,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import blog1 from "../assets/images/blog1.jpeg";
 import blog2 from "../assets/images/blog2.jpeg";
 import blog3 from "../assets/images/blog3.jpeg";
+import Link from "next/link";
 
 
 gsap.registerPlugin(ScrollTrigger);
@@ -264,7 +265,8 @@ h-[500px]
 
 {/* IMAGE */}
 
-
+   <Link
+                                        href="blogDetail">
 
 <div
 
@@ -302,12 +304,6 @@ group-hover:scale-110
 </div>
 
 
-
-
-
-
-
-
 {/* CONTENT */}
 
 
@@ -325,7 +321,7 @@ py-5
 
 <div
 className="
-mb-3
+mb-2
 font-heading
 text-modura-black
 font-bold
@@ -471,6 +467,8 @@ group-hover:translate-x-1
 </button>
 
 </div>
+                                        </Link>
+
 
 
 

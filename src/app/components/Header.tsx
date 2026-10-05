@@ -8,6 +8,7 @@ import {
     FiArrowRight,
     FiArrowUpRight,
     FiAward,
+    FiBookOpen,
     FiBriefcase,
     FiChevronDown,
     FiChevronRight,
@@ -56,58 +57,49 @@ type ServiceCategory = {
 ========================================================= */
 
 const companyLinks = [
-    {
-        title: "About Modura",
-        href: "/company/about",
-        icon: PiBuildings,
-    },
-    {
-        title: "Why Choose Us",
-        href: "/company/why-us",
-        icon: FiShield,
-    },
-    {
-        title: "Our Team",
-        href: "/company/team",
-        icon: FiUsers,
-    },
-    {
-        title: "Quality Policy",
-        href: "/company/quality-policy",
-        icon: FiFileText,
-    },
-    {
-        title: "Certifications",
-        href: "/company/certifications",
-        icon: FiAward,
-    },
-    {
-        title: "Testimonials",
-        href: "/company/testimonials",
-        icon: PiStack,
-    },
-    {
-        title: "FAQs",
-        href: "/company/faqs",
-        icon: FiHelpCircle,
-    },
-        {
-        title: "Careers",
-        href: "/company/careers",
-        icon: FiBriefcase,
-    },
-    {
-        title: "Contact Us",
-        href: "/company/contact",
-        icon: FiMail,
-    },
+  {
+    title: "About Modura",
+    href: "/company#about",
+    icon: PiBuildings,
+  },
+  {
+    title: "Why Choose Us",
+    href: "/company#why-us",
+    icon: FiShield,
+  },
+  {
+    title: "Our Team",
+    href: "/company#team",
+    icon: FiUsers,
+  },
+  {
+    title: "Quality Policy",
+    href: "/company#quality-policy",
+    icon: FiFileText,
+  },
+  {
+    title: "Certifications",
+    href: "/company#certifications",
+    icon: FiAward,
+  },
+  {
+    title: "Testimonials",
+    href: "/company#testimonials",
+    icon: PiStack,
+  },
+  {
+    title: "FAQs",
+    href: "/company#faqs",
+    icon: FiHelpCircle,
+  },
+  {
+    title: "Blog",
+    href: "/company#blog",
+    icon: FiBookOpen,
+},
 ];
 
-/* =========================================================
-   SERVICES
-   No icons
-   No numbering
-========================================================= */
+
 
 const serviceCategories: ServiceCategory[] = [
     {
