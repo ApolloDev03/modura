@@ -4,6 +4,9 @@ import "./globals.css";
 
 import GetInTouch from "./components/GetInTouch";
 import PageLoader from "./components/PageLoader";
+import TopBar from "./components/TopBar";
+import Header from "./components/Header";
+import Footer from "./components/footer";
 
 const manrope = Manrope({
   variable: "--font-manrope",
@@ -37,11 +40,12 @@ export default function RootLayout({
       <body className="font-sans antialiased">
 
         <PageLoader />
-
+ <TopBar />
+      <Header />
         {children}
 
         <GetInTouch />
-
+  <Footer />
       </body>
     </html>
   );
