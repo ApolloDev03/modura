@@ -137,7 +137,7 @@ export default function ResourceList({ moduleKey, config }: ResourceListProps) {
   return (
     <>
       <PageHeader title={config.title}>
-        <Link href={`/${moduleKey}/new`} className="btn btn-p">+ Add New</Link>
+        <Link href={`/admin/${moduleKey}/new`} className="btn btn-p">+ Add New</Link>
       </PageHeader>
 
       <div className="card">
@@ -193,7 +193,7 @@ export default function ResourceList({ moduleKey, config }: ResourceListProps) {
                         <button key={a.type} type="button" className="btn-sm btn-plus" title="Add new album" aria-label="Add new album" onClick={() => setAlbumFor(row)}>＋</button>
                       )
                     ))}
-                    <Link href={`/${moduleKey}/${row.id}`} className="btn btn-sm">Edit</Link>
+                    <Link href={`/admin/${moduleKey}/${row.id}`} className="btn btn-sm">Edit</Link>
                     <button type="button" className="btn-sm btn-danger-o" onClick={() => setToDelete(row)}>Delete</button>
                   </td>
                 </tr>

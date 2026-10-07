@@ -1,6 +1,6 @@
 "use client";
 import Image from "next/image";
-import Breadcrumb from "@/app/components/Breadcrumb";
+import Breadcrumb from "../../../components/Breadcrumb";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -64,7 +64,7 @@ import img6 from "../assets/images/why-us6.jpeg";
 import blog1 from "../assets/images/blog1.jpeg";
 import blog2 from "../assets/images/blog2.jpeg";
 import blog3 from "../assets/images/blog3.jpeg";
-import AnimatedButton from "../components/AnimatedButton";
+import AnimatedButton from "../../../components/AnimatedButton";
 import Link from "next/link";
 const advantages = [
   {

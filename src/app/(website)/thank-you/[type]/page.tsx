@@ -1,7 +1,7 @@
 "use client";
 
+import AnimatedButton from "@/components/AnimatedButton";
 import { motion } from "framer-motion";
-import AnimatedButton from "@/app/components/AnimatedButton";
 import { useParams } from "next/navigation";
 
 const thankYouContent = {
