@@ -78,7 +78,7 @@ export default function ResourceForm({ moduleKey, config, id }: ResourceFormProp
       })
       .catch((err: unknown) => {
         toast.error(errorMessage(err, 'Record not found'));
-        router.replace(`/${moduleKey}`);
+        router.replace(`/admin/${moduleKey}`);
       })
       .finally(() => { if (alive) setLoading(false); });
     return () => { alive = false; };
@@ -184,7 +184,7 @@ export default function ResourceForm({ moduleKey, config, id }: ResourceFormProp
         ? await api.put<ApiResponse<ApiRecord>>(`${config.endpoint}/${id}`, fd)
         : await api.post<ApiResponse<ApiRecord>>(config.endpoint, fd);
       toast.success(data.message);
-      router.push(`/${moduleKey}`);
+      router.push(`/admin/${moduleKey}`);
     } catch (err) {
       const fe = fieldErrors(err);
       if (Object.keys(fe).length) {
@@ -202,7 +202,7 @@ export default function ResourceForm({ moduleKey, config, id }: ResourceFormProp
   return (
     <>
       <PageHeader title={title}>
-        <Link href={`/${moduleKey}`} className="btn">← Back to List</Link>
+        <Link href={`/admin/${moduleKey}`} className="btn">← Back to List</Link>
       </PageHeader>
       {loading ? <div className="card"><Loader /></div> : (
         <form className="card" onSubmit={onSubmit} noValidate>
@@ -220,7 +220,7 @@ export default function ResourceForm({ moduleKey, config, id }: ResourceFormProp
             ))}
           </div>
           <div className="form-actions">
-            <Link href={`/${moduleKey}`} className="btn">Cancel</Link>
+            <Link href={`/admin/${moduleKey}`} className="btn">Cancel</Link>
             <button type="submit" className="btn-p" disabled={saving}>{saving ? 'Saving...' : isEdit ? 'Update' : 'Save'}</button>
           </div>
         </form>

@@ -9,8 +9,6 @@ import {
   Plus,
 } from "lucide-react";
 
-import Breadcrumb from "@/app/components/Breadcrumb";
-import AnimatedButton from "@/app/components/AnimatedButton";
 
 import autocadImage from "../assets/images/infrastructure.jpeg";
 
@@ -23,6 +21,8 @@ import blog1 from "../assets/images/blog1.jpeg";
 import blog2 from "../assets/images/blog2.jpeg";
 import blog3 from "../assets/images/blog3.jpeg";
 import Link from "next/link";
+import AnimatedButton from "@/components/AnimatedButton";
+import Breadcrumb from "@/components/Breadcrumb";
 
 
 gsap.registerPlugin(ScrollTrigger);

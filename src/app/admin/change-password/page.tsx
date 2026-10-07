@@ -41,7 +41,7 @@ export default function ChangePasswordPage() {
       const { data } = await api.put<ApiResponse<null>>('/admin/auth/change-password', form);
       toast.success(data.message);
       setForm(EMPTY);
-      router.push('/dashboard');
+      router.push('/admin/dashboard');
     } catch (err) {
       setErrors(fieldErrors(err));
       toast.error(errorMessage(err));
@@ -68,7 +68,7 @@ export default function ChangePasswordPage() {
         ))}
         <p className="hint">Min 8 characters, 1 uppercase, 1 number, 1 special character</p>
         <div className="form-actions">
-          <button type="button" onClick={() => router.push('/dashboard')}>Cancel</button>
+          <button type="button" onClick={() => router.push('/admin/dashboard')}>Cancel</button>
           <button type="submit" className="btn-p" disabled={saving}>{saving ? 'Updating...' : 'Update Password'}</button>
         </div>
       </form>

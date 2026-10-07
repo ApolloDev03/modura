@@ -42,7 +42,7 @@ export default function SeoEditPage() {
     try {
       const { data } = await api.put<ApiResponse<SeoPage>>(`/admin/seo/${id}`, values);
       toast.success(data.message);
-      router.push('/seo');
+      router.push('/admin/seo');
     } catch (err) {
       setErrors(fieldErrors(err));
       toast.error(errorMessage(err));
@@ -52,7 +52,7 @@ export default function SeoEditPage() {
   return (
     <>
       <PageHeader title="SEO Setup › Edit Page SEO" crumb="SEO Setup">
-        <Link href="/seo" className="btn">← Back to List</Link>
+        <Link href="/admin/seo" className="btn">← Back to List</Link>
       </PageHeader>
       {!values ? <div className="card"><Loader /></div> : (
         <form className="card" onSubmit={onSubmit} noValidate>
@@ -72,7 +72,7 @@ export default function SeoEditPage() {
             ))}
           </div>
           <div className="form-actions">
-            <Link href="/seo" className="btn">Cancel</Link>
+            <Link href="/admin/seo" className="btn">Cancel</Link>
             <button type="submit" className="btn-p" disabled={saving}>{saving ? 'Saving...' : 'Update'}</button>
           </div>
         </form>

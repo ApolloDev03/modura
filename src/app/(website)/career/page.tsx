@@ -14,9 +14,8 @@ import {
   Send,
   Users,
 } from "lucide-react";
-
-import AnimatedButton from "@/app/components/AnimatedButton";
-import Breadcrumb from "../components/Breadcrumb";
+import Breadcrumb from "@/components/Breadcrumb";
+import AnimatedButton from "@/components/AnimatedButton";
 
 /* =========================================================
    JOB DATA

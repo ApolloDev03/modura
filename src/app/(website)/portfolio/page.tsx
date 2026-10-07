@@ -16,7 +16,7 @@ import img4 from "../assets/images/blueprint.jpeg";
 import img5 from "../assets/images/infrastructure.jpeg";
 import img6 from "../assets/images/manufacturing.jpeg";
 import img7 from "../assets/images/oil.jpeg";
-import Breadcrumb from "../components/Breadcrumb";
+import Breadcrumb from "../../../components/Breadcrumb";
 
 type SampleType = "3D" | "2D";
 

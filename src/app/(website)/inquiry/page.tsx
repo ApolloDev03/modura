@@ -7,8 +7,7 @@ import {
   Send,
 } from "lucide-react";
 
-import Breadcrumb from "../components/Breadcrumb";
-import AnimatedButton from "@/app/components/AnimatedButton";
+import Breadcrumb from "../../../components/Breadcrumb";
 
 type DropdownProps = {
   label: string;

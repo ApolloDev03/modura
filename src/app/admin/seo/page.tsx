@@ -46,7 +46,7 @@ export default function SeoListPage() {
                   <td>{r.pageName}</td>
                   <td>{r.metaTitle || '—'}</td>
                   <td>{formatDate(r.updatedAt, true)}</td>
-                  <td><Link href={`/seo/${r.id}`} className="btn btn-sm btn-p">✎ Edit</Link></td>
+                  <td><Link href={`/admin/seo/${r.id}`} className="btn btn-sm btn-p">✎ Edit</Link></td>
                 </tr>
               ))}
             </tbody>
