@@ -33,7 +33,7 @@ import {
     PiStack,
 } from "react-icons/pi";
 
-import logo from "../assets/images/logo.png";
+import logo from "../app/(website)/assets/images/logo.png";
 import AnimatedButton from "./AnimatedButton";
 
 /* =========================================================

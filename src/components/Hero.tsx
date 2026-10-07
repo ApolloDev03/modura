@@ -46,11 +46,9 @@ import AnimatedButton from "./AnimatedButton";
 
 
 
-import banner1 from "../assets/images/banner1.jpeg";
-
-import banner2 from "../assets/images/banner2.jpeg";
-
-import banner3 from "../assets/images/banner3.jpeg";
+import banner1 from "../app/(website)/assets/images/banner1.jpeg";
+import banner2 from "../app/(website)/assets/images/banner2.jpeg";
+import banner3 from "../app/(website)/assets/images/banner3.jpeg";
 
 
 
