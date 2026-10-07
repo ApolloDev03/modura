@@ -3,7 +3,6 @@
 import {ArrowRight, DraftingCompass } from "lucide-react";
 import Image from "next/image";
 import { useLayoutEffect, useRef, useState } from "react";
-import Breadcrumb from "../components/Breadcrumb";
 import service_img from "../assets/images/why-us2.jpeg"
 import { motion } from "framer-motion";
 import gsap from "gsap";
@@ -14,6 +13,7 @@ import blog1 from "../assets/images/blog1.jpeg";
 import blog2 from "../assets/images/blog2.jpeg";
 import blog3 from "../assets/images/blog3.jpeg";
 import Link from "next/link";
+import Breadcrumb from "@/components/Breadcrumb";
 
 
 gsap.registerPlugin(ScrollTrigger);

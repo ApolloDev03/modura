@@ -3,8 +3,8 @@ import {
   DraftingCompass,
 } from "lucide-react";
 
-import about_building from "../assets/images/about-building.jpeg";
-import blueprint from "../assets/images/blueprint.jpeg";
+import about_building from "../app/(website)/assets/images/about-building.jpeg";
+import blueprint from "../app/(website)/assets/images/blueprint.jpeg";
 import AnimatedButton from "./AnimatedButton";
 
 

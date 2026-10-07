@@ -8,9 +8,9 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 
-import blog1 from "../assets/images/blog1.jpeg";
-import blog2 from "../assets/images/blog2.jpeg";
-import blog3 from "../assets/images/blog3.jpeg";
+import blog1 from "../app/(website)/assets/images/blog1.jpeg";
+import blog2 from "../app/(website)/assets/images/blog2.jpeg";
+import blog3 from "../app/(website)/assets/images/blog3.jpeg";
 import Link from "next/link";
 
 

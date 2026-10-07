@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { ChevronRight, Compass } from "lucide-react";
 
-import breadcrumbBg from "../assets/images/Breadcrumb.jpeg";
+import breadcrumbBg from "../app/(website)/assets/images/Breadcrumb.jpeg";
 
 interface BreadcrumbProps {
   title: string;

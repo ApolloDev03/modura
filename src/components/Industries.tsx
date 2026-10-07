@@ -23,12 +23,12 @@ import {
 } from "framer-motion";
 
 
-import oil from "../assets/images/oil.jpeg";
-import infrastructure from "../assets/images/infrastructure.jpeg";
-import steel from "../assets/images/steel.jpeg";
-import water from "../assets/images/water.jpeg";
-import transport from "../assets/images/transport.jpeg";
-import manufacturing from "../assets/images/manufacturing.jpeg";
+import oil from "../app/(website)/assets/images/oil.jpeg";
+import infrastructure from "../app/(website)/assets/images/infrastructure.jpeg";
+import steel from "../app/(website)/assets/images/steel.jpeg";
+import water from "../app/(website)/assets/images/water.jpeg";
+import transport from "../app/(website)/assets/images/transport.jpeg";
+import manufacturing from "../app/(website)/assets/images/manufacturing.jpeg";
 
 
 const industries = [
