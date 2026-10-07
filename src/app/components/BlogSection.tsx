@@ -20,40 +20,40 @@ gsap.registerPlugin(ScrollTrigger);
 
 const blogs = [
 
-{
-date:{
-day:"24",
-month:"JUN",
-year:"2026"
-},
-title:"How BIM Is Transforming Modern Construction",
-desc:"Discover how BIM technology improves coordination, accuracy and project delivery across complex construction projects.",
-image:blog1.src
-},
+   {
+      date: {
+         day: "24",
+         month: "JUN",
+         year: "2026"
+      },
+      title: "How BIM Is Transforming Modern Construction",
+      desc: "Discover how BIM technology improves coordination, accuracy and project delivery across complex construction projects.",
+      image: blog1.src
+   },
 
 
-{
-date:{
-day:"18",
-month:"MAY",
-year:"2026"
-},
-title:"Future Trends In Project Management",
-desc:"Exploring innovative approaches and digital tools that are shaping the future of engineering industry.",
-image:blog2.src
-},
+   {
+      date: {
+         day: "18",
+         month: "MAY",
+         year: "2026"
+      },
+      title: "Future Trends In Project Management",
+      desc: "Exploring innovative approaches and digital tools that are shaping the future of engineering industry.",
+      image: blog2.src
+   },
 
 
-{
-date:{
-day:"12",
-month:"APR",
-year:"2026"
-},
-title:"Sustainable Engineering For Future Infrastructure",
-desc:"Learn how sustainable design and engineering solutions are building greener infrastructure.",
-image:blog3.src
-}
+   {
+      date: {
+         day: "12",
+         month: "APR",
+         year: "2026"
+      },
+      title: "Sustainable Engineering For Future Infrastructure",
+      desc: "Learn how sustainable design and engineering solutions are building greener infrastructure.",
+      image: blog3.src
+   }
 
 ];
 
@@ -61,70 +61,70 @@ image:blog3.src
 
 
 
-export default function BlogSection(){
+export default function BlogSection() {
 
 
-const sectionRef = useRef<HTMLDivElement | null>(null);
-
-
-
-useLayoutEffect(()=>{
-
-
-const ctx = gsap.context(()=>{
-
-
-gsap.from(".blog-card",
-{
-opacity:0,
-y:70,
-duration:1,
-ease:"power3.out",
-stagger:0.2,
-
-scrollTrigger:{
-trigger:sectionRef.current,
-start:"top 75%",
-once:true
-}
-
-});
-
-
-},sectionRef);
+   const sectionRef = useRef<HTMLDivElement | null>(null);
 
 
 
-return()=>ctx.revert();
+   useLayoutEffect(() => {
+
+
+      const ctx = gsap.context(() => {
+
+
+         gsap.from(".blog-card",
+            {
+               opacity: 0,
+               y: 70,
+               duration: 1,
+               ease: "power3.out",
+               stagger: 0.2,
+
+               scrollTrigger: {
+                  trigger: sectionRef.current,
+                  start: "top 75%",
+                  once: true
+               }
+
+            });
+
+
+      }, sectionRef);
 
 
 
-},[]);
+      return () => ctx.revert();
+
+
+
+   }, []);
 
 
 
 
 
 
-return(
+   return (
 
-<section
+      <section
 
-ref={sectionRef}
+         ref={sectionRef}
 
-className="
+         className="
 relative
 overflow-hidden
 bg-modura-off-white
 py-16
 "
 
->
+      >
 
 
-<div
+         <div
 
-className="
+            className="
 relative
 z-10
 max-w-7xl
@@ -132,23 +132,23 @@ mx-auto
 px-6
 "
 
->
+         >
 
 
 
 
-{/* HEADER */}
+            {/* HEADER */}
 
-<div
-className="
+            <div
+               className="
 text-center
 mb-14
 "
 
->
+            >
 
 
-<div className="
+               <div className="
 flex
 items-center
 gap-3
@@ -162,26 +162,26 @@ text-modura-secondary
 ">
 
 
-<DraftingCompass
-size={20}
-strokeWidth={1.5}
-className="
+                  <DraftingCompass
+                     size={20}
+                     strokeWidth={1.5}
+                     className="
 text-modura-secondary
 "
-/>
+                  />
 
 
-<span>
-OUR BLOG 
-</span>
+                  <span>
+                     OUR BLOG
+                  </span>
 
 
-</div>
+               </div>
 
 
 
-<h2
-className="
+               <h2
+                  className="
 mt-4
 font-heading
 text-5xl
@@ -189,66 +189,66 @@ lg:text-6xl
 font-semibold
 text-modura-primary
 "
->
+               >
 
-Engineering 
-<span
-className="
+                  Engineering
+                  <span
+                     className="
 text-modura-secondary ml-2
 "
->
-Insights
-</span>
+                  >
+                     Insights
+                  </span>
 
 
-</h2>
-
-
-
-</div>
+               </h2>
 
 
 
-{/* BLOG GRID */}
+            </div>
 
 
-<div
 
-className="
+            {/* BLOG GRID */}
+
+
+            <div
+
+               className="
 grid
 md:grid-cols-2
 lg:grid-cols-3
 gap-8
 "
 
->
+            >
 
 
 
 
-{
-blogs.map((blog,index)=>(
+               {
+                  blogs.map((blog, index) => (
 
 
 
-<motion.article
+                     <motion.article
 
 
-key={index}
+                        key={index}
 
 
-whileHover={{
-y:-12
-}}
+                        whileHover={{
+                           y: -12
+                        }}
 
 
-transition={{
-duration:.35
-}}
+                        transition={{
+                           duration: .35
+                        }}
 
 
 
-className="
+                        className="
 blog-card
 bg-white
 shadow-xl
@@ -257,70 +257,70 @@ blog-card-shape
 h-[500px]
 "
 
->
+                     >
 
 
 
 
 
-{/* IMAGE */}
+                        {/* IMAGE */}
 
-   <Link
-                                        href="blogDetail">
+                        <Link
+                           href="blogDetail">
 
-<div
+                           <div
 
-className="
+                              className="
 relative
 h-[230px]
 overflow-hidden
 blog-image-shape
 "
 
->
+                           >
 
 
-<Image
+                              <Image
 
-src={blog.image}
+                                 src={blog.image}
 
-alt={blog.title}
+                                 alt={blog.title}
 
-fill
+                                 fill
 
-sizes="400px"
+                                 sizes="400px"
 
-className="
+                                 className="
 object-cover
 transition-transform
 duration-700
 group-hover:scale-110
 "
 
-/>
+                              />
 
 
 
-</div>
+                           </div>
 
 
-{/* CONTENT */}
+                           {/* CONTENT */}
 
 
-<div
+                           <div
 
-className="
+                              className="
 px-8
 py-5
 "
 
->
+                           >
 
 
-{/* DATE */}
+                              {/* DATE */}
 
-<div
-className="
+                              <div
+                                 className="
 mb-2
 font-heading
 text-modura-black
@@ -328,14 +328,14 @@ font-bold
 text-lg
 tracking-wide
 "
->
+                              >
 
-{blog.date.day} {blog.date.month} {blog.date.year}
+                                 {blog.date.day} {blog.date.month} {blog.date.year}
 
-</div>
-<h3
+                              </div>
+                              <h3
 
-className="
+                                 className="
 font-heading
 text-[20px]
 font-semibold
@@ -343,31 +343,31 @@ leading-tight
 text-modura-secondary
 "
 
->
+                              >
 
-{blog.title}
+                                 {blog.title}
 
-</h3>
+                              </h3>
 
 
 
-<p
+                              <p
 
-className="
+                                 className="
 font-body
 text-sm
 leading-7
 text-modura-black
 "
 
->
+                              >
 
-{blog.desc}
+                                 {blog.desc}
 
-</p>
+                              </p>
 
-<button
-className="
+                              <button
+                                 className="
 group
 relative
 mt-3
@@ -389,13 +389,13 @@ border-2
 border-modura-secondary
 
 "
->
+                              >
 
 
-{/* Hover Layer */}
+                                 {/* Hover Layer */}
 
-<span
-className="
+                                 <span
+                                    className="
 absolute
 inset-0
 bg-modura-secondary
@@ -406,32 +406,32 @@ ease-out
 group-hover:translate-y-0
 
 "
-/>
+                                 />
 
 
 
-{/* Text */}
+                                 {/* Text */}
 
-<span
-className="
+                                 <span
+                                    className="
 relative
 z-10
 transition-all
 duration-500
 group-hover:tracking-wider
 "
->
-Read More
-</span>
+                                 >
+                                    Read More
+                                 </span>
 
 
 
 
 
-{/* Arrow */}
+                                 {/* Arrow */}
 
-<span
-className="
+                                 <span
+                                    className="
 relative
 z-10
 flex
@@ -449,53 +449,53 @@ group-hover:translate-x-1
 group-hover:bg-modura-primary
 group-hover:text-white
 "
->
+                                 >
 
-<ArrowRight
-size={18}
-className="
+                                    <ArrowRight
+                                       size={18}
+                                       className="
 transition-transform
 duration-500
 group-hover:translate-x-1
 "
-/>
+                                    />
 
-</span>
-
-
-
-</button>
-
-</div>
-                                        </Link>
+                                 </span>
 
 
+
+                              </button>
+
+                           </div>
+                        </Link>
 
 
 
 
 
 
-</motion.article>
+
+
+                     </motion.article>
 
 
 
-))
-}
+                  ))
+               }
 
 
 
 
-</div>
+            </div>
 
 
-</div>
+         </div>
 
 
 
-</section>
+      </section>
 
 
-)
+   )
 
 }

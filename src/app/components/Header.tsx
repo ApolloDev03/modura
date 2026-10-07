@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
+import { useRef, useState } from "react";
 
 import {
     FiArrowRight,
@@ -57,463 +57,255 @@ type ServiceCategory = {
 ========================================================= */
 
 const companyLinks = [
-  {
-    title: "About Modura",
-    href: "/company#about",
-    icon: PiBuildings,
-  },
-  {
-    title: "Why Choose Us",
-    href: "/company#why-us",
-    icon: FiShield,
-  },
-  {
-    title: "Our Team",
-    href: "/company#team",
-    icon: FiUsers,
-  },
-  {
-    title: "Quality Policy",
-    href: "/company#quality-policy",
-    icon: FiFileText,
-  },
-  {
-    title: "Certifications",
-    href: "/company#certifications",
-    icon: FiAward,
-  },
-  {
-    title: "Testimonials",
-    href: "/company#testimonials",
-    icon: PiStack,
-  },
-  {
-    title: "FAQs",
-    href: "/company#faqs",
-    icon: FiHelpCircle,
-  },
-  {
-    title: "Blog",
-    href: "/company#blog",
-    icon: FiBookOpen,
-},
-];
-
-
-
-const serviceCategories: ServiceCategory[] = [
     {
-        title: "CAD Drafting Services",
-        href: "/services/cad-drafting-services",
-        description:
-            "Accurate CAD drafting and technical documentation for architecture, engineering and construction projects.",
-        services: [
-            {
-                title: "2D CAD Drafting",
-                href: "/services/cad-drafting-services/2d-cad-drafting",
-            },
-            {
-                title: "CAD Conversion",
-                href: "/services/cad-drafting-services/cad-conversion",
-            },
-            {
-                title: "As-Built Drawings",
-                href: "/services/cad-drafting-services/as-built-drawings",
-            },
-            {
-                title: "Construction Drawings",
-                href: "/services/cad-drafting-services/construction-drawings",
-            },
-            {
-                title: "PDF / Sketch to CAD",
-                href: "/services/cad-drafting-services/pdf-sketch-to-cad",
-            },
-        ],
+        title: "About Modura",
+        href: "/company#about",
+        icon: PiBuildings,
     },
-
     {
-        title: "Architectural Engineering",
-        href: "/services/architectural-engineering",
-        description:
-            "Architectural planning, documentation, modelling and visualization for coordinated project delivery.",
-        services: [
-            {
-                title: "Architectural Drafting",
-                href: "/services/architectural-engineering/architectural-drafting",
-            },
-            {
-                title: "Architectural Planning",
-                href: "/services/architectural-engineering/architectural-planning",
-            },
-            {
-                title: "Architectural Modeling",
-                href: "/services/architectural-engineering/architectural-modeling",
-            },
-            {
-                title: "Architectural Rendering",
-                href: "/services/architectural-engineering/architectural-rendering",
-            },
-            {
-                title: "Architectural Walkthroughs",
-                href: "/services/architectural-engineering/architectural-walkthroughs",
-            },
-        ],
+        title: "Why Choose Us",
+        href: "/company#why-us",
+        icon: FiShield,
     },
-
     {
-        title: "Structural Engineering",
-        href: "/services/structural-engineering",
-        description:
-            "Structural analysis, design and detailing solutions for safe, coordinated and constructible building systems.",
-        services: [
-            {
-                title: "Residential Structural Design",
-                href: "/services/structural-engineering/residential-structural-design",
-            },
-            {
-                title: "Structural Steel Detailing",
-                href: "/services/structural-engineering/structural-steel-detailing",
-            },
-            {
-                title: "Reinforcement Detailing",
-                href: "/services/structural-engineering/reinforcement-detailing",
-            },
-            {
-                title: "Steel / Concrete Structures",
-                href: "/services/structural-engineering/steel-concrete-structures",
-            },
-            {
-                title: "Structural Steel Frame Analysis",
-                href: "/services/structural-engineering/structural-steel-frame-analysis",
-            },
-            {
-                title: "Structural Calculations",
-                href: "/services/structural-engineering/structural-calculations",
-            },
-        ],
+        title: "Our Team",
+        href: "/company#team",
+        icon: FiUsers,
     },
-
     {
-        title: "Building Information Modeling",
-        href: "/services/building-information-modeling",
-        description:
-            "Integrated BIM workflows connecting design, coordination, construction and project information.",
-        services: [
-            {
-                title: "Architectural BIM",
-                href: "/services/building-information-modeling/architectural-bim",
-            },
-            {
-                title: "Structural BIM",
-                href: "/services/building-information-modeling/structural-bim",
-            },
-            {
-                title: "MEP BIM",
-                href: "/services/building-information-modeling/mep-bim",
-            },
-            {
-                title: "Scan to BIM",
-                href: "/services/building-information-modeling/scan-to-bim",
-            },
-            {
-                title: "Clash Detection",
-                href: "/services/building-information-modeling/clash-detection",
-            },
-            {
-                title: "BIM Coordination",
-                href: "/services/building-information-modeling/bim-coordination",
-            },
-        ],
+        title: "Quality Policy",
+        href: "/company#quality-policy",
+        icon: FiFileText,
     },
-
     {
-        title: "MEP Engineering",
-        href: "/services/mep-engineering",
-        description:
-            "Integrated mechanical, electrical and plumbing engineering for coordinated building systems.",
-        services: [
-            {
-                title: "MEP Design",
-                href: "/services/mep-engineering/mep-design",
-            },
-            {
-                title: "MEP Coordination",
-                href: "/services/mep-engineering/mep-coordination",
-            },
-            {
-                title: "MEP Drafting",
-                href: "/services/mep-engineering/mep-drafting",
-            },
-            {
-                title: "MEP BIM Modeling",
-                href: "/services/mep-engineering/mep-bim-modeling",
-            },
-            {
-                title: "MEP Shop Drawings",
-                href: "/services/mep-engineering/mep-shop-drawings",
-            },
-        ],
+        title: "Certifications",
+        href: "/company#certifications",
+        icon: FiAward,
     },
-
     {
-        title: "Mechanical Engineering",
-        href: "/services/mechanical-engineering",
-        description:
-            "Mechanical design, modelling and technical documentation for multidisciplinary engineering projects.",
-        services: [
-            {
-                title: "Mechanical Design",
-                href: "/services/mechanical-engineering/mechanical-design",
-            },
-            {
-                title: "Mechanical Drafting",
-                href: "/services/mechanical-engineering/mechanical-drafting",
-            },
-            {
-                title: "3D Mechanical Modeling",
-                href: "/services/mechanical-engineering/3d-modeling",
-            },
-            {
-                title: "Mechanical Detailing",
-                href: "/services/mechanical-engineering/mechanical-detailing",
-            },
-        ],
+        title: "Testimonials",
+        href: "/company#testimonials",
+        icon: PiStack,
     },
-
     {
-        title: "Shop Drawing Services",
-        href: "/services/shop-drawing-services",
-        description:
-            "Fabrication and installation-ready shop drawings developed for accurate project execution.",
-        services: [
-            {
-                title: "Architectural Shop Drawings",
-                href: "/services/shop-drawing-services/architectural",
-            },
-            {
-                title: "Structural Shop Drawings",
-                href: "/services/shop-drawing-services/structural",
-            },
-            {
-                title: "MEP Shop Drawings",
-                href: "/services/shop-drawing-services/mep",
-            },
-            {
-                title: "Fabrication Drawings",
-                href: "/services/shop-drawing-services/fabrication",
-            },
-            {
-                title: "Facade Shop Drawings",
-                href: "/services/shop-drawing-services/facade",
-            },
-        ],
+        title: "FAQs",
+        href: "/company#faqs",
+        icon: FiHelpCircle,
     },
-
     {
-        title: "Electrical Services",
-        href: "/services/electrical-services",
-        description:
-            "Electrical layouts, engineering documentation and coordinated building-services design.",
-        services: [
-            {
-                title: "Electrical Design",
-                href: "/services/electrical-services/electrical-design",
-            },
-            {
-                title: "Electrical Drafting",
-                href: "/services/electrical-services/electrical-drafting",
-            },
-            {
-                title: "Lighting Layouts",
-                href: "/services/electrical-services/lighting-layouts",
-            },
-            {
-                title: "Power Distribution",
-                href: "/services/electrical-services/power-distribution",
-            },
-        ],
-    },
-
-    {
-        title: "Plumbing / Piping",
-        href: "/services/plumbing-piping",
-        description:
-            "Coordinated plumbing and piping design solutions for building and engineering applications.",
-        services: [
-            {
-                title: "Plumbing Design",
-                href: "/services/plumbing-piping/plumbing-design",
-            },
-            {
-                title: "Piping Design",
-                href: "/services/plumbing-piping/piping-design",
-            },
-            {
-                title: "Plumbing Drafting",
-                href: "/services/plumbing-piping/plumbing-drafting",
-            },
-            {
-                title: "Piping Layouts",
-                href: "/services/plumbing-piping/piping-layouts",
-            },
-        ],
-    },
-
-    {
-        title: "HVAC Engineering",
-        href: "/services/hvac-engineering",
-        description:
-            "HVAC design, calculations, layouts and coordinated documentation for efficient building systems.",
-        services: [
-            {
-                title: "HVAC System Design",
-                href: "/services/hvac-engineering/system-design",
-            },
-            {
-                title: "HVAC Load Calculations",
-                href: "/services/hvac-engineering/load-calculations",
-            },
-            {
-                title: "Duct Layouts",
-                href: "/services/hvac-engineering/duct-layouts",
-            },
-            {
-                title: "HVAC Piping Design",
-                href: "/services/hvac-engineering/piping-design",
-            },
-            {
-                title: "HVAC Shop Drawings",
-                href: "/services/hvac-engineering/shop-drawings",
-            },
-        ],
-    },
-
-    {
-        title: "Civil Engineering",
-        href: "/services/civil-engineering",
-        description:
-            "Civil engineering and documentation support across planning, design and construction stages.",
-        services: [
-            {
-                title: "Civil Drafting",
-                href: "/services/civil-engineering/civil-drafting",
-            },
-            {
-                title: "Civil Engineering Design",
-                href: "/services/civil-engineering/design",
-            },
-            {
-                title: "Site Development",
-                href: "/services/civil-engineering/site-development",
-            },
-            {
-                title: "Construction Documentation",
-                href: "/services/civil-engineering/construction-documentation",
-            },
-        ],
-    },
-
-    {
-        title: "Detailing Services",
-        href: "/services/detailing-services",
-        description:
-            "Detailed fabrication and construction documentation developed for accuracy and coordination.",
-        services: [
-            {
-                title: "Steel Detailing",
-                href: "/services/detailing-services/steel-detailing",
-            },
-            {
-                title: "Rebar Detailing",
-                href: "/services/detailing-services/rebar-detailing",
-            },
-            {
-                title: "Precast Detailing",
-                href: "/services/detailing-services/precast-detailing",
-            },
-            {
-                title: "Structural Detailing",
-                href: "/services/detailing-services/structural-detailing",
-            },
-        ],
-    },
-
-    {
-        title: "Mass Timber Buildings",
-        href: "/services/mass-timber-buildings",
-        description:
-            "Engineering and detailing support for modern mass-timber building systems and assemblies.",
-        services: [
-            {
-                title: "Mass Timber Detailing",
-                href: "/services/mass-timber-buildings/detailing",
-            },
-            {
-                title: "CLT Detailing",
-                href: "/services/mass-timber-buildings/clt-detailing",
-            },
-            {
-                title: "Glulam Detailing",
-                href: "/services/mass-timber-buildings/glulam-detailing",
-            },
-            {
-                title: "Timber Shop Drawings",
-                href: "/services/mass-timber-buildings/shop-drawings",
-            },
-        ],
-    },
-
-    {
-        title: "Sheet Metal Design",
-        href: "/services/sheet-metal-design",
-        description:
-            "Precision sheet-metal modelling, detailing and fabrication documentation.",
-        services: [
-            {
-                title: "Sheet Metal Drafting",
-                href: "/services/sheet-metal-design/drafting",
-            },
-            {
-                title: "Sheet Metal Detailing",
-                href: "/services/sheet-metal-design/detailing",
-            },
-            {
-                title: "Fabrication Drawings",
-                href: "/services/sheet-metal-design/fabrication-drawings",
-            },
-            {
-                title: "3D Sheet Metal Modeling",
-                href: "/services/sheet-metal-design/3d-modeling",
-            },
-        ],
-    },
-
-    {
-        title: "Cladding Engineering",
-        href: "/services/cladding-engineering",
-        description:
-            "Facade and cladding engineering documentation supporting fabrication and installation.",
-        services: [
-            {
-                title: "Cladding Design",
-                href: "/services/cladding-engineering/design",
-            },
-            {
-                title: "Facade Detailing",
-                href: "/services/cladding-engineering/facade-detailing",
-            },
-            {
-                title: "Cladding Shop Drawings",
-                href: "/services/cladding-engineering/shop-drawings",
-            },
-            {
-                title: "Panel Layouts",
-                href: "/services/cladding-engineering/panel-layouts",
-            },
-        ],
+        title: "Blog",
+        href: "/company#blog",
+        icon: FiBookOpen,
     },
 ];
 
+
+
+export const serviceCategories: ServiceCategory[] = [
+  {
+    title: "CAD Drafting Services",
+    href: "/services",
+    description:
+      "Accurate 2D drafting and technical documentation for architectural, structural, mechanical and construction projects.",
+    services: [
+      { title: "2D CAD Drafting", href: "/services" },
+      { title: "CAD Conversion", href: "/services" },
+      { title: "As-Built Drawings", href: "/services" },
+      { title: "Construction Drawings", href: "/services" },
+      { title: "PDF / Sketch to CAD", href: "/services" },
+    ],
+  },
+
+  {
+    title: "Architectural Engineering",
+    href: "/services",
+    description:
+      "Architectural planning, documentation, modelling and visualization for coordinated project delivery.",
+    services: [
+      { title: "Architectural Drafting", href: "/services" },
+      { title: "Architectural Planning", href: "/services" },
+      { title: "Architectural Modeling", href: "/services" },
+      { title: "Architectural Rendering", href: "/services" },
+      { title: "Architectural Walkthroughs", href: "/services" },
+    ],
+  },
+
+  {
+    title: "Structural Engineering",
+    href: "/services",
+    description:
+      "Structural analysis, design and detailing solutions for safe, coordinated and constructible building systems.",
+    services: [
+      { title: "Residential Structural Design", href: "/services" },
+      { title: "Structural Steel Detailing", href: "/services" },
+      { title: "Reinforcement Detailing", href: "/services" },
+      { title: "Steel / Concrete Structures", href: "/services" },
+      { title: "Structural Steel Frame Analysis", href: "/services" },
+      { title: "Structural Calculations", href: "/services" },
+    ],
+  },
+
+  {
+    title: "Building Information Modeling",
+    href: "/services",
+    description:
+      "Integrated BIM workflows connecting design, coordination, construction and project information.",
+    services: [
+      { title: "Architectural BIM", href: "/services" },
+      { title: "Structural BIM", href: "/services" },
+      { title: "MEP BIM", href: "/services" },
+      { title: "Scan to BIM", href: "/services" },
+      { title: "Clash Detection", href: "/services" },
+      { title: "BIM Coordination", href: "/services" },
+    ],
+  },
+
+  {
+    title: "MEP Engineering",
+    href: "/services",
+    description:
+      "Integrated mechanical, electrical and plumbing engineering for coordinated building systems.",
+    services: [
+      { title: "MEP Design", href: "/services" },
+      { title: "MEP Coordination", href: "/services" },
+      { title: "MEP Drafting", href: "/services" },
+      { title: "MEP BIM Modeling", href: "/services" },
+      { title: "MEP Shop Drawings", href: "/services" },
+    ],
+  },
+
+  {
+    title: "Mechanical Engineering",
+    href: "/services",
+    description:
+      "Mechanical design, modelling and technical documentation for multidisciplinary engineering projects.",
+    services: [
+      { title: "Mechanical Design", href: "/services" },
+      { title: "Mechanical Drafting", href: "/services" },
+      { title: "3D Mechanical Modeling", href: "/services" },
+      { title: "Mechanical Detailing", href: "/services" },
+    ],
+  },
+
+  {
+    title: "Shop Drawing Services",
+    href: "/services",
+    description:
+      "Fabrication and installation-ready shop drawings developed for accurate project execution.",
+    services: [
+      { title: "Architectural Shop Drawings", href: "/services" },
+      { title: "Structural Shop Drawings", href: "/services" },
+      { title: "MEP Shop Drawings", href: "/services" },
+      { title: "Fabrication Drawings", href: "/services" },
+      { title: "Facade Shop Drawings", href: "/services" },
+    ],
+  },
+
+  {
+    title: "Electrical Services",
+    href: "/services",
+    description:
+      "Electrical layouts, engineering documentation and coordinated building-services design.",
+    services: [
+      { title: "Electrical Design", href: "/services" },
+      { title: "Electrical Drafting", href: "/services" },
+      { title: "Lighting Layouts", href: "/services" },
+      { title: "Power Distribution", href: "/services" },
+    ],
+  },
+
+  {
+    title: "Plumbing / Piping",
+    href: "/services",
+    description:
+      "Coordinated plumbing and piping design solutions for building and engineering applications.",
+    services: [
+      { title: "Plumbing Design", href: "/services" },
+      { title: "Piping Design", href: "/services" },
+      { title: "Plumbing Drafting", href: "/services" },
+      { title: "Piping Layouts", href: "/services" },
+    ],
+  },
+
+  {
+    title: "HVAC Engineering",
+    href: "/services",
+    description:
+      "HVAC design, calculations, layouts and coordinated documentation for efficient building systems.",
+    services: [
+      { title: "HVAC System Design", href: "/services" },
+      { title: "HVAC Load Calculations", href: "/services" },
+      { title: "Duct Layouts", href: "/services" },
+      { title: "HVAC Piping Design", href: "/services" },
+      { title: "HVAC Shop Drawings", href: "/services" },
+    ],
+  },
+
+  {
+    title: "Civil Engineering",
+    href: "/services",
+    description:
+      "Civil engineering and documentation support across planning, design and construction stages.",
+    services: [
+      { title: "Civil Drafting", href: "/services" },
+      { title: "Civil Engineering Design", href: "/services" },
+      { title: "Site Development", href: "/services" },
+      { title: "Construction Documentation", href: "/services" },
+    ],
+  },
+
+  {
+    title: "Detailing Services",
+    href: "/services",
+    description:
+      "Detailed fabrication and construction documentation developed for accuracy and coordination.",
+    services: [
+      { title: "Steel Detailing", href: "/services" },
+      { title: "Rebar Detailing", href: "/services" },
+      { title: "Precast Detailing", href: "/services" },
+      { title: "Structural Detailing", href: "/services" },
+    ],
+  },
+
+  {
+    title: "Mass Timber Buildings",
+    href: "/services",
+    description:
+      "Engineering and detailing support for modern mass-timber building systems and assemblies.",
+    services: [
+      { title: "Mass Timber Detailing", href: "/services" },
+      { title: "CLT Detailing", href: "/services" },
+      { title: "Glulam Detailing", href: "/services" },
+      { title: "Timber Shop Drawings", href: "/services" },
+    ],
+  },
+
+  {
+    title: "Sheet Metal Design",
+    href: "/services",
+    description:
+      "Precision sheet-metal modelling, detailing and fabrication documentation.",
+    services: [
+      { title: "Sheet Metal Drafting", href: "/services" },
+      { title: "Sheet Metal Detailing", href: "/services" },
+      { title: "Fabrication Drawings", href: "/services" },
+      { title: "3D Sheet Metal Modeling", href: "/services" },
+    ],
+  },
+
+  {
+    title: "Cladding Engineering",
+    href: "/services",
+    description:
+      "Facade and cladding engineering documentation supporting fabrication and installation.",
+    services: [
+      { title: "Cladding Design", href: "/services" },
+      { title: "Facade Detailing", href: "/services" },
+      { title: "Cladding Shop Drawings", href: "/services" },
+      { title: "Panel Layouts", href: "/services" },
+    ],
+  },
+];
 /* =========================================================
    SOFTWARE
 ========================================================= */
@@ -523,31 +315,31 @@ const softwareLinks = [
         title: "AutoCAD",
         subtitle: "CAD Drafting",
         icon: PiBlueprint,
-        href: "/software-expertise/autocad",
+        href: "/software-expertise",
     },
     {
         title: "Autodesk Revit",
         subtitle: "BIM & Coordination",
         icon: PiCube,
-        href: "/software-expertise/revit",
+        href: "/software-expertise",
     },
     {
         title: "Tekla Structures",
         subtitle: "Structural Detailing",
         icon: PiBridge,
-        href: "/software-expertise/tekla",
+        href: "/software-expertise",
     },
     {
         title: "STAAD.Pro",
         subtitle: "Structural Analysis",
         icon: PiBuildings,
-        href: "/software-expertise/staad-pro",
+        href: "/software-expertise",
     },
     {
         title: "Autodesk Inventor",
         subtitle: "Mechanical Engineering",
         icon: PiGear,
-        href: "/software-expertise/autodesk-inventor",
+        href: "/software-expertise",
     },
 ];
 
@@ -556,51 +348,69 @@ const softwareLinks = [
 ========================================================= */
 
 const portfolioLinks = [
-    {
-        title: "Steel Detailing Samples",
-        href: "/portfolio/steel-detailing",
-        icon: PiBridge,
-    },
-    {
-        title: "Rebar Detailing Samples",
-        href: "/portfolio/rebar-detailing",
-        icon: PiStack,
-    },
-    {
-        title: "Architectural Samples",
-        href: "/portfolio/architectural",
-        icon: PiBuildings,
-    },
-    {
-        title: "Structural Samples",
-        href: "/portfolio/structural",
-        icon: FiLayers,
-    },
-    {
-        title: "Facade Shop Drawings",
-        href: "/portfolio/facade-shop-drawings",
-        icon: PiBlueprint,
-    },
-    {
-        title: "Precast Shop Drawings",
-        href: "/portfolio/precast-shop-drawings",
-        icon: FiGrid,
-    },
-    {
-        title: "BIM Samples",
-        href: "/portfolio/bim",
-        icon: PiCube,
-    },
-    {
-        title: "Mechanical Detailing",
-        href: "/portfolio/mechanical-detailing",
-        icon: PiGear,
-    },
-    {
-        title: "Millwork / Joinery",
-        href: "/portfolio/millwork-joinery",
-        icon: FiHome,
-    },
+  {
+    title: "Steel Detailing Samples",
+    href: "/portfolio#steel-detailing",
+    icon: PiBridge,
+  },
+  {
+    title: "Rebar Detailing Samples",
+    href: "/portfolio#rebar-detailing",
+    icon: PiStack,
+  },
+  {
+    title: "Architectural Samples",
+    href: "/portfolio#architectural",
+    icon: PiBuildings,
+    children: [
+      {
+        title: "Architectural Modeling",
+        href: "/portfolio#architectural",
+      },
+      {
+        title: "Architectural Renderings",
+        href: "/portfolio#architectural",
+      },
+      {
+        title: "Architectural Drafting",
+        href: "/portfolio#architectural",
+      },
+      {
+        title: "Architecture Walkthroughs",
+        href: "/portfolio#architectural",
+      },
+    ],
+  },
+  {
+    title: "Structural Samples",
+    href: "/portfolio#structural",
+    icon: FiLayers,
+  },
+  {
+    title: "Facade Shop Drawings",
+    href: "/portfolio#facade-shop-drawings",
+    icon: PiBlueprint,
+  },
+  {
+    title: "Precast Shop Drawings",
+    href: "/portfolio#precast",
+    icon: FiGrid,
+  },
+  {
+    title: "BIM Samples",
+    href: "/portfolio#bim",
+    icon: PiCube,
+  },
+  {
+    title: "Mechanical Detailing",
+    href: "/portfolio#mechanical",
+    icon: PiGear,
+  },
+  {
+    title: "Millwork / Joinery",
+    href: "/portfolio#millwork",
+    icon: FiHome,
+  },
 ];
 
 /* =========================================================
@@ -609,6 +419,10 @@ const portfolioLinks = [
 
 export default function Header() {
     const [activeService, setActiveService] = useState(0);
+
+    const [activePortfolio, setActivePortfolio] = useState<string | null>(null);
+    const [activePortfolioTop, setActivePortfolioTop] = useState(0);
+    const portfolioScrollRef = useRef<HTMLDivElement>(null);
 
     const [mobileMenu, setMobileMenu] = useState(false);
 
@@ -627,8 +441,8 @@ export default function Header() {
     };
 
     return (
-       <header
-    className="
+        <header
+            className="
         sticky
         top-0
         z-[100]
@@ -637,7 +451,7 @@ export default function Header() {
         bg-modura-white
         shadow-[0_4px_20px_rgba(11,29,51,0.06)]
     "
->
+        >
             <div
                 className="
                     mx-auto
@@ -693,11 +507,7 @@ export default function Header() {
                             lg:flex
                         "
                     >
-                        <DesktopLink
-                            title="Home"
-                            href="/"
-                        />
-
+                      
                         {/* ================= COMPANY ================= */}
 
                         <div
@@ -1249,7 +1059,7 @@ export default function Header() {
                             </div>
                         </div>
 
-                        {/* ================= SOFTWARE ================= */}
+                        {/* ================= SOFTWARE EXPERTISE ================= */}
 
                         <div
                             className="
@@ -1267,25 +1077,24 @@ export default function Header() {
                             <div
                                 className="
                                     invisible
+                                    pointer-events-none
                                     absolute
                                     left-1/2
                                     top-[calc(100%-5px)]
-                                    w-[300px]
+                                    w-[320px]
                                     origin-top
                                     -translate-x-1/2
                                     translate-y-[18px]
                                     scale-[0.96]
                                     opacity-0
-                                    pointer-events-none
-
                                     transition-all
                                     duration-300
-
+                                    ease-out
                                     group-hover/software:visible
+                                    group-hover/software:pointer-events-auto
                                     group-hover/software:translate-y-0
                                     group-hover/software:scale-100
                                     group-hover/software:opacity-100
-                                    group-hover/software:pointer-events-auto
                                 "
                             >
                                 <DropdownTopLine />
@@ -1299,25 +1108,33 @@ export default function Header() {
                                         shadow-[0_24px_70px_rgba(11,29,51,0.18)]
                                     "
                                 >
-
-
                                     <div className="px-5 pb-5">
-                                        {softwareLinks.map((software) => {
-                                            const Icon = software.icon;
+                                        <div
+                                            className="
+                                                max-h-[430px]
+                                                overflow-y-auto
+                                                overscroll-contain
+                                                pr-1
+                                                [scrollbar-width:none]
+                                                [-ms-overflow-style:none]
+                                                [&::-webkit-scrollbar]:hidden
+                                            "
+                                        >
+                                            {softwareLinks.map((item) => {
+                                                const Icon = item.icon;
 
-                                            return (
-                                                <AnimatedIconItem
-                                                    key={software.title}
-                                                    href={software.href}
-                                                    title={software.title}
-                                                    subtitle={software.subtitle}
-                                                    icon={<Icon />}
-                                                />
-                                            );
-                                        })}
+                                                return (
+                                                    <AnimatedIconItem
+                                                        key={item.title}
+                                                        href={item.href}
+                                                        title={item.title}
+                                                        subtitle={item.subtitle}
+                                                        icon={<Icon />}
+                                                    />
+                                                );
+                                            })}
+                                        </div>
                                     </div>
-
-
                                 </div>
                             </div>
                         </div>
@@ -1328,9 +1145,11 @@ export default function Header() {
                             className="
                                 group/portfolio
                                 relative
-                                flex h-full
+                                flex
+                                h-full
                                 items-center
                             "
+                            onMouseLeave={() => setActivePortfolio(null)}
                         >
                             <DesktopDropdownTrigger
                                 title="Portfolio"
@@ -1340,69 +1159,367 @@ export default function Header() {
                             <div
                                 className="
                                     invisible
+                                    pointer-events-none
                                     absolute
                                     right-0
                                     top-[calc(100%-5px)]
+                                    z-[9999]
                                     w-[340px]
-                                    origin-top-right
-                                    translate-y-[18px]
-                                    scale-[0.96]
+                                    translate-y-3
                                     opacity-0
-                                    pointer-events-none
-
                                     transition-all
                                     duration-300
+                                    ease-out
 
                                     group-hover/portfolio:visible
-                                    group-hover/portfolio:translate-y-0
-                                    group-hover/portfolio:scale-100
-                                    group-hover/portfolio:opacity-100
                                     group-hover/portfolio:pointer-events-auto
+                                    group-hover/portfolio:translate-y-0
+                                    group-hover/portfolio:opacity-100
                                 "
                             >
                                 <DropdownTopLine />
 
+                                {/* =================================================
+                                    PORTFOLIO WRAPPER
+
+                                    overflow-visible is important here.
+                                    The scroll is applied ONLY to the left list,
+                                    so the right submenu is never clipped.
+                                ================================================= */}
+
                                 <div
                                     className="
-                                        overflow-hidden
+                                        relative
+                                        overflow-visible
                                         border
                                         border-modura-gray-200
                                         bg-modura-white
-                                        shadow-[0_24px_70px_rgba(11,29,51,0.18)]
+                                        shadow-[0_20px_60px_rgba(11,29,51,0.15)]
                                     "
                                 >
+                                    {/* =================================================
+                                        SCROLLABLE PORTFOLIO LIST
+
+                                        Scrollbar is intentionally hidden but
+                                        mouse-wheel / trackpad scrolling still works.
+                                    ================================================= */}
 
                                     <div
+                                        ref={portfolioScrollRef}
                                         className="
                                             max-h-[430px]
                                             overflow-y-auto
                                             overscroll-contain
+                                            pr-0
+
                                             [scrollbar-width:none]
                                             [-ms-overflow-style:none]
                                             [&::-webkit-scrollbar]:hidden
-                                            px-5
-                                            pb-5
-                                            pr-4
                                         "
                                     >
                                         {portfolioLinks.map((item) => {
                                             const Icon = item.icon;
+                                            const hasChildren =
+                                                Boolean(item.children?.length);
 
                                             return (
-                                                <AnimatedIconItem
+                                                <div
                                                     key={item.title}
-                                                    href={item.href}
-                                                    title={item.title}
-                                                    icon={<Icon />}
-                                                />
+                                                    className="
+                                                        group/portfolio-item
+                                                        relative
+                                                    "
+                                                    onMouseEnter={(event) => {
+                                                        if (!hasChildren) {
+                                                            setActivePortfolio(null);
+                                                            return;
+                                                        }
+
+                                                        const scrollContainer =
+                                                            portfolioScrollRef.current;
+
+                                                        const top =
+                                                            event.currentTarget
+                                                                .offsetTop -
+                                                            (scrollContainer?.scrollTop ??
+                                                                0);
+
+                                                        setActivePortfolio(
+                                                            item.title
+                                                        );
+                                                        setActivePortfolioTop(top);
+                                                    }}
+                                                >
+                                                    {/* MAIN PORTFOLIO ITEM */}
+
+                                                    <Link
+                                                        href={item.href}
+                                                        className="
+                                                            group/item
+                                                            relative
+                                                            flex
+                                                            min-h-[68px]
+                                                            items-center
+                                                            overflow-hidden
+                                                            border-b
+                                                            border-modura-gray-200
+                                                            px-3
+                                                        "
+                                                    >
+                                                        {/* LEFT ACTIVE LINE */}
+
+                                                        <span
+                                                            className="
+                                                                absolute
+                                                                left-0
+                                                                top-1/2
+                                                                h-0
+                                                                w-[3px]
+                                                                -translate-y-1/2
+                                                                bg-modura-primary
+                                                                transition-all
+                                                                duration-300
+                                                                group-hover/portfolio-item:h-7
+                                                            "
+                                                        />
+
+                                                        {/* ICON */}
+
+                                                        <span
+                                                            className="
+                                                                relative
+                                                                mr-3
+                                                                flex
+                                                                h-9
+                                                                w-9
+                                                                shrink-0
+                                                                items-center
+                                                                justify-center
+                                                                border
+                                                                border-modura-gray-200
+                                                                text-[18px]
+                                                                text-modura-primary
+                                                                transition-all
+                                                                duration-300
+                                                                group-hover/portfolio-item:translate-x-2
+                                                                group-hover/portfolio-item:border-modura-primary
+                                                            "
+                                                        >
+                                                            <Icon size={17} />
+
+                                                            <span
+                                                                className="
+                                                                    absolute
+                                                                    -right-[1px]
+                                                                    -top-[1px]
+                                                                    h-[7px]
+                                                                    w-[7px]
+                                                                    border-r-2
+                                                                    border-t-2
+                                                                    border-transparent
+                                                                    transition-all
+                                                                    duration-300
+                                                                    group-hover/portfolio-item:border-modura-primary
+                                                                "
+                                                            />
+                                                        </span>
+
+                                                        {/* BOTTOM LINE */}
+
+                                                        <span
+                                                            className="
+                                                                absolute
+                                                                bottom-0
+                                                                left-0
+                                                                h-[2px]
+                                                                w-0
+                                                                bg-modura-secondary
+                                                                transition-all
+                                                                duration-500
+                                                                group-hover/portfolio-item:w-full
+                                                            "
+                                                        />
+
+                                                        {/* TITLE */}
+
+                                                        <span
+                                                            className="
+                                                                relative
+                                                                flex-1
+                                                                transition-transform
+                                                                duration-300
+                                                                group-hover/portfolio-item:translate-x-2
+                                                            "
+                                                        >
+                                                            <span
+                                                                className="
+                                                                    block
+                                                                    text-[12px]
+                                                                    font-semibold
+                                                                    text-modura-primary
+                                                                "
+                                                            >
+                                                                {item.title}
+                                                            </span>
+                                                        </span>
+
+                                                        {/* RIGHT ARROW */}
+
+                                                        {hasChildren && (
+                                                            <FiChevronRight
+                                                                size={15}
+                                                                className="
+                                                                    text-modura-secondary
+                                                                    transition-transform
+                                                                    duration-300
+                                                                    group-hover/portfolio-item:translate-x-1
+                                                                "
+                                                            />
+                                                        )}
+                                                    </Link>
+                                                </div>
                                             );
                                         })}
                                     </div>
 
+                                    {/* =================================================
+                                        RIGHT SIDE SUBMENU
 
+                                        IMPORTANT:
+                                        This is OUTSIDE the scroll container.
+                                        Therefore it remains fully visible beside
+                                        the Portfolio bar and is never clipped.
+                                    ================================================= */}
+
+                                    {portfolioLinks.map((item) => {
+                                        const hasChildren =
+                                            Boolean(item.children?.length);
+
+                                        if (
+                                            !hasChildren ||
+                                            activePortfolio !== item.title
+                                        ) {
+                                            return null;
+                                        }
+
+                                        return (
+                                            <div
+                                                key={`submenu-${item.title}`}
+                                                className="
+                                                    absolute
+                                                    left-full
+                                                    z-[10000]
+                                                    ml-2
+                                                    w-[300px]
+                                                    pointer-events-auto
+                                                    opacity-100
+                                                    transition-all
+                                                    duration-200
+                                                "
+                                                style={{
+                                                    top: activePortfolioTop,
+                                                }}
+                                                onMouseEnter={() =>
+                                                    setActivePortfolio(
+                                                        item.title
+                                                    )
+                                                }
+                                            >
+                                                <div
+                                                    className="
+                                                        border
+                                                        border-modura-gray-200
+                                                        bg-modura-white
+                                                        shadow-[0_20px_60px_rgba(11,29,51,0.16)]
+                                                    "
+                                                >
+
+                                                    {/* SUBMENU ITEMS */}
+
+                                                    <div className="px-3 py-2">
+                                                        {(item.children ?? []).map(
+                                                            (child) => (
+                                                                <Link
+                                                                    key={child.title}
+                                                                    href={child.href}
+                                                                    className="
+                                                                        group/subitem
+                                                                        relative
+                                                                        flex
+                                                                        min-h-[50px]
+                                                                        items-center
+                                                                        justify-between
+                                                                        overflow-hidden
+                                                                        border-b
+                                                                        border-modura-gray-200
+                                                                        px-3
+                                                                        text-[12px]
+                                                                        font-medium
+                                                                        text-modura-gray-600
+                                                                        transition-all
+                                                                        duration-300
+                                                                        last:border-b-0
+                                                                        hover:bg-modura-light
+                                                                        hover:text-modura-primary
+                                                                    "
+                                                                >
+                                                                    {/* LEFT LINE */}
+
+                                                                    <span
+                                                                        className="
+                                                                            absolute
+                                                                            left-0
+                                                                            top-1/2
+                                                                            h-0
+                                                                            w-[3px]
+                                                                            -translate-y-1/2
+                                                                            bg-modura-secondary
+                                                                            transition-all
+                                                                            duration-300
+                                                                            group-hover/subitem:h-6
+                                                                        "
+                                                                    />
+
+                                                                    {/* TEXT */}
+
+                                                                    <span
+                                                                        className="
+                                                                            transition-all
+                                                                            duration-300
+                                                                            group-hover/subitem:translate-x-2
+                                                                            group-hover/subitem:font-semibold
+                                                                        "
+                                                                    >
+                                                                        {
+                                                                            child.title
+                                                                        }
+                                                                    </span>
+
+                                                                    {/* ARROW */}
+
+                                                                    <FiArrowUpRight
+                                                                        size={14}
+                                                                        className="
+                                                                            text-modura-secondary
+                                                                            opacity-0
+                                                                            transition-all
+                                                                            duration-300
+                                                                            group-hover/subitem:translate-x-0
+                                                                            group-hover/subitem:opacity-100
+                                                                        "
+                                                                    />
+                                                                </Link>
+                                                            )
+                                                        )}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        );
+                                    })}
                                 </div>
                             </div>
                         </div>
+
 
                         <DesktopLink
                             title="Career"
@@ -1773,31 +1890,33 @@ export default function Header() {
                             "portfolio"
                         }
                     >
-                        {portfolioLinks.map(
-                            (item) => {
-                                const Icon =
-                                    item.icon;
+                        {portfolioLinks.map((item) => {
+                            const Icon = item.icon;
+                            const hasChildren =
+                                item.children &&
+                                item.children.length > 0;
 
-                                return (
+                            return (
+                                <div
+                                    key={item.title}
+                                    className="
+                                        border-b
+                                        border-modura-gray-200
+                                    "
+                                >
+                                    {/* MAIN PORTFOLIO ITEM */}
                                     <Link
-                                        key={
-                                            item.title
-                                        }
-                                        href={
-                                            item.href
-                                        }
-                                        onClick={() =>
-                                            setMobileMenu(
-                                                false
-                                            )
-                                        }
+                                        href={item.href}
+                                        onClick={() => {
+                                            if (!hasChildren) {
+                                                setMobileMenu(false);
+                                            }
+                                        }}
                                         className="
                                             flex
                                             min-h-[48px]
                                             items-center
                                             gap-3
-                                            border-b
-                                            border-modura-gray-200
                                             px-4
                                             text-[12px]
                                             font-medium
@@ -1806,13 +1925,74 @@ export default function Header() {
                                     >
                                         <Icon className="text-[17px] text-modura-primary" />
 
-                                        {
-                                            item.title
-                                        }
+                                        <span className="flex-1">
+                                            {item.title}
+                                        </span>
+
+                                        {hasChildren && (
+                                            <FiChevronRight
+                                                className="
+                                                    text-[15px]
+                                                    text-modura-secondary
+                                                "
+                                            />
+                                        )}
                                     </Link>
-                                );
-                            }
-                        )}
+
+                                    {/* MOBILE SUBMENU */}
+                                    {hasChildren && (
+                                        <div
+                                            className="
+                                                bg-modura-light
+                                                pl-8
+                                            "
+                                        >
+                                            {item.children.map((child) => (
+                                                <Link
+                                                    key={child.title}
+                                                    href={child.href}
+                                                    onClick={() =>
+                                                        setMobileMenu(false)
+                                                    }
+                                                    className="
+                                                        flex
+                                                        min-h-[44px]
+                                                        items-center
+                                                        gap-3
+                                                        border-t
+                                                        border-modura-gray-200
+                                                        px-4
+                                                        text-[11px]
+                                                        font-medium
+                                                        text-modura-gray-600
+                                                    "
+                                                >
+                                                    <span
+                                                        className="
+                                                            h-px
+                                                            w-3
+                                                            shrink-0
+                                                            bg-modura-secondary
+                                                        "
+                                                    />
+
+                                                    <span className="flex-1">
+                                                        {child.title}
+                                                    </span>
+
+                                                    <FiArrowUpRight
+                                                        className="
+                                                            text-[13px]
+                                                            text-modura-secondary
+                                                        "
+                                                    />
+                                                </Link>
+                                            ))}
+                                        </div>
+                                    )}
+                                </div>
+                            );
+                        })}
                     </MobileContent>
 
                     <MobileLink
