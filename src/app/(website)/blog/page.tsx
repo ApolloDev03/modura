@@ -932,9 +932,7 @@ export default function BlogSection() {
                     "
                   >
                     <Link
-                      href={`/blogDetail?slug=${encodeURIComponent(
-                        blog.slug
-                      )}`}
+                      href={`/blogDetail/${blog.slug}`}
                       className="block h-full"
                     >
                       {/* IMAGE */}
@@ -984,23 +982,7 @@ export default function BlogSection() {
                           {date.day} {date.month} {date.year}
                         </div>
 
-                        {/* CATEGORY */}
-
-                        {blog.category?.name && (
-                          <div
-                            className="
-                              mb-2
-                              font-body
-                              text-[10px]
-                              font-semibold
-                              uppercase
-                              tracking-[2px]
-                              text-modura-secondary
-                            "
-                          >
-                            {blog.category.name}
-                          </div>
-                        )}
+                      
 
                         {/* TITLE */}
 

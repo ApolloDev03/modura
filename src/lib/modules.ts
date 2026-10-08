@@ -372,6 +372,7 @@ export const INQUIRIES: Record<'contact' | 'project', InquiryConfig> = {
 /** Sidebar menu (hrefs of custom pages are listed directly). */
 export const NAV: NavGroup[] = [
   { group: 'Main', items: [{ label: 'Dashboard', href: '/admin/dashboard' }] },
+    { group: 'Home', items: [{ label: 'Home Counter', href: '/admin/home-counter' }] },
   { group: 'Services', items: [
     { label: 'Manage Category', href: '/admin/categories' },
     { label: 'Manage Services', href: '/admin/services' },

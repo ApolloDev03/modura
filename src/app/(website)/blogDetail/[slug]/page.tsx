@@ -1081,58 +1081,42 @@
 
 "use client";
 
+import { useEffect, useState } from "react";
+import { useParams } from "next/navigation";
+import axios from "axios";
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useState } from "react";
-
 import {
-  ArrowLeft,
   ArrowUpRight,
   CalendarDays,
   DraftingCompass,
 } from "lucide-react";
-
 import Breadcrumb from "@/components/Breadcrumb";
 
-import axios from "axios";
-import { useSearchParams } from "next/navigation";
-
-const API_URL = (
-  process.env.NEXT_PUBLIC_API_URL ||
-  "https://mvnl.salexo.co.in/api/v1"
-).replace(/\/+$/, "");
+const API_URL = "https://mvnl.salexo.co.in";
 
 /* =========================================================
    TYPES
 ========================================================= */
 
-interface RelatedBlog {
+interface BlogItem {
   id: number;
   title: string;
   slug: string;
-  image?: string;
+  image: string;
   imageUrl?: string;
   author?: string;
   publishedAt?: string;
 }
 
-interface BlogDetailData {
-  id: number;
-  title: string;
-  slug: string;
+interface BlogDetailData extends BlogItem {
+  description: string;
   categoryId?: number;
   serviceId?: number;
   softwareId?: number;
-  author?: string;
-  description?: string;
-  image?: string;
-  imageUrl?: string;
   status?: string;
-  publishedAt?: string;
   metaTitle?: string;
   metaDescription?: string;
-  headScript?: string | null;
-  bodyScript?: string | null;
 
   category?: {
     id: number;
@@ -1152,11 +1136,11 @@ interface BlogDetailData {
     slug: string;
   };
 
-  related?: RelatedBlog[];
-  recent?: RelatedBlog[];
+  related?: BlogItem[];
+  recent?: BlogItem[];
 }
 
-interface BlogDetailResponse {
+interface BlogApiResponse {
   success: boolean;
   message: string;
   data: BlogDetailData;
@@ -1166,111 +1150,117 @@ interface BlogDetailResponse {
    HELPERS
 ========================================================= */
 
-const getImageUrl = (
-  imageUrl?: string,
-  image?: string
-): string => {
-  if (imageUrl) {
-    return imageUrl;
-  }
+const getImageUrl = (image?: string | null): string => {
+  if (!image) return "";
 
-  if (!image) {
-    return "/images/blog-placeholder.jpg";
-  }
-
-  if (image.startsWith("http")) {
+  if (
+    image.startsWith("https://") ||
+    image.startsWith("http://")
+  ) {
     return image;
   }
 
-  return `https://mvnl.salexo.co.in${image}`;
+  return `${API_URL}/${image.replace(/^\/+/, "")}`;
 };
 
-const formatDate = (dateString?: string) => {
-  if (!dateString) {
-    return {
-      day: "",
-      month: "",
-      year: "",
-    };
+const formatDate = (date?: string) => {
+  if (!date) {
+    return { day: "", month: "", year: "" };
   }
 
-  const date = new Date(dateString);
+  const parsed = new Date(date);
+
+  if (Number.isNaN(parsed.getTime())) {
+    return { day: "", month: "", year: "" };
+  }
 
   return {
-    day: date.toLocaleDateString("en-GB", {
+    day: parsed.toLocaleDateString("en-US", {
       day: "2-digit",
+      timeZone: "UTC",
     }),
-
-    month: date
+    month: parsed
       .toLocaleDateString("en-US", {
         month: "short",
+        timeZone: "UTC",
       })
       .toUpperCase(),
-
-    year: date.toLocaleDateString("en-GB", {
+    year: parsed.toLocaleDateString("en-US", {
       year: "numeric",
+      timeZone: "UTC",
     }),
   };
 };
 
 /* =========================================================
-   COMPONENT
+   BLOG DETAIL
 ========================================================= */
 
 export default function BlogDetail() {
-  const searchParams = useSearchParams();
-
-  const slug = searchParams.get("slug");
+  const params = useParams<{ slug: string }>();
+  const slug = params.slug;
 
   const [blog, setBlog] = useState<BlogDetailData | null>(null);
-
   const [loading, setLoading] = useState(true);
-
   const [error, setError] = useState("");
 
   /* =========================================================
-     API CALL
+     BLOG DETAIL API
   ========================================================= */
 
   useEffect(() => {
     if (!slug) {
       setLoading(false);
-      setError("Blog slug not found.");
+      setError("Invalid blog URL.");
       return;
     }
+
+    const controller = new AbortController();
 
     const fetchBlogDetail = async () => {
       try {
         setLoading(true);
         setError("");
+        setBlog(null);
 
-        const response = await axios.post<BlogDetailResponse>(
-          `${API_URL}/blogDetail`,
+        const response = await axios.post<BlogApiResponse>(
+          `${API_URL}/api/v1/blogDetail`,
           {
-            slug: slug,
+            slug,
+          },
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+            signal: controller.signal,
           }
         );
 
-        if (response.data?.success) {
+        if (response.data.success && response.data.data) {
           setBlog(response.data.data);
         } else {
-          setError(
-            response.data?.message || "Unable to load blog."
-          );
+          setError(response.data.message || "Blog not found.");
         }
-      } catch (error) {
-        console.error(
-          "Blog Detail API Error:",
-          error
-        );
+      } catch (err) {
+        if (axios.isCancel(err)) return;
 
-        setError("Unable to load blog.");
+        console.error("Blog Detail API Error:", err);
+
+        setError(
+          "Unable to load blog details. Please try again."
+        );
       } finally {
-        setLoading(false);
+        if (!controller.signal.aborted) {
+          setLoading(false);
+        }
       }
     };
 
     fetchBlogDetail();
+
+    return () => {
+      controller.abort();
+    };
   }, [slug]);
 
   /* =========================================================
@@ -1283,15 +1273,13 @@ export default function BlogDetail() {
         <Breadcrumb title="BlogDetail" />
 
         <main className="bg-white">
-          <div className="mx-auto max-w-7xl px-6 py-32 lg:px-10">
-            <div className="animate-pulse">
-              <div className="h-5 w-40 bg-modura-light" />
+          <div className="mx-auto flex min-h-[60vh] max-w-7xl items-center justify-center px-6">
+            <div className="flex flex-col items-center gap-5">
+              <div className="h-10 w-10 animate-spin rounded-full border-[3px] border-modura-gray-200 border-t-modura-secondary" />
 
-              <div className="mt-8 h-20 w-3/4 bg-modura-light" />
-
-              <div className="mt-6 h-6 w-1/2 bg-modura-light" />
-
-              <div className="mt-12 h-[500px] w-full bg-modura-light" />
+              <p className="font-body text-sm text-modura-secondary">
+                Loading blog details...
+              </p>
             </div>
           </div>
         </main>
@@ -1309,33 +1297,20 @@ export default function BlogDetail() {
         <Breadcrumb title="BlogDetail" />
 
         <main className="bg-white">
-          <div className="mx-auto max-w-7xl px-6 py-32 text-center lg:px-10">
-            <h1 className="font-heading text-4xl font-semibold text-modura-primary">
+          <div className="mx-auto flex min-h-[60vh] max-w-7xl flex-col items-center justify-center gap-6 px-6">
+            <h2 className="font-heading text-3xl font-semibold uppercase text-modura-primary">
               Blog Not Found
-            </h1>
+            </h2>
 
-            <p className="mt-4 font-body text-modura-gray-600">
+            <p className="font-body text-sm text-modura-gray-600">
               {error || "The requested blog could not be found."}
             </p>
 
             <Link
               href="/blog"
-              className="
-                mt-8
-                inline-flex
-                items-center
-                gap-3
-                bg-modura-primary
-                px-6
-                py-4
-                font-body
-                text-sm
-                font-semibold
-                text-white
-              "
+              className="bg-modura-primary px-7 py-3 font-body text-xs font-bold uppercase tracking-[2px] text-white transition-colors hover:bg-modura-secondary"
             >
-              <ArrowLeft size={18} />
-              Back To Blog
+              Back To Blogs
             </Link>
           </div>
         </main>
@@ -1343,187 +1318,76 @@ export default function BlogDetail() {
     );
   }
 
-  /* =========================================================
-     DATA
-  ========================================================= */
-
-  const date = formatDate(blog.publishedAt);
-
-  const mainImage = getImageUrl(
-    blog.imageUrl,
-    blog.image
-  );
-
+  const blogDate = formatDate(blog.publishedAt);
   const relatedBlogs = blog.related || [];
+  const featureImage = getImageUrl(
+    blog.imageUrl || blog.image
+  );
 
   return (
     <>
       <Breadcrumb title="BlogDetail" />
 
       <main className="bg-white">
-
         {/* =====================================================
             BLOG HERO
         ===================================================== */}
 
         <section className="relative overflow-hidden bg-modura-off-white">
-
           {/* Architectural Background */}
 
           <div className="pointer-events-none absolute right-0 top-0 hidden h-full w-[40%] lg:block">
-
             <div className="absolute right-[10%] top-0 h-full w-px bg-modura-primary/5" />
-
             <div className="absolute right-[25%] top-0 h-full w-px bg-modura-primary/5" />
-
             <div className="absolute right-[40%] top-0 h-full w-px bg-modura-primary/5" />
-
             <div className="absolute right-[55%] top-0 h-full w-px bg-modura-primary/5" />
-
             <div className="absolute right-0 top-[30%] h-px w-full bg-modura-primary/5" />
-
             <div className="absolute right-0 top-[65%] h-px w-full bg-modura-primary/5" />
-
           </div>
 
-          <div
-            className="
-              relative
-              z-10
-              mx-auto
-              max-w-7xl
-              px-6
-              py-16
-              lg:px-10
-            "
-          >
-
+          <div className="relative z-10 mx-auto max-w-7xl px-6 py-16 lg:px-10">
             {/* META */}
 
-            <div
-              className="
-                mt-12
-                flex
-                flex-wrap
-                items-center
-                gap-5
-              "
-            >
-
-              {/* CATEGORY */}
-
-              <div
-                className="
-                  flex
-                  items-center
-                  gap-3
-                  font-body
-                  text-[10px]
-                  font-bold
-                  uppercase
-                  tracking-[3px]
-                  text-modura-secondary
-                "
-              >
-
+            <div className="mt-12 flex flex-wrap items-center gap-5">
+              <div className="flex items-center gap-3 font-body text-[10px] font-bold uppercase tracking-[3px] text-modura-secondary">
                 <DraftingCompass size={17} />
 
                 {blog.category?.name || "Engineering Insights"}
-
               </div>
 
               <span className="h-1 w-1 rounded-full bg-modura-gray-300" />
 
-              {/* DATE */}
-
-              <span
-                className="
-                  flex
-                  items-center
-                  gap-2
-                  font-body
-                  text-xs
-                  text-modura-gray-500
-                "
-              >
-
+              <span className="flex items-center gap-2 font-body text-xs text-modura-gray-500">
                 <CalendarDays
                   size={15}
                   className="text-modura-secondary"
                 />
 
-                {date.day} {date.month} {date.year}
-
+                {blogDate.day} {blogDate.month} {blogDate.year}
               </span>
-
             </div>
 
             {/* TITLE */}
 
-            <h1
-              className="
-                mt-8
-                max-w-5xl
-                font-heading
-                text-5xl
-                font-semibold
-                uppercase
-                leading-[0.9]
-                tracking-[-1px]
-                text-modura-primary
-                md:text-6xl
-                lg:text-[76px]
-              "
-            >
-
+            <h1 className="mt-8 max-w-5xl font-heading text-5xl font-semibold uppercase leading-[0.9] tracking-[-1px] text-modura-primary md:text-6xl lg:text-[76px]">
               {blog.title}
 
-              <span className="text-modura-secondary">
-                .
-              </span>
-
+              <span className="text-modura-secondary">.</span>
             </h1>
 
             {/* DESCRIPTION */}
 
-            <div
-              className="
-                mt-9
-                flex
-                max-w-3xl
-                items-start
-                gap-5
-              "
-            >
-
-              <span
-                className="
-                  mt-2
-                  h-12
-                  w-[3px]
-                  shrink-0
-                  bg-modura-secondary
-                "
-              />
+            <div className="mt-9 flex max-w-3xl items-start gap-5">
+              <span className="mt-2 h-12 w-[3px] shrink-0 bg-modura-secondary" />
 
               <div
-                className="
-                  font-body
-                  text-sm
-                  leading-7
-                  text-modura-gray-600
-                  md:text-base
-                  md:leading-8
-                "
+                className="font-body text-sm leading-7 text-modura-gray-600 md:text-base md:leading-8"
                 dangerouslySetInnerHTML={{
                   __html: blog.description || "",
                 }}
               />
-
             </div>
-
           </div>
-
         </section>
 
         {/* =====================================================
@@ -1531,97 +1395,35 @@ export default function BlogDetail() {
         ===================================================== */}
 
         <section className="relative">
-
-          <div
-            className="
-              mx-auto
-              max-w-7xl
-              px-6
-              lg:px-10
-            "
-          >
-
-            <div
-              className="
-                relative
-                h-[300px]
-                overflow-hidden
-                md:h-[480px]
-                lg:h-[600px]
-              "
-            >
-
-              <Image
-                src={mainImage}
-                alt={blog.title}
-                fill
-                priority
-                sizes="100vw"
-                className="
-                  object-cover
-                  transition-transform
-                  duration-1000
-                  hover:scale-[1.02]
-                "
-              />
+          <div className="mx-auto max-w-7xl px-6 lg:px-10">
+            <div className="relative h-[300px] overflow-hidden md:h-[480px] lg:h-[600px]">
+              {featureImage && (
+                <Image
+                  src={featureImage}
+                  alt={blog.title}
+                  fill
+                  priority
+                  unoptimized
+                  sizes="100vw"
+                  className="object-cover transition-transform duration-1000 hover:scale-[1.02]"
+                />
+              )}
 
               {/* Image Overlay */}
 
-              <div
-                className="
-                  absolute
-                  inset-x-0
-                  bottom-0
-                  h-32
-                  bg-gradient-to-t
-                  from-modura-primary/40
-                  to-transparent
-                "
-              />
+              <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-modura-primary/40 to-transparent" />
 
               {/* Image Label */}
 
-              <div
-                className="
-                  absolute
-                  bottom-6
-                  left-6
-                  flex
-                  items-center
-                  gap-3
-                  bg-white
-                  px-5
-                  py-3
-                "
-              >
+              <div className="absolute bottom-6 left-6 flex items-center gap-3 bg-white px-5 py-3">
+                <span className="h-2 w-2 bg-modura-secondary" />
 
-                <span
-                  className="
-                    h-2
-                    w-2
-                    bg-modura-secondary
-                  "
-                />
-
-                <span
-                  className="
-                    font-body
-                    text-[9px]
-                    font-bold
-                    uppercase
-                    tracking-[3px]
-                    text-modura-primary
-                  "
-                >
+                <span className="font-body text-[9px] font-bold uppercase tracking-[3px] text-modura-primary">
                   Modura Design Group
                 </span>
-
               </div>
-
             </div>
-
           </div>
-
         </section>
 
         {/* =====================================================
@@ -1629,197 +1431,82 @@ export default function BlogDetail() {
         ===================================================== */}
 
         <section className="py-20 lg:py-28">
-
-          <div
-            className="
-              mx-auto
-              grid
-              max-w-7xl
-              gap-14
-              px-6
-              lg:grid-cols-[240px_minmax(0,1fr)]
-              lg:px-10
-            "
-          >
-
+          <div className="mx-auto grid max-w-7xl gap-14 px-6 lg:grid-cols-[240px_minmax(0,1fr)] lg:px-10">
             {/* =================================================
                 LEFT SIDEBAR
             ================================================= */}
 
             <aside className="hidden lg:block">
-
               <div className="sticky top-28">
-
                 {/* Related Heading */}
 
-                <div
-                  className="
-                    flex
-                    items-center
-                    gap-3
-                    font-body
-                    text-[12px]
-                    font-bold
-                    uppercase
-                    tracking-[3px]
-                    text-modura-secondary
-                  "
-                >
-
-                  <span
-                    className="
-                      h-[2px]
-                      w-8
-                      bg-modura-secondary
-                    "
-                  />
+                <div className="flex items-center gap-3 font-body text-[12px] font-bold uppercase tracking-[3px] text-modura-secondary">
+                  <span className="h-[2px] w-8 bg-modura-secondary" />
 
                   Related Blogs
-
                 </div>
 
                 {/* Related Blogs */}
 
                 <div className="mt-7 space-y-8">
+                  {relatedBlogs.map((item) => {
+                    const itemDate = formatDate(item.publishedAt);
+                    const itemImage = getImageUrl(
+                      item.imageUrl || item.image
+                    );
 
-                  {relatedBlogs
-                    .slice(0, 3)
-                    .map((item) => {
+                    return (
+                      <Link
+                        key={item.slug}
+                        href={`/blogDetail/${item.slug}`}
+                        className="group block"
+                      >
+                        {/* Image */}
 
-                      const relatedImage = getImageUrl(
-                        item.imageUrl,
-                        item.image
-                      );
-
-                      const relatedDate =
-                        formatDate(item.publishedAt);
-
-                      return (
-                        <Link
-                          key={item.id}
-                          href={`/blogDetail?slug=${encodeURIComponent(
-                            item.slug
-                          )}`}
-                          className="group block"
-                        >
-
-                          {/* Image */}
-
-                          <div
-                            className="
-                              relative
-                              h-[125px]
-                              w-full
-                              overflow-hidden
-                              bg-modura-light
-                            "
-                          >
-
+                        <div className="relative h-[125px] w-full overflow-hidden bg-modura-light">
+                          {itemImage && (
                             <Image
-                              src={relatedImage}
+                              src={itemImage}
                               alt={item.title}
                               fill
+                              unoptimized
                               sizes="240px"
-                              className="
-                                object-cover
-                                transition-transform
-                                duration-700
-                                group-hover:scale-105
-                              "
+                              className="object-cover transition-transform duration-700 group-hover:scale-105"
                             />
+                          )}
 
-                            {/* Hover */}
+                          {/* Hover */}
 
-                            <div
-                              className="
-                                absolute
-                                inset-0
-                                bg-modura-primary/0
-                                transition-all
-                                duration-500
-                                group-hover:bg-modura-primary/20
-                              "
-                            />
+                          <div className="absolute inset-0 bg-modura-primary/0 transition-all duration-500 group-hover:bg-modura-primary/20" />
 
-                            {/* Arrow */}
+                          {/* Arrow */}
 
-                            <div
-                              className="
-                                absolute
-                                bottom-3
-                                right-3
-                                flex
-                                h-7
-                                w-7
-                                items-center
-                                justify-center
-                                bg-white
-                                text-modura-primary
-                                opacity-0
-                                transition-all
-                                duration-300
-                                group-hover:opacity-100
-                              "
-                            >
-                              <ArrowUpRight size={13} />
-                            </div>
-
+                          <div className="absolute bottom-3 right-3 flex h-7 w-7 items-center justify-center bg-white text-modura-primary opacity-0 transition-all duration-300 group-hover:opacity-100">
+                            <ArrowUpRight size={13} />
                           </div>
+                        </div>
 
-                          {/* Date */}
+                        {/* Date */}
 
-                          <div
-                            className="
-                              mt-3
-                              font-body
-                              text-[11px]
-                              font-bold
-                              uppercase
-                              tracking-[2px]
-                              text-modura-secondary
-                            "
-                          >
-                            {relatedDate.day}{" "}
-                            {relatedDate.month}{" "}
-                            {relatedDate.year}
-                          </div>
+                        <div className="mt-3 font-body text-[11px] font-bold uppercase tracking-[2px] text-modura-secondary">
+                          {itemDate.day} {itemDate.month}{" "}
+                          {itemDate.year}
+                        </div>
 
-                          {/* Title */}
+                        {/* Title */}
 
-                          <h4
-                            className="
-                              mt-2
-                              font-heading
-                              text-lg
-                              font-semibold
-                              uppercase
-                              leading-[1.05]
-                              text-modura-primary
-                              transition-colors
-                              duration-300
-                              group-hover:text-modura-secondary
-                            "
-                          >
-                            {item.title}
-                          </h4>
-
-                        </Link>
-                      );
-                    })}
-
+                        <h4 className="mt-2 font-heading text-lg font-semibold uppercase leading-[1.05] text-modura-primary transition-colors duration-300 group-hover:text-modura-secondary">
+                          {item.title}
+                        </h4>
+                      </Link>
+                    );
+                  })}
                 </div>
 
-                <div
-                  className="
-                    mt-10
-                    h-px
-                    w-full
-                    bg-modura-gray-200
-                  "
-                />
+                {/* Divider */}
 
+                <div className="mt-10 h-px w-full bg-modura-gray-200" />
               </div>
-
             </aside>
 
             {/* =================================================
@@ -1827,252 +1514,176 @@ export default function BlogDetail() {
             ================================================= */}
 
             <article className="max-w-4xl">
+              {/* OVERVIEW */}
 
-              {/* =================================================
-                  BLOG DESCRIPTION / CONTENT
-              ================================================= */}
-
-              <div
-                id="overview"
-                className="
-                  blog-content
-                  scroll-mt-28
-                "
-              >
-
+              <div id="overview" className="scroll-mt-28">
                 <div className="mb-8 flex items-center gap-3">
+                  <span className="h-[2px] w-10 bg-modura-secondary" />
 
-                  <span
-                    className="
-                      h-[2px]
-                      w-10
-                      bg-modura-secondary
-                    "
-                  />
-
-                  <span
-                    className="
-                      font-body
-                      text-[11px]
-                      font-bold
-                      uppercase
-                      tracking-[3px]
-                      text-modura-secondary
-                    "
-                  >
+                  <span className="font-body text-[11px] font-bold uppercase tracking-[3px] text-modura-secondary">
                     Overview
                   </span>
-
                 </div>
 
-                {/* API HTML DESCRIPTION */}
+                {/* API DESCRIPTION */}
 
                 <div
-                  className="
-                    blog-description
-                    font-body
-                    text-[15px]
-                    leading-8
-                    text-modura-gray-600
-                    md:text-base
-                    md:leading-9
-                  "
+                  className="font-body text-[15px] leading-8 text-modura-gray-600 md:text-base md:leading-9 [&_p]:mb-7 [&_ul]:mb-7 [&_ul]:list-disc [&_ul]:pl-6 [&_ol]:mb-7 [&_ol]:list-decimal [&_ol]:pl-6 [&_h2]:mb-5 [&_h2]:font-heading [&_h2]:text-3xl [&_h2]:font-semibold [&_h2]:uppercase [&_h2]:text-modura-primary [&_h3]:mb-4 [&_h3]:font-heading [&_h3]:text-2xl [&_h3]:font-semibold [&_h3]:text-modura-primary [&_img]:h-auto [&_img]:max-w-full"
                   dangerouslySetInnerHTML={{
                     __html: blog.description || "",
                   }}
                 />
+              </div>
 
+              {/* =================================================
+                  KEY INSIGHTS
+                  Existing static design/content retained
+              ================================================= */}
+
+              <div
+                id="insights"
+                className="mt-20 scroll-mt-28"
+              >
+                <span className="font-body text-[11px] font-bold uppercase tracking-[3px] text-modura-secondary">
+                  What Matters
+                </span>
+
+                <h2 className="mt-4 font-heading text-4xl font-semibold uppercase leading-[0.95] text-modura-primary md:text-5xl">
+                  Key
+
+                  <span className="ml-2 text-modura-secondary">
+                    Insights
+                  </span>
+                </h2>
+
+                <div className="mt-10 grid gap-4 md:grid-cols-2">
+                  {[
+                    "Improved coordination between architecture, structure and other project disciplines.",
+                    "Greater accuracy across drawings, models and project documentation.",
+                    "Early identification of design conflicts and potential construction issues.",
+                    "More efficient collaboration between distributed project teams.",
+                  ].map((item, index) => (
+                    <div
+                      key={index}
+                      className="group relative overflow-hidden border border-modura-gray-200 bg-modura-off-white p-6 transition-all duration-500 hover:-translate-y-1 hover:border-modura-secondary"
+                    >
+                      <div className="flex items-center justify-between">
+                        <span className="font-heading text-3xl font-semibold leading-none text-modura-secondary/40 transition-colors duration-300 group-hover:text-modura-secondary">
+                          {String(index + 1).padStart(2, "0")}
+                        </span>
+
+                        <ArrowUpRight
+                          size={18}
+                          className="text-modura-gray-300 transition-all duration-300 group-hover:-translate-y-1 group-hover:translate-x-1 group-hover:text-modura-secondary"
+                        />
+                      </div>
+
+                      <p className="mt-8 font-body text-sm leading-7 text-modura-gray-600">
+                        {item}
+                      </p>
+
+                      <span className="absolute bottom-0 left-0 h-[3px] w-0 bg-modura-secondary transition-all duration-500 group-hover:w-full" />
+                    </div>
+                  ))}
+                </div>
               </div>
 
               {/* =================================================
                   HIGHLIGHT
               ================================================= */}
 
-              <div
-                className="
-                  relative
-                  my-20
-                  overflow-hidden
-                  bg-modura-primary
-                  px-7
-                  py-12
-                  md:px-12
-                  md:py-14
-                "
-              >
+              <div className="relative my-20 overflow-hidden bg-modura-primary px-7 py-12 md:px-12 md:py-14">
+                <div className="absolute right-[-40px] top-[-40px] h-36 w-36 rotate-45 border border-white/10" />
 
-                <div
-                  className="
-                    absolute
-                    right-[-40px]
-                    top-[-40px]
-                    h-36
-                    w-36
-                    rotate-45
-                    border
-                    border-white/10
-                  "
-                />
-
-                <div
-                  className="
-                    absolute
-                    bottom-[-50px]
-                    right-20
-                    h-32
-                    w-32
-                    rotate-45
-                    border
-                    border-modura-secondary/30
-                  "
-                />
+                <div className="absolute bottom-[-50px] right-20 h-32 w-32 rotate-45 border border-modura-secondary/30" />
 
                 <div className="relative z-10">
-
-                  <span
-                    className="
-                      font-body
-                      text-[9px]
-                      font-bold
-                      uppercase
-                      tracking-[3px]
-                      text-modura-secondary
-                    "
-                  >
+                  <span className="font-body text-[9px] font-bold uppercase tracking-[3px] text-modura-secondary">
                     Modura Perspective
                   </span>
 
-                  <h3
-                    className="
-                      mt-5
-                      max-w-2xl
-                      font-heading
-                      text-3xl
-                      font-semibold
-                      uppercase
-                      leading-[1]
-                      text-white
-                      md:text-4xl
-                    "
-                  >
+                  <h3 className="mt-5 max-w-2xl font-heading text-3xl font-semibold uppercase leading-[1] text-white md:text-4xl">
                     Better Coordination.
                     <br />
                     Better Decisions.
                     <br />
+
                     <span className="text-modura-secondary">
                       Better Outcomes.
                     </span>
                   </h3>
-
                 </div>
+              </div>
 
+              {/* =================================================
+                  OUR APPROACH
+                  Existing static content retained
+              ================================================= */}
+
+              <div id="approach" className="scroll-mt-28">
+                <span className="font-body text-[11px] font-bold uppercase tracking-[3px] text-modura-secondary">
+                  Our Perspective
+                </span>
+
+                <h2 className="mt-4 font-heading text-4xl font-semibold uppercase leading-[0.95] text-modura-primary md:text-5xl">
+                  Our
+
+                  <span className="ml-2 text-modura-secondary">
+                    Approach
+                  </span>
+                </h2>
+
+                <div className="mt-8">
+                  <p className="mb-7 font-body text-[15px] leading-8 text-modura-gray-600 md:text-base md:leading-9">
+                    At Modura Design Group, we use digital
+                    engineering workflows to support accurate
+                    modelling, coordination and project delivery.
+                    Our approach combines technical expertise
+                    with practical project requirements to
+                    create reliable outcomes.
+                  </p>
+
+                  <p className="mb-7 font-body text-[15px] leading-8 text-modura-gray-600 md:text-base md:leading-9">
+                    As construction continues to adopt smarter
+                    digital workflows, BIM will remain an
+                    important part of delivering efficient,
+                    coordinated and future-ready projects.
+                  </p>
+                </div>
               </div>
 
               {/* =================================================
                   ARTICLE FOOTER
               ================================================= */}
 
-              <div
-                className="
-                  mt-16
-                  flex
-                  flex-col
-                  gap-6
-                  border-t
-                  border-modura-gray-200
-                  pt-7
-                  sm:flex-row
-                  sm:items-center
-                  sm:justify-between
-                "
-              >
-
+              <div className="mt-16 flex flex-col gap-6 border-t border-modura-gray-200 pt-7 sm:flex-row sm:items-center sm:justify-between">
                 <div>
-
-                  <span
-                    className="
-                      font-body
-                      text-[11px]
-                      font-bold
-                      uppercase
-                      tracking-[3px]
-                      text-modura-gray-400
-                    "
-                  >
+                  <span className="font-body text-[11px] font-bold uppercase tracking-[3px] text-modura-gray-400">
                     Published By
                   </span>
 
-                  <p
-                    className="
-                      mt-2
-                      font-heading
-                      text-lg
-                      font-semibold
-                      uppercase
-                      text-modura-primary
-                    "
-                  >
+                  <p className="mt-2 font-heading text-lg font-semibold uppercase text-modura-primary">
                     {blog.author || "Modura Design Group"}
                   </p>
-
                 </div>
 
                 <Link
                   href="/blog"
-                  className="
-                    group
-                    inline-flex
-                    items-center
-                    gap-3
-                    font-body
-                    text-[10px]
-                    font-bold
-                    uppercase
-                    tracking-[2px]
-                    text-modura-primary
-                    transition-colors
-                    hover:text-modura-secondary
-                  "
+                  className="group inline-flex items-center gap-3 font-body text-[10px] font-bold uppercase tracking-[2px] text-modura-primary transition-colors hover:text-modura-secondary"
                 >
-
                   Explore All Insights
 
-                  <span
-                    className="
-                      flex
-                      h-9
-                      w-9
-                      items-center
-                      justify-center
-                      bg-modura-secondary
-                      text-modura-primary
-                      transition-all
-                      duration-300
-                      group-hover:bg-modura-primary
-                      group-hover:text-white
-                    "
-                  >
+                  <span className="flex h-9 w-9 items-center justify-center bg-modura-secondary text-modura-primary transition-all duration-300 group-hover:bg-modura-primary group-hover:text-white">
                     <ArrowUpRight
                       size={16}
-                      className="
-                        transition-transform
-                        duration-300
-                        group-hover:translate-x-1
-                        group-hover:-translate-y-1
-                      "
+                      className="transition-transform duration-300 group-hover:translate-x-1 group-hover:-translate-y-1"
                     />
                   </span>
-
                 </Link>
-
               </div>
-
             </article>
-
           </div>
-
         </section>
-
       </main>
     </>
   );

@@ -15,11 +15,9 @@ import {
   DraftingCompass,
   Plus, CircleHelp,
    Building2,
-  Compass,
     Award,
   BadgeCheck,
   RefreshCw,
-  Check,
   Target,
     Quote,
   Star,
@@ -29,12 +27,7 @@ import {
   ArrowRight,
 } from "lucide-react";
 
-type TeamMember = {
-  name: string;
-  role: string;
-  image: string;
-  bio: string;
-};
+
 import {
   Swiper,
   SwiperSlide,
@@ -60,12 +53,10 @@ import img3 from "../assets/images/why-us3.jpeg";
 import img4 from "../assets/images/why-us4.jpeg";
 import img5 from "../assets/images/why-us5.jpeg";
 import img6 from "../assets/images/why-us6.jpeg";
-
-import blog1 from "../assets/images/blog1.jpeg";
-import blog2 from "../assets/images/blog2.jpeg";
-import blog3 from "../assets/images/blog3.jpeg";
 import AnimatedButton from "../../../components/AnimatedButton";
 import Link from "next/link";
+import axios from "axios";
+import { apiUrl } from "../config";
 const advantages = [
   {
     title: "Technical Expertise",
@@ -111,175 +102,144 @@ const advantages = [
 ];
 
 
-const directors = [
-  {
-    name: "Dipak Bhavsar",
-    role: "CEO",
-    image: our_team.src,
-    bio: "Leading the organization with a strong focus on strategic growth, engineering excellence and long-term client relationships.",
-  },
-  {
-    name: "M V Rupesh",
-    role: "COO",
-    image: our_team.src,
-    bio: "Focused on operational excellence, project coordination and building efficient processes that support successful project delivery.",
-  },
-  {
-    name: "Nayan Panchal",
-    role: "CTO",
-    image: our_team.src,
-    bio: "Driving technology, engineering workflows and innovative solutions to improve project quality, efficiency and delivery.",
-  },
-];
 
-
-const engineers = [
+const qualityPoints = [
   {
-    name: "Trilochan. S Dholakia",
-    role: "Sr. Design Manager (Structure)",
-    image: our_team.src,
-    bio: "Experienced in structural design and project coordination, with a strong focus on accurate and practical engineering solutions.",
+    title: "Quality First",
+    description:
+      "We maintain high standards of accuracy, consistency and reliability throughout every project.",
+    icon: ShieldCheck,
   },
   {
-    name: "Hardik G. Upadhyay",
-    role: "Project Leader",
-    image: our_team.src,
-    bio: "Responsible for project leadership, coordination and ensuring engineering deliverables meet project requirements and timelines.",
+    title: "Precision in Delivery",
+    description:
+      "Every drawing, model and engineering deliverable is carefully reviewed before reaching our clients.",
+    icon: Target,
   },
   {
-    name: "Sunil Patel",
-    role: "Sr. Project Coordinator",
-    image: our_team.src,
-    bio: "Coordinates project activities and supports teams in maintaining smooth communication, quality and timely delivery.",
+    title: "Skilled Professionals",
+    description:
+      "Our experienced team combines technical knowledge with practical project understanding.",
+    icon: Users,
   },
   {
-    name: "Janak Thakor",
-    role: "Sr. Project Leader",
-    image: our_team.src,
-    bio: "Leads project execution with a focus on technical coordination, team collaboration and dependable project outcomes.",
+    title: "Continuous Improvement",
+    description:
+      "We continuously improve our processes, technology and workflows to deliver better results.",
+    icon: RefreshCw,
   },
 ];
 
 
-const bde = [
-  {
-    name: "Divya Rajgor",
-    role: "Sr. Business Development Specialist",
-    image: our_team.src,
-    bio: "Focused on business development, client relationships and identifying opportunities that create long-term value for the organization.",
-  },
-  {
-    name: "Krunal Rathod",
-    role: "Business Development Specialist",
-    image: our_team.src,
-    bio: "Works closely with clients and project teams to understand requirements and develop strong business relationships.",
-  },
-];
-
-
-const testimonials = [
-  {
-    name: "David Anderson",
-    role: "Project Director",
-    company: "Global Construction Ltd.",
-    initials: "DA",
-    text:
-      "MODURA delivered exceptional architectural and engineering solutions with outstanding precision and professionalism. Their team understood our requirements and consistently delivered beyond expectations.",
-  },
-
-  {
-    name: "Sophia Williams",
-    role: "CEO",
-    company: "Urban Developers",
-    initials: "SW",
-    text:
-      "Their BIM coordination and project management approach helped us achieve better efficiency and quality. The entire team was responsive, technically strong and easy to work with.",
-  },
-
-  {
-    name: "Michael Brown",
-    role: "Managing Partner",
-    company: "BuildTech International",
-    initials: "MB",
-    text:
-      "A reliable design partner who understands complex projects and delivers innovative solutions. MODURA has become an important extension of our engineering team.",
-  },
-
-  {
-    name: "James Wilson",
-    role: "Development Manager",
-    company: "Prime Infrastructure",
-    initials: "JW",
-    text:
-      "The attention to detail and technical expertise demonstrated by the MODURA team made a significant difference to our project delivery.",
-  },
-];
-
-
-const faqs = [
-  {
-    question: "What services does MVNL Engineering provide?",
-    answer:
-      "We provide architecture, BIM, structural engineering, project management and related engineering solutions.",
-  },
-  {
-    question: "Do you work on international projects?",
-    answer:
-      "Our multidisciplinary workflow is designed to support projects across different markets and project requirements.",
-  },
-  {
-    question: "Can you support an existing project team?",
-    answer:
-      "Yes. Our engineering and BIM capabilities can work as an extension of an existing project team.",
-  },
-  {
-    question: "How can I start a project with MVNL Engineering?",
-    answer:
-      "You can contact our team through the inquiry form and share your project requirements.",
-  },
-];
-
-const blogs = [
-
-{
-date:{
-day:"24",
-month:"JUN",
-year:"2026"
-},
-title:"How BIM Is Transforming Modern Construction",
-desc:"Discover how BIM technology improves coordination, accuracy and project delivery across complex construction projects.",
-image:blog1.src
-},
-
-
-{
-date:{
-day:"18",
-month:"MAY",
-year:"2026"
-},
-title:"Future Trends In Project Management",
-desc:"Exploring innovative approaches and digital tools that are shaping the future of engineering industry.",
-image:blog2.src
-},
-
-
-{
-date:{
-day:"12",
-month:"APR",
-year:"2026"
-},
-title:"Sustainable Engineering For Future Infrastructure",
-desc:"Learn how sustainable design and engineering solutions are building greener infrastructure.",
-image:blog3.src
+ type FAQ = {
+  id: number;
+  question: string;
+  answer: string;
+};
+interface Blog {
+  id: number;
+  title: string;
+  slug: string;
+  author: string;
+  image: string;
+  imageUrl: string;
+  publishedAt: string;
+  categoryId: number;
+  serviceId: number;
+  softwareId: number;
+  category?: {
+    id: number;
+    name: string;
+    slug: string;
+  };
+  service?: {
+    id: number;
+    title: string;
+    slug: string;
+  };
+  software?: {
+    id: number;
+    name: string;
+    slug: string;
+  };
 }
-
-];
+interface Testimonial {
+  id: number;
+  clientName: string;
+  designation: string;
+  company: string;
+  rating: number;
+  testimonial: string;
+  photo: string;
+  videoUrl: string | null;
+  photoUrl: string;
+}
+interface Certification {
+  id: number;
+  title: string;
+  issuedBy: string;
+  year: number;
+  description: string;
+  file: string;
+  fileUrl: string;
+}
+interface TeamMember {
+  id: number;
+  name: string;
+  designation: string;
+  bio: string;
+  photo: string;
+  linkedinUrl: string | null;
+  socialUrl: string | null;
+  photoUrl: string;
+}
 export default function CompanyPage() {
+ const [teamMembers, setTeamMembers] = useState<TeamMember[]>([]);
+const [teamLoading, setTeamLoading] = useState(true);
+const [blogs, setBlogs] = useState<Blog[]>([]);
+const [blogLoading, setBlogLoading] = useState(true);
+const [faqs, setFaqs] = useState<FAQ[]>([]);
+const [faqLoading, setFaqLoading] = useState(true);
+const [faqError, setFaqError] = useState(false);
+
+const [testimonials, setTestimonials] = useState<Testimonial[]>([]);
+const [testimonialLoading, setTestimonialLoading] = useState(true);
+const [active, setActive] = useState<number | null>(0);
       const sectionRef = useRef<HTMLElement | null>(null);
-       const [active, setActive] = useState<number | null>(0);
+        const [certifications, setCertifications] = useState<Certification[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchCertifications = async () => {
+      try {
+        setLoading(true);
+
+        const response = await axios.post(
+          `${apiUrl}/certifications`
+        );
+
+        if (
+          response.data?.success &&
+          Array.isArray(response.data?.data)
+        ) {
+          setCertifications(response.data.data);
+        } else {
+          setCertifications([]);
+        }
+      } catch (error) {
+        console.error(
+          "Certification API Error:",
+          error
+        );
+
+        setCertifications([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchCertifications();
+  }, []);
     
      useEffect(() => {
       const ctx = gsap.context(() => {
@@ -379,55 +339,8 @@ export default function CompanyPage() {
      const [selectedMember, setSelectedMember] =
         useState<TeamMember | null>(null);
 
-const qualityPoints = [
-  {
-    title: "Quality First",
-    description:
-      "We maintain high standards of accuracy, consistency and reliability throughout every project.",
-    icon: ShieldCheck,
-  },
-  {
-    title: "Precision in Delivery",
-    description:
-      "Every drawing, model and engineering deliverable is carefully reviewed before reaching our clients.",
-    icon: Target,
-  },
-  {
-    title: "Skilled Professionals",
-    description:
-      "Our experienced team combines technical knowledge with practical project understanding.",
-    icon: Users,
-  },
-  {
-    title: "Continuous Improvement",
-    description:
-      "We continuously improve our processes, technology and workflows to deliver better results.",
-    icon: RefreshCw,
-  },
-];
 
 
-
-const certifications = [
-  {
-    title: "Quality Management",
-    description:
-      "Our quality management standards ensure accuracy, consistency and reliable project delivery.",
-    icon: ShieldCheck,
-  },
-  {
-    title: "Engineering Standards",
-    description:
-      "We follow recognized engineering standards to deliver safe, efficient and high-quality solutions.",
-    icon: Award,
-  },
-  {
-    title: "Professional Excellence",
-    description:
-      "Our professional approach reflects technical expertise, continuous improvement and excellence.",
-    icon: BadgeCheck,
-  },
-];
 
  const sectiontestimonialRef = useRef<HTMLDivElement>(null);
 
@@ -477,9 +390,7 @@ const certifications = [
 
 
   const sectionblogRef = useRef<HTMLDivElement | null>(null);
-  
-  
-  
+   
   useLayoutEffect(()=>{
   
   
@@ -513,6 +424,156 @@ const certifications = [
   
   },[]);
 
+
+  useEffect(() => {
+  const fetchFAQs = async () => {
+    try {
+      setFaqLoading(true);
+      setFaqError(false);
+
+      const response = await axios.post(
+        `${apiUrl}/faqs`
+      );
+
+      if (response.data?.success && Array.isArray(response.data?.data)) {
+        setFaqs(response.data.data);
+
+        // First FAQ automatically open
+        setActive(response.data.data.length > 0 ? 0 : null);
+      } else {
+        setFaqs([]);
+        setFaqError(true);
+      }
+    } catch (error) {
+      console.error("FAQ API Error:", error);
+      setFaqs([]);
+      setFaqError(true);
+    } finally {
+      setFaqLoading(false);
+    }
+  };
+
+  fetchFAQs();
+}, []);
+
+
+useEffect(() => {
+  const fetchBlogs = async () => {
+    try {
+      setBlogLoading(true);
+
+      const response = await axios.post(
+        `${apiUrl}/blogs`,
+        {
+          params: {
+            search: "",
+            category: "",
+            page: 1,
+            limit: 10,
+          },
+        }
+      );
+
+      if (
+        response.data?.success &&
+        Array.isArray(response.data?.data?.items)
+      ) {
+        setBlogs(response.data.data.items);
+      } else {
+        setBlogs([]);
+      }
+    } catch (error) {
+      console.error("Blog API Error:", error);
+      setBlogs([]);
+    } finally {
+      setBlogLoading(false);
+    }
+  };
+
+  fetchBlogs();
+}, []);
+
+const getPlainText = (html: string = ""): string => {
+  if (!html) return "";
+
+  const temp = document.createElement("div");
+  temp.innerHTML = html;
+
+  return temp.textContent
+    ?.replace(/\s+/g, " ")
+    .trim() || "";
+};
+
+const getShortDescription = (
+  description: string = ""
+): string => {
+  const text = getPlainText(description);
+
+  if (text.length <= 80) {
+    return text;
+  }
+
+  return `${text.substring(0, 80).trim()}...`;
+};
+
+useEffect(() => {
+  const fetchTestimonials = async () => {
+    try {
+      setTestimonialLoading(true);
+
+      const response = await axios.post(
+        `${apiUrl}/testimonials`
+      );
+
+      if (
+        response.data?.success &&
+        Array.isArray(response.data?.data)
+      ) {
+        setTestimonials(response.data.data);
+      } else {
+        setTestimonials([]);
+      }
+    } catch (error) {
+      console.error(
+        "Testimonials API Error:",
+        error
+      );
+
+      setTestimonials([]);
+    } finally {
+      setTestimonialLoading(false);
+    }
+  };
+
+  fetchTestimonials();
+}, []);
+useEffect(() => {
+  const fetchTeam = async () => {
+    try {
+      setTeamLoading(true);
+
+      const response = await axios.post(
+        `${apiUrl}/team`
+      );
+
+      if (
+        response.data?.success &&
+        Array.isArray(response.data?.data)
+      ) {
+        setTeamMembers(response.data.data);
+      } else {
+        setTeamMembers([]);
+      }
+    } catch (error) {
+      console.error("Team API Error:", error);
+      setTeamMembers([]);
+    } finally {
+      setTeamLoading(false);
+    }
+  };
+
+  fetchTeam();
+}, []);
   return (
     <main className="min-h-screen bg-white">
 
@@ -1781,131 +1842,146 @@ const certifications = [
           OUR TEAM
       ========================================= */}
 
-    <section id="team" className="relative overflow-hidden bg-white pb-16">
-   
-           <div className="mx-auto max-w-7xl px-6 lg:px-10">
-   
-   
-             {/* ==================================================
-                 INTRO
-             ================================================== */}
-   
-             <div className="grid items-end gap-10 lg:grid-cols-[1fr_0.8fr]">
-   
-               <div>
-   
-                 <div
-                   className="
-                     flex
-                     items-center
-                     gap-3
-                     font-body
-                     text-[10px]
-                     font-bold
-                     uppercase
-                     tracking-[4px]
-                     text-modura-secondary
-                   "
-                 >
-   
-                   <span className="h-[2px] w-10 bg-modura-secondary" />
-   
-                   <Users
-                     size={18}
-                     strokeWidth={1.5}
-                   />
-   
-                   Our People
-   
-                 </div>
-   
-   
-                 <h2
-                   className="
-                     mt-5
-                     font-heading
-                     text-5xl
-                     font-semibold
-                     uppercase
-                     leading-[0.88]
-                     text-modura-primary
-                     md:text-6xl
-                     lg:text-7xl
-                   "
-                 >
-                   People Behind
-   
-                   <br />
-   
-                   <span className="text-modura-secondary">
-                     Precision
-                   </span>
-                 </h2>
-   
-               </div>
-   
-   
-               <div className="lg:pb-2">
-   
-                 <div className="border-l-2 border-modura-secondary pl-6">
-   
-                   <p
-                     className="
-                       max-w-md
-                       font-body
-                       text-sm
-                       leading-7
-                       text-modura-gray-600
-                     "
-                   >
-                     Our strength lies in our people. Engineers,
-                     designers, coordinators and business
-                     professionals work together to create
-                     reliable and innovative solutions.
-                   </p>
-   
-                 </div>
-   
-               </div>
-   
-             </div>
-   
-   
-             {/* ==================================================
-                 DIRECTORS
-             ================================================== */}
-   
-             <TeamGroup
-               title="About the Directors"
-               members={directors}
-               onViewBio={setSelectedMember}
-             />
-   
-   
-             {/* ==================================================
-                 ENGINEERS
-             ================================================== */}
-   
-             <TeamGroup
-               title="Meet the Engineers"
-               members={engineers}
-               onViewBio={setSelectedMember}
-             />
-   
-   
-             {/* ==================================================
-                 BDE
-             ================================================== */}
-   
-             <TeamGroup
-               title="Meet the BDE"
-               members={bde}
-               onViewBio={setSelectedMember}
-             />
-   
-           </div>
-   
-         </section>
+  <section
+  id="team"
+  className="relative overflow-hidden bg-white pb-16"
+>
+  <div className="mx-auto max-w-7xl px-6 lg:px-10">
+
+    {/* INTRO */}
+
+    <div className="grid items-end gap-10 lg:grid-cols-[1fr_0.8fr]">
+
+      <div>
+
+        <div
+          className="
+            flex
+            items-center
+            gap-3
+            font-body
+            text-[10px]
+            font-bold
+            uppercase
+            tracking-[4px]
+            text-modura-secondary
+          "
+        >
+
+          <span className="h-[2px] w-10 bg-modura-secondary" />
+
+          <Users
+            size={18}
+            strokeWidth={1.5}
+          />
+
+          Our People
+
+        </div>
+
+
+        <h2
+          className="
+            mt-5
+            font-heading
+            text-5xl
+            font-semibold
+            uppercase
+            leading-[0.88]
+            text-modura-primary
+            md:text-6xl
+            lg:text-7xl
+          "
+        >
+          People Behind
+
+          <br />
+
+          <span className="text-modura-secondary">
+            Precision
+          </span>
+
+        </h2>
+
+      </div>
+
+
+      <div className="lg:pb-2">
+
+        <div className="border-l-2 border-modura-secondary pl-6">
+
+          <p
+            className="
+              max-w-md
+              font-body
+              text-sm
+              leading-7
+              text-modura-gray-600
+            "
+          >
+            Our strength lies in our people. Engineers,
+            designers, coordinators and business
+            professionals work together to create
+            reliable and innovative solutions.
+          </p>
+
+        </div>
+
+      </div>
+
+    </div>
+
+
+    {/* TEAM */}
+
+    {teamLoading ? (
+
+      <div className="mt-20 flex justify-center py-20">
+
+        <div className="flex items-center gap-3">
+
+          <div
+            className="
+              h-5
+              w-5
+              animate-spin
+              rounded-full
+              border-2
+              border-modura-gray-300
+              border-t-modura-secondary
+            "
+          />
+
+          <span className="font-body text-sm text-modura-gray-500">
+            Loading team...
+          </span>
+
+        </div>
+
+      </div>
+
+    ) : teamMembers.length > 0 ? (
+
+      <TeamGroup
+        title="Our Team"
+        members={teamMembers}
+        onViewBio={setSelectedMember}
+      />
+
+    ) : (
+
+      <div className="mt-20 py-16 text-center">
+
+        <p className="font-body text-sm text-modura-gray-500">
+          No team members available.
+        </p>
+
+      </div>
+
+    )}
+
+  </div>
+</section>
    
    
          {/* ======================================================
@@ -1987,7 +2063,7 @@ const certifications = [
                  <div className="relative min-h-[360px] bg-modura-light md:min-h-[500px]">
    
                    <Image
-                     src={selectedMember.image}
+                     src={selectedMember.photo}
                      alt={selectedMember.name}
                      fill
                      className="object-cover"
@@ -2043,7 +2119,7 @@ const certifications = [
                          text-white
                        "
                      >
-                       {selectedMember.role}
+                       {selectedMember.designation}
                      </p>
    
                    </div>
@@ -2111,7 +2187,7 @@ const certifications = [
                        text-modura-secondary
                      "
                    >
-                     {selectedMember.role}
+                     {selectedMember.designation}
                    </p>
    
    
@@ -2399,173 +2475,279 @@ const certifications = [
       {/* =========================================
           CERTIFICATIONS
       ========================================= */}
+<section className="bg-modura-light py-16">
 
-    <section className="bg-modura-light py-16">
+  <div className="mx-auto max-w-7xl px-6 lg:px-10">
 
-      <div className="mx-auto max-w-7xl px-6 lg:px-10">
+    {/* Heading */}
 
-        {/* Heading */}
+    <div className="text-center">
 
-        <div className="text-center">
+      <div
+        className="
+          flex
+          items-center
+          justify-center
+          gap-3
+          font-body
+          text-[10px]
+          font-bold
+          uppercase
+          tracking-[4px]
+          text-modura-secondary
+        "
+      >
 
-          <div
-            className="
-              flex
-              items-center
-              justify-center
-              gap-3
-              font-body
-              text-[10px]
-              font-bold
-              uppercase
-              tracking-[4px]
-              text-modura-secondary
-            "
-          >
-            <span className="h-[2px] w-8 bg-modura-secondary" />
+        <span className="h-[2px] w-8 bg-modura-secondary" />
 
-            <BadgeCheck
-              size={17}
-              strokeWidth={1.5}
+        <BadgeCheck
+          size={17}
+          strokeWidth={1.5}
+        />
+
+        <span>Standards</span>
+
+        <span className="h-[2px] w-8 bg-modura-secondary" />
+
+      </div>
+
+
+      <h2
+        className="
+          mt-4
+          font-heading
+          text-5xl
+          font-semibold
+          uppercase
+          leading-none
+          text-modura-primary
+          md:text-6xl
+        "
+      >
+        Certifications
+      </h2>
+
+
+      <p
+        className="
+          mx-auto
+          mt-5
+          max-w-2xl
+          font-body
+          text-sm
+          leading-7
+          text-modura-gray-700
+        "
+      >
+        Our commitment to quality, technical standards and
+        professional excellence supports reliable project delivery.
+      </p>
+
+    </div>
+
+
+    {/* Cards */}
+
+    <div
+      className="
+        mt-12
+        grid
+        gap-6
+        md:grid-cols-3
+      "
+    >
+
+      {/* Loading */}
+
+      {loading && (
+
+        <div
+          className="
+            col-span-full
+            flex
+            min-h-[250px]
+            items-center
+            justify-center
+          "
+        >
+
+          <div className="flex items-center gap-3">
+
+            <div
+              className="
+                h-5
+                w-5
+                animate-spin
+                rounded-full
+                border-2
+                border-modura-gray-300
+                border-t-modura-secondary
+              "
             />
 
-            <span>Standards</span>
+            <span
+              className="
+                font-body
+                text-sm
+                text-modura-gray-600
+              "
+            >
+              Loading certifications...
+            </span>
 
-            <span className="h-[2px] w-8 bg-modura-secondary" />
           </div>
 
+        </div>
 
-          <h2
-            className="
-              mt-4
-              font-heading
-              text-5xl
-              font-semibold
-              uppercase
-              leading-none
-              text-modura-primary
-              md:text-6xl
-            "
-          >
-            Certifications
-          </h2>
+      )}
 
 
-          <p
-            className="
-              mx-auto
-              mt-5
-              max-w-2xl
-              font-body
-              text-sm
-              leading-7
-              text-modura-gray-700
-            "
-          >
-            Our commitment to quality, technical standards and
-            professional excellence supports reliable project delivery.
+      {/* Empty */}
+
+      {!loading && certifications.length === 0 && (
+
+        <div
+          className="
+            col-span-full
+            py-10
+            text-center
+          "
+        >
+
+          <p className="font-body text-sm text-modura-gray-500">
+            No certifications available.
           </p>
 
         </div>
 
+      )}
 
-        {/* Cards */}
 
-        <div
-          className="
-            mt-12
-            grid
-            gap-6
-            md:grid-cols-3
-          "
-        >
+      {/* Dynamic Cards */}
 
-          {certifications.map((item) => {
+      {!loading &&
+        certifications.map((item) => (
 
-            const Icon = item.icon;
+          <div
+            key={item.id}
+            className="
+              group
+              bg-white
+              p-8
+              shadow-sm
+              transition-all
+              duration-300
+              hover:-translate-y-2
+              hover:shadow-xl
+            "
+          >
 
-            return (
-              <div
-                key={item.title}
+            {/* Icon */}
+
+            <div
+              className="
+                flex
+                h-14
+                w-14
+                items-center
+                justify-center
+                bg-modura-primary
+                text-modura-secondary
+                transition-all
+                duration-300
+                group-hover:bg-modura-secondary
+                group-hover:text-white
+              "
+            >
+
+              <Award
+                size={28}
+                strokeWidth={1.5}
+              />
+
+            </div>
+
+
+            {/* Issued By + Year */}
+
+            <div
+              className="
+                mt-5
+                flex
+                items-center
+                justify-between
+                gap-3
+              "
+            >
+
+              <span
                 className="
-                  group
-                  bg-white
-                  p-8
-                  shadow-sm
-                  transition-all
-                  duration-300
-                  hover:-translate-y-2
-                  hover:shadow-xl
+                  font-body
+                  text-[10px]
+                  font-bold
+                  uppercase
+                  tracking-[2px]
+                  text-modura-secondary
                 "
               >
+                {item.issuedBy}
+              </span>
 
-                {/* Icon */}
+              <span
+                className="
+                  font-body
+                  text-[10px]
+                  font-bold
+                  tracking-[2px]
+                  text-modura-gray-500
+                "
+              >
+                {item.year}
+              </span>
 
-                <div
-                  className="
-                    flex
-                    h-14
-                    w-14
-                    items-center
-                    justify-center
-                    bg-modura-primary
-                    text-modura-secondary
-                    transition-all
-                    duration-300
-                    group-hover:bg-modura-secondary
-                    group-hover:text-white
-                  "
-                >
-                  <Icon
-                    size={28}
-                    strokeWidth={1.5}
-                  />
-                </div>
+            </div>
 
 
-              
+            {/* Title */}
+
+            <h3
+              className="
+                mt-3
+                font-heading
+                text-2xl
+                font-semibold
+                uppercase
+                leading-tight
+                text-modura-primary
+              "
+            >
+              {item.title}
+            </h3>
 
 
-                {/* Title */}
+            {/* Description */}
 
-                <h3
-                  className="
-                    mt-5
-                    font-heading
-                    text-2xl
-                    font-semibold
-                    uppercase
-                    leading-tight
-                    text-modura-primary
-                  "
-                >
-                  {item.title}
-                </h3>
+            <p
+              className="
+                mt-4
+                font-body
+                text-sm
+                leading-7
+                text-modura-gray-600
+              "
+            >
+              {item.description}
+            </p>
 
+          </div>
 
-                {/* Description */}
+        ))}
 
-                <p
-                  className="
-                    mt-4
-                    font-body
-                    text-sm
-                    leading-7
-                    text-modura-gray-600
-                  "
-                >
-                  {item.description}
-                </p>
+    </div>
 
-              </div>
-            );
-          })}
+  </div>
 
-        </div>
-
-      </div>
-
-    </section>
+</section>
 
       {/* =========================================
           TESTIMONIALS
@@ -2852,256 +3034,361 @@ const certifications = [
               speed={900}
             >
 
-              {testimonials.map((item, index) => (
+             {testimonialLoading ? (
 
-                <SwiperSlide key={item.name}>
+  <div
+    className="
+      flex
+      min-h-[430px]
+      items-center
+      justify-center
+      border
+      border-modura-gray-200
+      bg-white
+    "
+  >
+    <div className="flex items-center gap-3">
 
-                  <div
-                    className="
-                      relative
-                      min-h-[430px]
-                      overflow-hidden
-                      border
-                      border-modura-gray-200
-                      bg-white
-                      p-8
-                      md:p-12
-                      lg:p-14
-                    "
-                  >
+      <div
+        className="
+          h-5
+          w-5
+          animate-spin
+          rounded-full
+          border-2
+          border-modura-gray-200
+          border-t-modura-secondary
+        "
+      />
 
-                    {/* Orange corner */}
+      <span
+        className="
+          font-body
+          text-sm
+          text-modura-gray-500
+        "
+      >
+        Loading testimonials...
+      </span>
 
-                    <div
-                      className="
-                        absolute
-                        right-0
-                        top-0
-                        h-20
-                        w-20
-                        bg-modura-secondary
-                        clip-testimonial-corner
-                      "
-                    />
+    </div>
+  </div>
 
+) : testimonials.length === 0 ? (
 
-                    {/* Big quote */}
+  <div
+    className="
+      flex
+      min-h-[430px]
+      items-center
+      justify-center
+      border
+      border-modura-gray-200
+      bg-white
+    "
+  >
+    <p className="font-body text-sm text-modura-gray-500">
+      No testimonials available.
+    </p>
+  </div>
 
-                    <div
-                      className="
-                        absolute
-                        right-10
-                        top-7
-                        font-heading
-                        text-[110px]
-                        leading-none
-                        text-modura-secondary/10
-                      "
-                    >
-                      "
-                    </div>
+) : (
 
+  <Swiper
+    modules={[
+      Autoplay,
+      EffectFade,
+    ]}
+    effect="fade"
+    fadeEffect={{
+      crossFade: true,
+    }}
+    slidesPerView={1}
+    loop
+    autoplay={{
+      delay: 4500,
+      disableOnInteraction: false,
+    }}
+    speed={900}
+  >
 
-                    {/* Number */}
+    {testimonials.map((item, index) => (
 
-                    <div
-                      className="
-                        absolute
-                        right-7
-                        top-[76px]
-                        font-body
-                        text-[10px]
-                        font-bold
-                        tracking-[2px]
-                        text-modura-gray-400
-                      "
-                    >
-                      {String(index + 1).padStart(2, "0")}
-                      {" / "}
-                      {String(testimonials.length).padStart(2, "0")}
-                    </div>
+      <SwiperSlide key={item.id}>
 
+        <div
+          className="
+            relative
+            min-h-[430px]
+            overflow-hidden
+            border
+            border-modura-gray-200
+            bg-white
+            p-8
+            md:p-12
+            lg:p-14
+          "
+        >
 
-                    {/* Content */}
+          {/* Orange corner */}
 
-                    <div className="relative z-10 max-w-3xl">
-
-                      <div
-                        className="
-                          flex
-                          items-center
-                          gap-1
-                          text-modura-secondary
-                        "
-                      >
-
-                        {[1, 2, 3, 4, 5].map((star) => (
-                          <Star
-                            key={star}
-                            size={15}
-                            fill="currentColor"
-                            strokeWidth={1}
-                          />
-                        ))}
-
-                      </div>
-
-
-                      <p
-                        className="
-                          mt-8
-                          font-heading
-                          text-3xl
-                          font-medium
-                          leading-[1.25]
-                          text-modura-primary
-                          md:text-4xl
-                        "
-                      >
-                        “{item.text}”
-                      </p>
-
-                    </div>
-
-
-                    {/* Bottom */}
-
-                    <div
-                      className="
-                        absolute
-                        bottom-0
-                        left-0
-                        right-0
-                        border-t
-                        border-modura-gray-200
-                        bg-modura-off-white
-                        px-8
-                        py-6
-                        md:px-12
-                      "
-                    >
-
-                      <div
-                        className="
-                          flex
-                          items-center
-                          justify-between
-                          gap-5
-                        "
-                      >
-
-                        <div
-                          className="
-                            flex
-                            items-center
-                            gap-4
-                          "
-                        >
-
-                          {/* Initials */}
-
-                          <div
-                            className="
-                              flex
-                              h-12
-                              w-12
-                              shrink-0
-                              items-center
-                              justify-center
-                              bg-modura-primary
-                              font-heading
-                              text-lg
-                              font-semibold
-                              text-white
-                              clip-testimonial-avatar
-                            "
-                          >
-                            {item.initials}
-                          </div>
+          <div
+            className="
+              absolute
+              right-0
+              top-0
+              h-20
+              w-20
+              bg-modura-secondary
+              clip-testimonial-corner
+            "
+          />
 
 
-                          <div>
+          {/* Big quote */}
 
-                            <h3
-                              className="
-                                font-heading
-                                text-xl
-                                font-semibold
-                                uppercase
-                                leading-none
-                                text-modura-primary
-                              "
-                            >
-                              {item.name}
-                            </h3>
-
-
-                            <p
-                              className="
-                                mt-1
-                                font-body
-                                text-[10px]
-                                font-semibold
-                                uppercase
-                                tracking-[1.5px]
-                                text-modura-secondary
-                              "
-                            >
-                              {item.role}
-                            </p>
-
-                          </div>
-
-                        </div>
+          <div
+            className="
+              absolute
+              right-10
+              top-7
+              font-heading
+              text-[110px]
+              leading-none
+              text-modura-secondary/10
+            "
+          >
+            "
+          </div>
 
 
-                        {/* Company */}
+          {/* Number */}
 
-                        <div
-                          className="
-                            hidden
-                            text-right
-                            sm:block
-                          "
-                        >
+          <div
+            className="
+              absolute
+              right-7
+              top-[76px]
+              font-body
+              text-[10px]
+              font-bold
+              tracking-[2px]
+              text-modura-gray-400
+            "
+          >
+            {String(index + 1).padStart(2, "0")}
+            {" / "}
+            {String(testimonials.length).padStart(2, "0")}
+          </div>
 
-                          <p
-                            className="
-                              font-body
-                              text-[11px]
-                              font-bold
-                              uppercase
-                              tracking-[2px]
-                              text-modura-gray-700
-                            "
-                          >
-                            Project Partner
-                          </p>
 
-                          <p
-                            className="
-                              mt-1
-                              font-heading
-                              text-lg
-                              font-semibold
-                              uppercase
-                              text-modura-primary
-                            "
-                          >
-                            {item.company}
-                          </p>
+          {/* Content */}
 
-                        </div>
+          <div className="relative z-10 max-w-3xl">
 
-                      </div>
+            {/* RATING */}
 
-                    </div>
+            <div
+              className="
+                flex
+                items-center
+                gap-1
+                text-modura-secondary
+              "
+            >
 
-                  </div>
+              {[1, 2, 3, 4, 5].map((star) => (
 
-                </SwiperSlide>
+                <Star
+                  key={star}
+                  size={15}
+                  fill={
+                    star <= item.rating
+                      ? "currentColor"
+                      : "transparent"
+                  }
+                  strokeWidth={1}
+                  className={
+                    star <= item.rating
+                      ? "text-modura-secondary"
+                      : "text-modura-gray-300"
+                  }
+                />
 
               ))}
+
+            </div>
+
+
+            {/* TESTIMONIAL */}
+
+            <p
+              className="
+                mt-8
+                font-heading
+                text-3xl
+                font-medium
+                leading-[1.25]
+                text-modura-primary
+                md:text-4xl
+              "
+            >
+              “{item.testimonial}”
+            </p>
+
+          </div>
+
+
+          {/* Bottom */}
+
+          <div
+            className="
+              absolute
+              bottom-0
+              left-0
+              right-0
+              border-t
+              border-modura-gray-200
+              bg-modura-off-white
+              px-8
+              py-6
+              md:px-12
+            "
+          >
+
+            <div
+              className="
+                flex
+                items-center
+                justify-between
+                gap-5
+              "
+            >
+
+              {/* CLIENT */}
+
+              <div
+                className="
+                  flex
+                  items-center
+                  gap-4
+                "
+              >
+
+                {/* PHOTO */}
+
+                <div
+                  className="
+                    relative
+                    h-12
+                    w-12
+                    shrink-0
+                    overflow-hidden
+                    bg-modura-primary
+                    clip-testimonial-avatar
+                  "
+                >
+
+                  <Image
+                    src={item.photoUrl}
+                    alt={item.clientName}
+                    fill
+                    sizes="48px"
+                    className="object-cover"
+                  />
+
+                </div>
+
+
+                {/* NAME */}
+
+                <div>
+
+                  <h3
+                    className="
+                      font-heading
+                      text-xl
+                      font-semibold
+                      uppercase
+                      leading-none
+                      text-modura-primary
+                    "
+                  >
+                    {item.clientName}
+                  </h3>
+
+
+                  <p
+                    className="
+                      mt-1
+                      font-body
+                      text-[10px]
+                      font-semibold
+                      uppercase
+                      tracking-[1.5px]
+                      text-modura-secondary
+                    "
+                  >
+                    {item.designation}
+                  </p>
+
+                </div>
+
+              </div>
+
+
+              {/* COMPANY */}
+
+              <div
+                className="
+                  hidden
+                  text-right
+                  sm:block
+                "
+              >
+
+                <p
+                  className="
+                    font-body
+                    text-[11px]
+                    font-bold
+                    uppercase
+                    tracking-[2px]
+                    text-modura-gray-700
+                  "
+                >
+                  Project Partner
+                </p>
+
+
+                <p
+                  className="
+                    mt-1
+                    font-heading
+                    text-lg
+                    font-semibold
+                    uppercase
+                    text-modura-primary
+                  "
+                >
+                  {item.company}
+                </p>
+
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </SwiperSlide>
+
+    ))}
+
+  </Swiper>
+
+)}
 
             </Swiper>
 
@@ -3193,675 +3480,719 @@ const certifications = [
           FAQ
       ========================================= */}
 
-      <section  id="faqs" className="relative overflow-hidden bg-white py-16">
+    <section
+  id="faqs"
+  className="relative overflow-hidden bg-white py-16"
+>
+  <div className="mx-auto max-w-5xl px-6 lg:px-10">
 
-      <div className="mx-auto max-w-5xl px-6 lg:px-10">
+    {/* HEADING */}
 
-        {/* Heading */}
+    <div className="mb-12 text-center">
 
-        <div className="mb-12 text-center">
+      <div
+        className="
+          mb-4
+          flex
+          items-center
+          justify-center
+          gap-3
+          font-body
+          text-[12px]
+          font-bold
+          uppercase
+          tracking-[4px]
+          text-modura-secondary
+        "
+      >
+        <span className="h-[2px] w-8 bg-modura-secondary" />
 
-          <div
-            className="
-              mb-4
-              flex
-              items-center
-              justify-center
-              gap-3
-              font-body
-              text-[12px]
-              font-bold
-              uppercase
-              tracking-[4px]
-              text-modura-secondary
-            "
-          >
-            <span className="h-[2px] w-8 bg-modura-secondary" />
+        <DraftingCompass
+          size={24}
+          className="text-modura-secondary"
+        />
 
-           
-<DraftingCompass
-size={24}
-className="
-text-modura-secondary
-"
-/>
-            <span>FAQ</span>
+        <span>FAQ</span>
 
-            <span className="h-[2px] w-8 bg-modura-secondary" />
+        <span className="h-[2px] w-8 bg-modura-secondary" />
+      </div>
+
+      <h2
+        className="
+          font-heading
+          text-5xl
+          font-semibold
+          uppercase
+          leading-none
+          text-modura-primary
+          md:text-6xl
+        "
+      >
+        Frequently Asked
+        <span className="text-modura-secondary">
+          {" "}Questions
+        </span>
+      </h2>
+
+      <p
+        className="
+          mx-auto
+          mt-5
+          max-w-2xl
+          font-body
+          text-sm
+          leading-7
+          text-modura-gray-700
+        "
+      >
+        Find answers to some of the most common questions
+        about our services and project process.
+      </p>
+
+    </div>
+
+
+    {/* FAQ LIST */}
+
+    <div className="border-t border-modura-gray-200">
+
+      {/* LOADING */}
+
+      {faqLoading && (
+        <div className="flex items-center justify-center py-16">
+          <div className="flex items-center gap-3">
+
+            <div
+              className="
+                h-5
+                w-5
+                animate-spin
+                rounded-full
+                border-2
+                border-modura-gray-200
+                border-t-modura-secondary
+              "
+            />
+
+            <span
+              className="
+                font-body
+                text-sm
+                text-modura-gray-500
+              "
+            >
+              Loading FAQs...
+            </span>
+
           </div>
+        </div>
+      )}
 
-          <h2
-            className="
-              font-heading
-              text-5xl
-              font-semibold
-              uppercase
-              leading-none
-              text-modura-primary
-              md:text-6xl
-            "
-          >
-            Frequently Asked
-            <span className="text-modura-secondary"> Questions</span>
-          </h2>
+
+      {/* API ERROR */}
+
+      {!faqLoading && faqError && (
+        <div className="py-12 text-center">
 
           <p
             className="
-              mx-auto
-              mt-5
-              max-w-2xl
               font-body
               text-sm
-              leading-7
-              text-modura-gray-700
+              text-modura-gray-500
             "
           >
-            Find answers to some of the most common questions
-            about our services and project process.
+            Unable to load FAQs.
           </p>
 
         </div>
+      )}
 
 
-        {/* FAQ LIST */}
+      {/* NO FAQ */}
 
-        <div className="border-t border-modura-gray-200">
+      {!faqLoading && !faqError && faqs.length === 0 && (
+        <div className="py-12 text-center">
 
-          {faqs.map((faq, index) => {
+          <p
+            className="
+              font-body
+              text-sm
+              text-modura-gray-500
+            "
+          >
+            No FAQs available.
+          </p>
 
-            const isOpen = active === index;
+        </div>
+      )}
 
-            return (
-              <div
-                key={faq.question}
+
+      {/* FAQ ITEMS */}
+
+      {!faqLoading &&
+        !faqError &&
+        faqs.map((faq, index) => {
+
+          const isOpen = active === index;
+
+          return (
+            <div
+              key={faq.id}
+              className="
+                relative
+                border-b
+                border-modura-gray-200
+              "
+            >
+
+              {/* ACTIVE ORANGE LINE */}
+
+              <span
+                className={`
+                  absolute
+                  left-0
+                  top-0
+                  h-full
+                  w-[3px]
+                  origin-top
+                  bg-modura-secondary
+                  transition-transform
+                  duration-300
+                  ${
+                    isOpen
+                      ? "scale-y-100"
+                      : "scale-y-0"
+                  }
+                `}
+              />
+
+
+              {/* QUESTION BUTTON */}
+
+              <button
+                type="button"
+                onClick={() =>
+                  setActive(isOpen ? null : index)
+                }
                 className="
-                  relative
-                  border-b
-                  border-modura-gray-200
+                  group
+                  flex
+                  w-full
+                  items-center
+                  gap-5
+                  px-5
+                  py-6
+                  text-left
+                  transition-all
+                  duration-300
+                  hover:bg-modura-off-white
+                  md:px-7
                 "
               >
 
-                {/* Orange active line */}
+                {/* FAQ ICON */}
 
                 <span
                   className={`
-                    absolute
-                    left-0
-                    top-0
-                    h-full
-                    w-[3px]
-                    bg-modura-secondary
-                    transition-transform
-                    duration-300
-                    origin-top
-                    ${
-                      isOpen
-                        ? "scale-y-100"
-                        : "scale-y-0"
-                    }
-                  `}
-                />
-
-
-                {/* Question */}
-
-                <button
-                  type="button"
-                  onClick={() =>
-                    setActive(isOpen ? null : index)
-                  }
-                  className="
                     flex
-                    w-full
+                    h-9
+                    w-9
+                    shrink-0
                     items-center
-                    gap-5
-                    px-5
-                    py-6
-                    text-left
-                    transition-all
-                    duration-300
-                    hover:bg-modura-off-white
-                    md:px-7
-                  "
-                >
-
-                  {/* Number */}
-
-                  <span
-  className={`
-    flex
-    h-9
-    w-9
-    shrink-0
-    items-center
-    justify-center
-    transition-all
-    duration-300
-    ${
-      isOpen
-        ? "bg-modura-secondary text-white"
-        : "bg-modura-light text-modura-gray-500"
-    }
-  `}
->
-  <CircleHelp
-    size={17}
-    strokeWidth={1.5}
-    className="
-      transition-transform
-      duration-300
-      group-hover:scale-110
-    "
-  />
-</span>
-
-
-                  {/* Question */}
-
-                  <span
-                    className={`
-                      flex-1
-                      font-heading
-                      text-xl
-                      font-semibold
-                      uppercase
-                      leading-tight
-                      transition-colors
-                      duration-300
-                      md:text-2xl
-                      ${
-                        isOpen
-                          ? "text-modura-primary"
-                          : "text-modura-primary/80"
-                      }
-                    `}
-                  >
-                    {faq.question}
-                  </span>
-
-
-                  {/* Plus */}
-
-                  <span
-                    className={`
-                      flex
-                      h-9
-                      w-9
-                      shrink-0
-                      items-center
-                      justify-center
-                      border
-                      transition-all
-                      duration-300
-                      ${
-                        isOpen
-                          ? "border-modura-secondary bg-modura-secondary text-white"
-                          : "border-modura-gray-300 text-modura-primary"
-                      }
-                    `}
-                  >
-                    <Plus
-                      size={17}
-                      strokeWidth={1.5}
-                      className={`
-                        transition-transform
-                        duration-300
-                        ${
-                          isOpen
-                            ? "rotate-45"
-                            : "rotate-0"
-                        }
-                      `}
-                    />
-                  </span>
-
-                </button>
-
-
-                {/* Answer */}
-
-                <div
-                  className={`
-                    grid
+                    justify-center
                     transition-all
                     duration-300
                     ${
                       isOpen
-                        ? "grid-rows-[1fr]"
-                        : "grid-rows-[0fr]"
+                        ? "bg-modura-secondary text-white"
+                        : "bg-modura-light text-modura-gray-500"
                     }
                   `}
                 >
+                  <CircleHelp
+                    size={17}
+                    strokeWidth={1.5}
+                    className="
+                      transition-transform
+                      duration-300
+                      group-hover:scale-110
+                    "
+                  />
+                </span>
 
-                  <div className="overflow-hidden">
+
+                {/* QUESTION */}
+
+                <span
+                  className={`
+                    flex-1
+                    font-heading
+                    text-xl
+                    font-semibold
+                    uppercase
+                    leading-tight
+                    transition-colors
+                    duration-300
+                    md:text-2xl
+                    ${
+                      isOpen
+                        ? "text-modura-primary"
+                        : "text-modura-primary/80"
+                    }
+                  `}
+                >
+                  {faq.question}
+                </span>
+
+
+                {/* PLUS */}
+
+                <span
+                  className={`
+                    flex
+                    h-9
+                    w-9
+                    shrink-0
+                    items-center
+                    justify-center
+                    border
+                    transition-all
+                    duration-300
+                    ${
+                      isOpen
+                        ? "border-modura-secondary bg-modura-secondary text-white"
+                        : "border-modura-gray-300 text-modura-primary"
+                    }
+                  `}
+                >
+                  <Plus
+                    size={17}
+                    strokeWidth={1.5}
+                    className={`
+                      transition-transform
+                      duration-300
+                      ${
+                        isOpen
+                          ? "rotate-45"
+                          : "rotate-0"
+                      }
+                    `}
+                  />
+                </span>
+
+              </button>
+
+
+              {/* ANSWER */}
+
+              <div
+                className={`
+                  grid
+                  transition-all
+                  duration-300
+                  ${
+                    isOpen
+                      ? "grid-rows-[1fr]"
+                      : "grid-rows-[0fr]"
+                  }
+                `}
+              >
+
+                <div className="overflow-hidden">
+
+                  <div
+                    className="
+                      pb-7
+                      pl-[60px]
+                      pr-14
+                      md:pl-[75px]
+                      md:pr-20
+                    "
+                  >
 
                     <div
                       className="
-                        pb-7
-                        pl-[60px]
-                        pr-14
-                        md:pl-[75px]
-                        md:pr-20
+                        max-w-3xl
+                        font-body
+                        text-sm
+                        leading-7
+                        text-modura-gray-600
                       "
-                    >
-
-                      <p
-                        className="
-                          max-w-3xl
-                          font-body
-                          text-sm
-                          leading-7
-                          text-modura-gray-600
-                        "
-                      >
-                        {faq.answer}
-                      </p>
-
-                    </div>
+                      dangerouslySetInnerHTML={{
+                        __html: faq.answer,
+                      }}
+                    />
 
                   </div>
 
                 </div>
 
               </div>
-            );
-          })}
+
+            </div>
+          );
+        })}
+
+    </div>
+
+  </div>
+
+</section>
+
+{/* =========================================
+    Blog
+========================================= */}
+
+<section
+  id="blog"
+  ref={sectionblogRef}
+  className="
+    relative
+    overflow-hidden
+    bg-modura-off-white
+    py-16
+  "
+>
+  <div
+    className="
+      relative
+      z-10
+      mx-auto
+      max-w-7xl
+      px-6
+    "
+  >
+
+    {/* HEADER */}
+
+    <div
+      className="
+        mb-14
+        flex
+        flex-col
+        gap-7
+        lg:flex-row
+        lg:items-end
+        lg:justify-between
+      "
+    >
+
+      {/* LEFT — HEADING */}
+
+      <div>
+
+        <div
+          className="
+            flex
+            items-center
+            gap-3
+            font-body
+            text-xs
+            font-bold
+            uppercase
+            tracking-[5px]
+            text-modura-secondary
+          "
+        >
+
+          <DraftingCompass
+            size={20}
+            strokeWidth={1.5}
+            className="text-modura-secondary"
+          />
+
+          <span>
+            OUR BLOG
+          </span>
 
         </div>
 
+
+        <h2
+          className="
+            mt-4
+            font-heading
+            text-5xl
+            font-semibold
+            leading-none
+            text-modura-primary
+            lg:text-6xl
+          "
+        >
+          Engineering
+
+          <span className="ml-3 text-modura-secondary">
+            Insights
+          </span>
+        </h2>
+
       </div>
 
-    </section>
 
- {/* =========================================
-          Blog
-      ========================================= */}
-<section
-id="blog"
-ref={sectionblogRef}
+      {/* BUTTON */}
 
-className="
-relative
-overflow-hidden
-bg-modura-off-white
-py-16
-"
+      <div className="lg:pb-1">
 
->
+        <AnimatedButton
+          href="/blog"
+          title="View More"
+        />
 
+      </div>
 
-<div
-
-className="
-relative
-z-10
-max-w-7xl
-mx-auto
-px-6
-"
-
->
-
-
-
-
-{/* HEADER */}
-
-<div
-  className="
-    mb-14
-    flex
-    flex-col
-    gap-7
-    lg:flex-row
-    lg:items-end
-    lg:justify-between
-  "
->
-  {/* LEFT — HEADING */}
-
-  <div>
-    <div
-      className="
-        flex
-        items-center
-        gap-3
-        font-body
-        text-xs
-        font-bold
-        uppercase
-        tracking-[5px]
-        text-modura-secondary
-      "
-    >
-      <DraftingCompass
-        size={20}
-        strokeWidth={1.5}
-        className="text-modura-secondary"
-      />
-
-      <span>
-        OUR BLOG
-      </span>
     </div>
 
-    <h2
-      className="
-        mt-4
-        font-heading
-        text-5xl
-        font-semibold
-        leading-none
-        text-modura-primary
-        lg:text-6xl
-      "
-    >
-      Engineering
 
-      <span className="ml-3 text-modura-secondary">
-        Insights
-      </span>
-    </h2>
+   { blogs.length === 0 ? (
+
+      <div
+        className="
+          py-16
+          text-center
+          font-body
+          text-sm
+          text-modura-gray-600
+        "
+      >
+        No blogs available.
+      </div>
+
+    ) : (
+
+      <div
+        className="
+          grid
+          gap-8
+          md:grid-cols-2
+          lg:grid-cols-3
+        "
+      >
+
+        {blogs.slice(0,3).map((blog) => (
+
+          <motion.article
+            key={blog.id}
+            whileHover={{
+              y: -12,
+            }}
+            transition={{
+              duration: 0.35,
+            }}
+            className="
+              blog-card
+              blog-card-shape
+              h-[500px]
+              overflow-hidden
+              bg-white
+              shadow-xl
+            "
+          >
+
+            <Link
+              href={`/blogDetail/${blog.slug}`}
+              className="block h-full"
+            >
+
+              {/* IMAGE */}
+
+              <div
+                className="
+                  group
+                  relative
+                  h-[230px]
+                  overflow-hidden
+                  blog-image-shape
+                "
+              >
+
+                <Image
+                  src={blog.imageUrl}
+                  alt={blog.title}
+                  fill
+                  sizes="400px"
+                  className="
+                    object-cover
+                    transition-transform
+                    duration-700
+                    group-hover:scale-110
+                  "
+                />
+
+              </div>
+
+
+              {/* CONTENT */}
+
+              <div
+                className="
+                  px-8
+                  py-5
+                "
+              >
+
+                {/* DATE */}
+
+                <div
+                  className="
+                    mb-3
+                    font-heading
+                    text-lg
+                    font-bold
+                    tracking-wide
+                    text-modura-black
+                  "
+                >
+                  {new Date(blog.publishedAt).toLocaleDateString(
+                    "en-GB",
+                    {
+                      day: "2-digit",
+                      month: "short",
+                      year: "numeric",
+                    }
+                  )}
+                </div>
+
+
+                {/* TITLE */}
+
+                <h3
+                  className="
+                    font-heading
+                    text-[20px]
+                    font-semibold
+                    leading-tight
+                    text-modura-secondary
+                  "
+                >
+                  {blog.title}
+                </h3>
+
+
+                {/* DESCRIPTION */}
+
+                <p
+                  className="
+                    mt-3
+                    font-body
+                    text-sm
+                    leading-7
+                    text-modura-black
+                  "
+                >
+                  {getShortDescription(
+                    (blog as Blog & {
+                      description?: string;
+                    }).description || ""
+                  )}
+                </p>
+
+
+                {/* READ MORE */}
+
+                <div
+                  className="
+                    group
+                    relative
+                    mt-3
+                    flex
+                    h-[58px]
+                    w-[200px]
+                    items-center
+                    justify-between
+                    overflow-hidden
+                    border-2
+                    border-modura-secondary
+                    bg-modura-white
+                    px-7
+                    font-body
+                    font-semibold
+                    text-modura-primary
+                    clip-read-btn
+                    transition-all
+                    duration-500
+                  "
+                >
+
+                  {/* HOVER LAYER */}
+
+                  <span
+                    className="
+                      absolute
+                      inset-0
+                      translate-y-full
+                      bg-modura-secondary
+                      transition-transform
+                      duration-500
+                      ease-out
+                      group-hover:translate-y-0
+                    "
+                  />
+
+
+                  {/* TEXT */}
+
+                  <span
+                    className="
+                      relative
+                      z-10
+                      transition-all
+                      duration-500
+                      group-hover:tracking-wider
+                    "
+                  >
+                    Read More
+                  </span>
+
+
+                  {/* ARROW */}
+
+                  <span
+                    className="
+                      relative
+                      z-10
+                      flex
+                      h-10
+                      w-12
+                      items-center
+                      justify-center
+                      bg-modura-secondary
+                      text-modura-primary
+                      clip-arrow-box
+                      transition-all
+                      duration-500
+                      group-hover:translate-x-1
+                      group-hover:rotate-12
+                      group-hover:bg-modura-primary
+                      group-hover:text-white
+                    "
+                  >
+
+                    <ArrowRight
+                      size={18}
+                      className="
+                        transition-transform
+                        duration-500
+                        group-hover:translate-x-1
+                      "
+                    />
+
+                  </span>
+
+                </div>
+
+              </div>
+
+            </Link>
+
+          </motion.article>
+
+        ))}
+
+      </div>
+
+    )}
+
   </div>
-
-
-  {/* RIGHT — ANIMATED BUTTON */}
-
-  <div className="lg:pb-1">
-    <AnimatedButton
-      href="/blog"
-      title="View More"
-    />
-  </div>
-
-</div>
-
-
-
-{/* BLOG GRID */}
-
-
-<div
-
-className="
-grid
-md:grid-cols-2
-lg:grid-cols-3
-gap-8
-"
-
->
-
-
-
-
-{
-blogs.map((blog,index)=>(
-
-
-
-<motion.article
-
-
-key={index}
-
-
-whileHover={{
-y:-12
-}}
-
-
-transition={{
-duration:.35
-}}
-
-
-
-className="
-blog-card
-bg-white
-shadow-xl
-overflow-hidden
-blog-card-shape
-h-[500px]
-"
-
->
-
-
-   <Link
-                                        href="blogDetail">
-
-{/* IMAGE */}
-
-
-
-<div
-
-className="
-relative
-h-[230px]
-overflow-hidden
-blog-image-shape
-"
-
->
-
-
-<Image
-
-src={blog.image}
-
-alt={blog.title}
-
-fill
-
-sizes="400px"
-
-className="
-object-cover
-transition-transform
-duration-700
-group-hover:scale-110
-"
-
-/>
-
-
-
-</div>
-
-
-{/* CONTENT */}
-
-
-<div
-
-className="
-px-8
-py-5
-"
-
->
-
-
-{/* DATE */}
-
-<div
-className="
-mb-3
-font-heading
-text-modura-black
-font-bold
-text-lg
-tracking-wide
-"
->
-
-{blog.date.day} {blog.date.month} {blog.date.year}
-
-</div>
-<h3
-
-className="
-font-heading
-text-[20px]
-font-semibold
-leading-tight
-text-modura-secondary
-"
-
->
-
-{blog.title}
-
-</h3>
-
-
-
-<p
-
-className="
-font-body
-text-sm
-leading-7
-text-modura-black
-"
-
->
-
-{blog.desc}
-
-</p>
-
-<button
-className="
-group
-relative
-mt-3
-flex
-h-[58px]
-w-[200px]
-items-center
-justify-between
-overflow-hidden
-bg-modura-white
-px-7
-font-body
-font-semibold
-text-modura-primary
-clip-read-btn
-transition-all
-duration-500
-border-2
-border-modura-secondary
-
-"
->
-
-
-{/* Hover Layer */}
-
-<span
-className="
-absolute
-inset-0
-bg-modura-secondary
-translate-y-full
-transition-transform
-duration-500
-ease-out
-group-hover:translate-y-0
-
-"
-/>
-
-
-
-{/* Text */}
-
-<span
-className="
-relative
-z-10
-transition-all
-duration-500
-group-hover:tracking-wider
-"
->
-Read More
-</span>
-
-
-
-
-
-{/* Arrow */}
-
-<span
-className="
-relative
-z-10
-flex
-h-10
-w-12
-items-center
-justify-center
-bg-modura-secondary
-text-modura-primary
-clip-arrow-box
-transition-all
-duration-500
-group-hover:rotate-12
-group-hover:translate-x-1
-group-hover:bg-modura-primary
-group-hover:text-white
-"
->
-
-<ArrowRight
-size={18}
-className="
-transition-transform
-duration-500
-group-hover:translate-x-1
-"
-/>
-
-</span>
-
-
-
-</button>
-
-</div>
-                                        </Link>
-
-
-
-
-
-
-
-
-
-</motion.article>
-
-
-
-))
-}
-
-
-
-
-</div>
-
-
-</div>
-
-
-
 </section>
     </main>
   );
@@ -3931,11 +4262,8 @@ function TeamGroup({
   members: TeamMember[];
   onViewBio: (member: TeamMember) => void;
 }) {
-
   return (
-
     <div className="mt-20 lg:mt-24">
-
 
       {/* GROUP HEADER */}
 
@@ -3960,7 +4288,6 @@ function TeamGroup({
           </h3>
 
         </div>
-
 
         <span
           className="
@@ -3991,10 +4318,10 @@ function TeamGroup({
         "
       >
 
-        {members.map((member, index) => (
+        {members.map((member) => (
 
           <article
-            key={member.name}
+            key={member.id}
             className="
               group
               relative
@@ -4007,7 +4334,6 @@ function TeamGroup({
             "
           >
 
-
             {/* IMAGE */}
 
             <div
@@ -4019,9 +4345,10 @@ function TeamGroup({
             >
 
               <Image
-                src={member.image}
+                src={member.photoUrl}
                 alt={member.name}
                 fill
+                sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
                 className="
                   object-cover
                   transition-transform
@@ -4045,6 +4372,7 @@ function TeamGroup({
                 "
               />
 
+
               {/* ORANGE CORNER */}
 
               <div
@@ -4063,7 +4391,7 @@ function TeamGroup({
               />
 
 
-              {/* VIEW BIO ON IMAGE */}
+              {/* VIEW BIO */}
 
               <button
                 type="button"
@@ -4086,16 +4414,14 @@ function TeamGroup({
                 "
                 aria-label={`View bio of ${member.name}`}
               >
-
                 <ArrowUpRight
                   size={18}
                   strokeWidth={1.5}
                 />
-
               </button>
 
 
-              {/* NAME ON IMAGE */}
+              {/* NAME */}
 
               <div
                 className="
@@ -4119,7 +4445,6 @@ function TeamGroup({
                   {member.name}
                 </h4>
 
-
                 <p
                   className="
                     mt-2
@@ -4131,7 +4456,7 @@ function TeamGroup({
                     text-modura-secondary
                   "
                 >
-                  {member.role}
+                  {member.designation}
                 </p>
 
               </div>
@@ -4141,7 +4466,16 @@ function TeamGroup({
 
             {/* BOTTOM LINE */}
 
-            <div className="h-[3px] w-0 bg-modura-secondary transition-all duration-500 group-hover:w-full" />
+            <div
+              className="
+                h-[3px]
+                w-0
+                bg-modura-secondary
+                transition-all
+                duration-500
+                group-hover:w-full
+              "
+            />
 
           </article>
 
