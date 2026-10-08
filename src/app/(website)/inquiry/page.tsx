@@ -1,25 +1,48 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
+
 import {
-  ChevronDown,
   RefreshCw,
   Send,
 } from "lucide-react";
 
 import Breadcrumb from "../../../components/Breadcrumb";
+import axios from "axios";
+import { apiUrl } from "../config";
 
-type DropdownProps = {
-  label: string;
-  value: string;
-  options: string[];
-  onChange: (value: string) => void;
-  required?: boolean;
+
+// ============================================================
+// API PAYLOAD TYPE
+// ============================================================
+
+type ProjectInquiryPayload = {
+  name: string;
+  company: string;
+  email: string;
+  phone: string;
+  city: string;
+  state: string;
+  country: string;
+  natureOfProject: string;
+  description: string;
+  teams: string;
+  hangout: string;
+  other: string;
 };
 
+
+// ============================================================
+// PAGE
+// ============================================================
+
 export default function InquiryPage() {
-  const [projectType, setProjectType] = useState("");
-  const [country, setCountry] = useState("");
+  const router = useRouter();
+
+  // ==========================================================
+  // CAPTCHA
+  // ==========================================================
 
   const [captcha, setCaptcha] = useState({
     num1: 7,
@@ -27,6 +50,17 @@ export default function InquiryPage() {
   });
 
   const [captchaAnswer, setCaptchaAnswer] = useState("");
+
+  // ==========================================================
+  // SUBMIT STATE
+  // ==========================================================
+
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+
+  // ==========================================================
+  // GENERATE CAPTCHA
+  // ==========================================================
 
   const generateCaptcha = () => {
     setCaptcha({
@@ -37,10 +71,22 @@ export default function InquiryPage() {
     setCaptchaAnswer("");
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+
+  // ==========================================================
+  // FORM SUBMIT
+  // ==========================================================
+
+  const handleSubmit = async (
+    e: React.FormEvent<HTMLFormElement>
+  ) => {
     e.preventDefault();
 
-    const correctAnswer = captcha.num1 + captcha.num2;
+    // --------------------------------------------------------
+    // CAPTCHA VALIDATION
+    // --------------------------------------------------------
+
+    const correctAnswer =
+      captcha.num1 + captcha.num2;
 
     if (Number(captchaAnswer) !== correctAnswer) {
       alert("Please enter the correct CAPTCHA.");
@@ -48,9 +94,213 @@ export default function InquiryPage() {
       return;
     }
 
-    // API integration can be added here.
-    alert("Inquiry submitted successfully.");
+
+    // --------------------------------------------------------
+    // GET FORM DATA
+    // --------------------------------------------------------
+
+    const form = e.currentTarget;
+
+    const formData = new FormData(form);
+
+
+    const name = String(
+      formData.get("name") || ""
+    ).trim();
+
+    const company = String(
+      formData.get("company") || ""
+    ).trim();
+
+    const email = String(
+      formData.get("email") || ""
+    ).trim();
+
+    const phone = String(
+      formData.get("phone") || ""
+    ).trim();
+
+    const city = String(
+      formData.get("city") || ""
+    ).trim();
+
+    const state = String(
+      formData.get("state") || ""
+    ).trim();
+
+    const country = String(
+      formData.get("country") || ""
+    ).trim();
+
+    const natureOfProject = String(
+      formData.get("natureOfProject") || ""
+    ).trim();
+
+    const description = String(
+      formData.get("description") || ""
+    ).trim();
+
+    const teams = String(
+      formData.get("teams") || ""
+    ).trim();
+
+    const hangout = String(
+      formData.get("hangout") || ""
+    ).trim();
+
+    const other = String(
+      formData.get("other") || ""
+    ).trim();
+
+
+    // ========================================================
+    // REQUIRED VALIDATION
+    // ========================================================
+
+    if (!name) {
+      alert("Please enter your name.");
+      return;
+    }
+
+    if (!email) {
+      alert("Please enter your email address.");
+      return;
+    }
+
+    if (!phone) {
+      alert("Please enter your phone number.");
+      return;
+    }
+
+    if (!natureOfProject) {
+      alert("Please enter the nature of project.");
+      return;
+    }
+
+    if (!country) {
+      alert("Please enter the country.");
+      return;
+    }
+
+    if (!description) {
+      alert("Please enter your project description.");
+      return;
+    }
+
+
+    // ========================================================
+    // EMAIL VALIDATION
+    // ========================================================
+
+    const emailRegex =
+      /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if (!emailRegex.test(email)) {
+      alert("Please enter a valid email address.");
+      return;
+    }
+
+
+    // ========================================================
+    // PHONE VALIDATION
+    // ========================================================
+
+    const phoneDigits =
+      phone.replace(/\D/g, "");
+
+    if (phoneDigits.length < 7) {
+      alert("Please enter a valid phone number.");
+      return;
+    }
+
+
+    // ========================================================
+    // API PAYLOAD
+    // ========================================================
+
+    const payload: ProjectInquiryPayload = {
+      name,
+      company,
+      email,
+      phone,
+      city,
+      state,
+      country,
+      natureOfProject,
+      description,
+      teams,
+      hangout,
+      other,
+    };
+
+
+    console.log(
+      "Project Inquiry Payload:",
+      payload
+    );
+
+
+    // ========================================================
+    // API CALL
+    // ========================================================
+
+   try {
+  setIsSubmitting(true);
+
+  const response = await axios.post(
+      `${apiUrl}/projectInquiry`,
+    payload,
+    {
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      timeout: 60000,
+    }
+  );
+
+  console.log(
+    "Project Inquiry API Response:",
+    response.data
+  );
+
+  if (response.data?.success === true) {
+    router.push("/thank-you/inquiry");
+    return;
+  }
+
+  alert(
+    response.data?.message ||
+      "Unable to submit inquiry. Please try again."
+  );
+
+} catch (error: unknown) {
+
+  console.error(
+    "Project Inquiry API Error:",
+    error
+  );
+
+  if (axios.isAxiosError(error)) {
+    alert(
+      error.response?.data?.message ||
+        "Unable to submit inquiry. Please try again."
+    );
+  } else {
+    alert(
+      "Something went wrong while submitting your inquiry."
+    );
+  }
+
+} finally {
+  setIsSubmitting(false);
+} 
   };
+
+
+  // ==========================================================
+  // UI
+  // ==========================================================
 
   return (
     <>
@@ -62,7 +312,7 @@ export default function InquiryPage() {
 
 
       {/* =====================================================
-          INQUIRY FORM
+          MAIN
       ===================================================== */}
 
       <main className="bg-modura-off-white py-14 md:py-20">
@@ -71,6 +321,7 @@ export default function InquiryPage() {
 
           <form
             onSubmit={handleSubmit}
+            noValidate
             className="
               overflow-hidden
               bg-white
@@ -79,7 +330,7 @@ export default function InquiryPage() {
           >
 
             {/* =================================================
-                FORM HEADER
+                HEADER
             ================================================= */}
 
             <div
@@ -150,7 +401,7 @@ export default function InquiryPage() {
 
 
             {/* =================================================
-                PERSONAL INFORMATION
+                FORM
             ================================================= */}
 
             <div
@@ -163,6 +414,10 @@ export default function InquiryPage() {
               "
             >
 
+              {/* =================================================
+                  BASIC INFORMATION
+              ================================================= */}
+
               <div
                 className="
                   grid
@@ -174,82 +429,75 @@ export default function InquiryPage() {
 
                 <FormField
                   label="Name"
+                  name="name"
                   placeholder="Enter your name"
                   required
                 />
 
+
                 <FormField
                   label="Company"
+                  name="company"
                   placeholder="Enter company name"
                 />
 
+
                 <FormField
                   label="Email Address"
+                  name="email"
                   placeholder="Enter your email address"
                   type="email"
                   required
                 />
 
+
                 <FormField
                   label="Phone"
+                  name="phone"
                   placeholder="Enter your phone number"
                   type="tel"
                   required
                 />
 
+
                 <FormField
                   label="City / Address"
+                  name="city"
                   placeholder="Enter city or address"
                 />
 
+
                 <FormField
                   label="State / Province"
+                  name="state"
                   placeholder="Enter state / province"
                 />
 
 
-                {/* CUSTOM PROJECT DROPDOWN */}
+                {/* NATURE OF PROJECT */}
 
-                <CustomDropdown
+                <FormField
                   label="Nature of Project"
-                  value={projectType}
-                  onChange={setProjectType}
+                  name="natureOfProject"
+                  placeholder="Enter nature of project"
                   required
-                  options={[
-                    "Architecture",
-                    "BIM Solutions",
-                    "Structural Engineering",
-                    "Project Management",
-                    "Steel Detailing",
-                    "Shop Drawing",
-                    "Other",
-                  ]}
                 />
 
 
-                {/* CUSTOM COUNTRY DROPDOWN */}
+                {/* COUNTRY */}
 
-                <CustomDropdown
+                <FormField
                   label="Country"
-                  value={country}
-                  onChange={setCountry}
+                  name="country"
+                  placeholder="Enter country"
                   required
-                  options={[
-                    "India",
-                    "United States",
-                    "United Kingdom",
-                    "Canada",
-                    "Australia",
-                    "United Arab Emirates",
-                    "Other",
-                  ]}
                 />
 
               </div>
 
 
               {/* =================================================
-                  PROJECT DESCRIPTION
+                  DESCRIPTION
               ================================================= */}
 
               <div className="mt-9">
@@ -264,11 +512,13 @@ export default function InquiryPage() {
                     text-modura-gray-600
                   "
                 >
+
                   Description of your project
 
                   <span className="ml-1 text-modura-secondary">
                     *
                   </span>
+
                 </label>
 
 
@@ -276,7 +526,9 @@ export default function InquiryPage() {
                   name="description"
                   required
                   rows={7}
-                  placeholder="Tell us about your project, requirements, scope, timeline..."
+                  placeholder="
+                    Tell us about your project, requirements, scope, timeline...
+                  "
                   className="
                     w-full
                     resize-none
@@ -316,17 +568,22 @@ export default function InquiryPage() {
 
                 <FormField
                   label="Teams"
-                  placeholder="Enter details"
+                  name="teams"
+                  placeholder="Enter teams"
                 />
+
 
                 <FormField
                   label="Hangout"
-                  placeholder="Enter details"
+                  name="hangout"
+                  placeholder="Enter hangout / meeting option"
                 />
+
 
                 <FormField
                   label="Other"
-                  placeholder="Enter details"
+                  name="other"
+                  placeholder="Enter other information"
                 />
 
               </div>
@@ -348,11 +605,13 @@ export default function InquiryPage() {
                     text-modura-gray-600
                   "
                 >
+
                   Security Verification
 
                   <span className="ml-1 text-modura-secondary">
                     *
                   </span>
+
                 </label>
 
 
@@ -367,7 +626,7 @@ export default function InquiryPage() {
                   "
                 >
 
-                  {/* CAPTCHA BOX */}
+                  {/* CAPTCHA */}
 
                   <div
                     className="
@@ -402,7 +661,7 @@ export default function InquiryPage() {
                   </div>
 
 
-                  {/* ANSWER */}
+                  {/* CAPTCHA INPUT */}
 
                   <input
                     type="number"
@@ -503,6 +762,7 @@ export default function InquiryPage() {
 
                 <button
                   type="submit"
+                  disabled={isSubmitting}
                   className="
                     group
                     relative
@@ -523,22 +783,35 @@ export default function InquiryPage() {
                     transition-all
                     duration-500
                     hover:bg-modura-secondary
+                    disabled:cursor-not-allowed
+                    disabled:opacity-60
                   "
                 >
 
                   <span>
-                    Submit Inquiry
+                    {isSubmitting
+                      ? "Submitting..."
+                      : "Submit Inquiry"}
                   </span>
 
-                  <Send
-                    size={18}
-                    strokeWidth={1.5}
-                    className="
-                      transition-transform
-                      duration-500
-                      group-hover:translate-x-1
-                    "
-                  />
+
+                  {isSubmitting ? (
+                    <RefreshCw
+                      size={18}
+                      strokeWidth={1.5}
+                      className="animate-spin"
+                    />
+                  ) : (
+                    <Send
+                      size={18}
+                      strokeWidth={1.5}
+                      className="
+                        transition-transform
+                        duration-500
+                        group-hover:translate-x-1
+                      "
+                    />
+                  )}
 
                 </button>
 
@@ -556,21 +829,24 @@ export default function InquiryPage() {
 }
 
 
-/* =========================================================
-   FORM FIELD
-========================================================= */
+// ============================================================
+// FORM FIELD COMPONENT
+// ============================================================
 
 function FormField({
   label,
+  name,
   placeholder,
   type = "text",
   required = false,
 }: {
   label: string;
+  name: string;
   placeholder: string;
   type?: string;
   required?: boolean;
 }) {
+
   return (
     <div>
 
@@ -598,7 +874,7 @@ function FormField({
 
       <input
         type={type}
-        name={label.toLowerCase().replace(/\s+/g, "_")}
+        name={name}
         placeholder={placeholder}
         required={required}
         className="
@@ -619,167 +895,6 @@ function FormField({
           focus:bg-white
         "
       />
-
-    </div>
-  );
-}
-
-
-/* =========================================================
-   CUSTOM DROPDOWN
-========================================================= */
-
-function CustomDropdown({
-  label,
-  value,
-  options,
-  onChange,
-  required = false,
-}: DropdownProps) {
-  const [open, setOpen] = useState(false);
-
-  return (
-    <div className="relative">
-
-      <label
-        className="
-          mb-3
-          block
-          font-body
-          text-sm
-          font-medium
-          text-modura-gray-600
-        "
-      >
-
-        {label}
-
-        {required && (
-          <span className="ml-1 text-modura-secondary">
-            *
-          </span>
-        )}
-
-      </label>
-
-
-      {/* SELECT BUTTON */}
-
-      <button
-        type="button"
-        onClick={() => setOpen(!open)}
-        className={`
-          flex
-          h-14
-          w-full
-          items-center
-          justify-between
-          border
-          bg-modura-off-white
-          px-5
-          text-left
-          font-body
-          text-base
-          outline-none
-          transition-all
-          duration-300
-          ${
-            open
-              ? "border-modura-secondary bg-white"
-              : "border-modura-gray-200"
-          }
-        `}
-      >
-
-        <span
-          className={
-            value
-              ? "text-modura-primary"
-              : "text-modura-gray-400"
-          }
-        >
-          {value || `Select ${label.toLowerCase()}`}
-        </span>
-
-
-        <ChevronDown
-          size={18}
-          strokeWidth={1.5}
-          className={`
-            text-modura-secondary
-            transition-transform
-            duration-300
-            ${open ? "rotate-180" : ""}
-          `}
-        />
-
-      </button>
-
-
-      {/* DROPDOWN */}
-
-      {open && (
-        <div
-          className="
-            absolute
-            left-0
-            right-0
-            top-full
-            z-50
-            mt-1
-            overflow-hidden
-            border
-            border-modura-gray-200
-            bg-white
-            shadow-[0_15px_40px_rgba(6,19,34,0.12)]
-          "
-        >
-
-          {options.map((option) => (
-            <button
-              key={option}
-              type="button"
-              onClick={() => {
-                onChange(option);
-                setOpen(false);
-              }}
-              className="
-                flex
-                w-full
-                items-center
-                border-b
-                border-modura-gray-100
-                px-5
-                py-4
-                text-left
-                font-body
-                text-sm
-                text-modura-primary
-                transition-all
-                duration-200
-                last:border-b-0
-                hover:bg-modura-off-white
-                hover:pl-7
-                hover:text-modura-secondary
-              "
-            >
-
-              <span
-                className="
-                  mr-3
-                  h-1.5
-                  w-1.5
-                  bg-modura-secondary
-                "
-              />
-
-              {option}
-
-            </button>
-          ))}
-
-        </div>
-      )}
 
     </div>
   );
