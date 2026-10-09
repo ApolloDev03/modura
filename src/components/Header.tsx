@@ -2583,11 +2583,7 @@ const companyLinks: CompanyLink[] = [
         href: "/company#certifications",
         icon: FiAward,
     },
-    {
-        title: "Testimonials",
-        href: "/company#testimonials",
-        icon: PiStack,
-    },
+ 
     {
         title: "FAQs",
         href: "/company#faqs",
@@ -2718,11 +2714,6 @@ export default function Header() {
     const [activeService, setActiveService] =
         useState(0);
 
-    const [activePortfolio, setActivePortfolio] =
-        useState<string | null>(null);
-
-    const [activePortfolioTop, setActivePortfolioTop] =
-        useState(0);
 
     const portfolioScrollRef =
         useRef<HTMLDivElement>(null);
@@ -3986,9 +3977,7 @@ export default function Header() {
                                 h-full
                                 items-center
                             "
-                            onMouseLeave={() =>
-                                setActivePortfolio(null)
-                            }
+                         
                         >
 
                             <DesktopDropdownTrigger

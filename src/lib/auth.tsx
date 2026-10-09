@@ -189,7 +189,7 @@ export function AuthProvider({
   const logout = useCallback(() => {
     clearToken();
     setAdmin(null);
-
+    setLoading(false);
     window.location.href =
       "/admin/login";
   }, []);
