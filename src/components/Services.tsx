@@ -413,7 +413,7 @@ export default function Services({
                   {/* Image */}
 
                   <Image
-                    src={item.imageUrl || item.image}
+                    src={item.imageUrl}
                     alt={item.title}
                     fill
                     className="
