@@ -92,7 +92,7 @@ export function Gallery({ value, onChange, onError, invalid, max = 20, coverLabe
     const bad = files.map((f) => checkImage(f)).find(Boolean);
     if (bad) { onError(bad); return; }
     onError(null);
-    onChange({ existing, removed, added: [...added, ...files].slice(0, max) });
+   onChange({ existing, removed, added: files.slice(0, 1) });
   };
 
   const kept = existing.filter((img) => !removed.includes(img.id));
@@ -107,9 +107,9 @@ export function Gallery({ value, onChange, onError, invalid, max = 20, coverLabe
         role="button"
         tabIndex={0}
       >
-        <b>⬆ Drag &amp; drop or click to add images</b>
-        <span>Multiple images · jpg, jpeg, png, webp · max {MAX_IMAGE_MB} MB each · up to {max} per save</span>
-        <input ref={input} type="file" hidden multiple accept={IMAGE_ACCEPT} onChange={(e) => { addFiles(e.target.files); e.target.value = ''; }} />
+       <b>⬆ Drag &amp; drop or click to add image</b>
+        <span>Single image · jpg, jpeg, png, webp · max {MAX_IMAGE_MB} MB</span>
+        <input ref={input} type="file" hidden accept={IMAGE_ACCEPT} onChange={(e) => { addFiles(e.target.files); e.target.value = ''; }} />
       </div>
       {(kept.length > 0 || added.length > 0) && (
         <div className="thumbs">

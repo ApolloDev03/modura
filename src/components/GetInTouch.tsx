@@ -1,1113 +1,3 @@
-// "use client";
-
-// import {
-//   useEffect,
-//   useState,
-//   type ReactNode,
-// } from "react";
-
-// import {
-//   X,
-//   User,
-//   Mail,
-//   Phone,
-//   Layers,
-//   MessageSquare,
-//   ArrowRight,
-//   ChevronDown,
-// } from "lucide-react";
-
-// import {
-//   motion,
-//   AnimatePresence,
-// } from "framer-motion";
-
-
-
-// export default function GetInTouch() {
-
-//   const [open, setOpen] = useState(false);
-
-//   const [serviceOpen, setServiceOpen] = useState(false);
-
-//   const [service, setService] = useState("Select Service");
-
-
-
-//   const services = [
-//     "Architecture Design",
-//     "BIM Solutions",
-//     "Structural Engineering",
-//     "Project Management",
-//     "Interior Design",
-//     "Engineering Consultancy",
-//   ];
-
-
-
-//   /*
-//   |--------------------------------------------------------------------------
-//   | LOCK BODY SCROLL
-//   |--------------------------------------------------------------------------
-//   */
-
-//   useEffect(() => {
-
-//     if (open) {
-
-//       document.body.style.overflow = "hidden";
-
-//     } else {
-
-//       document.body.style.overflow = "";
-
-//       setServiceOpen(false);
-
-//     }
-
-
-//     return () => {
-
-//       document.body.style.overflow = "";
-
-//     };
-
-//   }, [open]);
-
-
-
-//   /*
-//   |--------------------------------------------------------------------------
-//   | ESCAPE TO CLOSE
-//   |--------------------------------------------------------------------------
-//   */
-
-//   useEffect(() => {
-
-//     const handleKeyDown = (event: KeyboardEvent) => {
-
-//       if (event.key === "Escape") {
-
-//         setOpen(false);
-
-//       }
-
-//     };
-
-
-//     window.addEventListener(
-//       "keydown",
-//       handleKeyDown
-//     );
-
-
-//     return () => {
-
-//       window.removeEventListener(
-//         "keydown",
-//         handleKeyDown
-//       );
-
-//     };
-
-//   }, []);
-
-
-
-
-//   return (
-
-//     <>
-
-//       {/* =========================================================
-//           FLOATING GET IN TOUCH BUTTON
-//       ========================================================= */}
-
-//       <button
-
-//         type="button"
-
-//         onClick={() => setOpen(true)}
-
-//         aria-label="Open Get In Touch Form"
-
-//         className="
-//           fixed
-//           right-6
-//           bottom-8
-//           z-[999]
-//           group
-//         "
-
-//       >
-
-//         <div
-
-//           className="
-//             relative
-//             h-[64px]
-//             w-[64px]
-//             bg-modura-primary
-//             overflow-hidden
-//             transition-all
-//             duration-700
-//             group-hover:w-[210px]
-//             shadow-xl
-//             cta-blueprint
-//           "
-
-//         >
-
-//           {/* Orange Corner */}
-
-//           <div
-
-//             className="
-//               absolute
-//               right-0
-//               top-0
-//               w-[30px]
-//               h-[30px]
-//               bg-modura-secondary
-//               transition-all
-//               duration-700
-//               group-hover:w-full
-//               group-hover:h-[4px]
-//             "
-
-//           />
-
-
-
-//           {/* Minimal Blueprint Line */}
-
-//           <div
-
-//             className="
-//               absolute
-//               inset-3
-//               border
-//               border-white/10
-//             "
-
-//           >
-
-//             <div
-
-//               className="
-//                 absolute
-//                 left-1/2
-//                 top-0
-//                 h-full
-//                 border-l
-//                 border-white/10
-//               "
-
-//             />
-
-//           </div>
-
-
-
-//           {/* Plus Icon */}
-
-//           <div
-
-//             className="
-//               absolute
-//               left-3
-//               top-1/2
-//               -translate-y-1/2
-//               w-9
-//               h-9
-//               border
-//               border-modura-secondary
-//               text-modura-secondary
-//               flex
-//               items-center
-//               justify-center
-//               text-xl
-//               font-body
-//               transition-all
-//               duration-500
-//               group-hover:bg-modura-secondary
-//               group-hover:text-white
-//             "
-
-//           >
-
-//             +
-
-//           </div>
-
-
-
-//           {/* Button Text */}
-
-//           <div
-
-//             className="
-//               absolute
-//               left-16
-//               top-1/2
-//               -translate-y-1/2
-//               text-white
-//               opacity-0
-//               translate-x-5
-//               transition-all
-//               duration-700
-//               group-hover:opacity-100
-//               group-hover:translate-x-0
-//             "
-
-//           >
-
-//             <p
-
-//               className="
-//                 font-heading
-//                 tracking-[2px]
-//                 text-sm
-//                 whitespace-nowrap
-//               "
-
-//             >
-
-//               GET IN TOUCH
-
-//             </p>
-
-//           </div>
-
-//         </div>
-
-//       </button>
-
-
-
-
-
-//       {/* =========================================================
-//           FORM
-//       ========================================================= */}
-
-//       <AnimatePresence>
-
-//         {open && (
-
-//           <>
-
-//             {/* =====================================================
-//                 BACKDROP
-//             ===================================================== */}
-
-//             <motion.div
-
-//               initial={{
-//                 opacity: 0,
-//               }}
-
-//               animate={{
-//                 opacity: 1,
-//               }}
-
-//               exit={{
-//                 opacity: 0,
-//               }}
-
-//               transition={{
-//                 duration: 0.35,
-//               }}
-
-//               onClick={() => setOpen(false)}
-
-//               className="
-//                 fixed
-//                 inset-0
-//                 z-[1000]
-//                 bg-black/60
-//                 backdrop-blur-sm
-//               "
-
-//             />
-
-
-
-
-
-//             {/* =====================================================
-//                 LEFT DRAWER
-//             ===================================================== */}
-
-//             <motion.aside
-
-//               initial={{
-//                 x: "-100%",
-//               }}
-
-//               animate={{
-//                 x: 0,
-//               }}
-
-//               exit={{
-//                 x: "-100%",
-//               }}
-
-//               transition={{
-//                 duration: 0.6,
-//                 ease: [0.22, 1, 0.36, 1],
-//               }}
-
-//               className="
-//                 fixed
-//                 left-0
-//                 top-0
-//                 z-[1001]
-//                 h-screen
-//                 w-full
-//                 sm:w-[460px]
-//                 lg:w-[500px]
-//                 bg-modura-primary
-//                 text-white
-//                 shadow-2xl
-//                 overflow-y-auto
-//                 scrollbar-hide
-//                 clip-form
-//               "
-
-//               onClick={(event) => {
-//                 event.stopPropagation();
-//               }}
-
-//             >
-
-//               {/* =================================================
-//                   INNER CONTENT
-//               ================================================= */}
-
-//               <div
-
-//                 className="
-//                   min-h-full
-//                   px-7
-//                   py-8
-//                   sm:px-9
-//                   sm:py-10
-//                 "
-
-//               >
-
-
-
-//                 {/* TOP */}
-
-//                 <div
-
-//                   className="
-//                     flex
-//                     items-start
-//                     justify-between
-//                     gap-5
-//                   "
-
-//                 >
-
-//                   <div>
-
-//                     <p
-
-//                       className="
-//                         font-body
-//                         text-modura-secondary
-//                         uppercase
-//                         tracking-[5px]
-//                         text-[11px]
-//                         font-semibold
-//                       "
-
-//                     >
-
-//                       START PROJECT
-
-//                     </p>
-
-
-
-//                     <h2
-
-//                       className="
-//                         mt-4
-//                         font-heading
-//                         text-4xl
-//                         sm:text-5xl
-//                         leading-[0.95]
-//                         font-semibold
-//                         text-white
-//                       "
-
-//                     >
-
-//                       Let's Create
-
-//                       <br />
-
-//                       Something
-
-//                       <br />
-
-//                       <span className="text-modura-secondary">
-
-//                         Remarkable
-
-//                       </span>
-
-//                     </h2>
-
-//                   </div>
-
-
-
-//                   {/* CLOSE */}
-
-//                   <button
-
-//                     type="button"
-
-//                     onClick={() => setOpen(false)}
-
-//                     aria-label="Close form"
-
-//                     className="
-//                       shrink-0
-//                       w-10
-//                       h-10
-//                       border
-//                       border-white/20
-//                       text-white
-//                       flex
-//                       items-center
-//                       justify-center
-//                       transition-all
-//                       duration-300
-//                       hover:bg-modura-secondary
-//                       hover:border-modura-secondary
-//                       hover:rotate-90
-//                     "
-
-//                   >
-
-//                     <X size={19} />
-
-//                   </button>
-
-//                 </div>
-
-
-
-
-
-//                 {/* DESCRIPTION */}
-
-//                 <p
-
-//                   className="
-//                     mt-6
-//                     max-w-[390px]
-//                     font-body
-//                     text-sm
-//                     leading-6
-//                     text-modura-gray-400
-//                   "
-
-//                 >
-
-//                   Share your project requirements and our
-//                   engineering team will get back to you.
-
-//                 </p>
-
-
-
-
-
-//                 {/* =================================================
-//                     FORM
-//                 ================================================= */}
-
-//                 <div
-
-//                   className="
-//                     mt-9
-//                     space-y-6
-//                   "
-
-//                 >
-
-
-
-//                   {/* NAME */}
-
-//                   <Input
-
-//                     icon={<User size={18} />}
-
-//                     label="NAME"
-
-//                     placeholder="Your Name"
-
-//                   />
-
-
-
-//                   {/* EMAIL */}
-
-//                   <Input
-
-//                     icon={<Mail size={18} />}
-
-//                     label="EMAIL"
-
-//                     placeholder="Email Address"
-
-//                   />
-
-
-
-//                   {/* PHONE */}
-
-//                   <Input
-
-//                     icon={<Phone size={18} />}
-
-//                     label="PHONE"
-
-//                     placeholder="Phone Number"
-
-//                   />
-
-
-
-
-
-//                   {/* =================================================
-//                       CUSTOM SERVICE DROPDOWN
-//                   ================================================= */}
-
-//                   <div className="relative">
-
-//                     <p
-
-//                       className="
-//                         mb-2
-//                         font-body
-//                         text-[10px]
-//                         uppercase
-//                         tracking-[2px]
-//                         text-modura-gray-400
-//                       "
-
-//                     >
-
-//                       SERVICE
-
-//                     </p>
-
-
-
-//                     <button
-
-//                       type="button"
-
-//                       onClick={() =>
-//                         setServiceOpen(!serviceOpen)
-//                       }
-
-//                       className="
-//                         group
-//                         w-full
-//                         flex
-//                         items-center
-//                         justify-between
-//                         gap-4
-//                         border-b
-//                         border-white/20
-//                         pb-4
-//                         text-left
-//                         font-body
-//                         text-sm
-//                         text-gray-300
-//                         transition-all
-//                         duration-300
-//                         hover:border-modura-secondary
-//                       "
-
-//                     >
-
-//                       <span
-
-//                         className="
-//                           flex
-//                           items-center
-//                           gap-3
-//                         "
-
-//                       >
-
-//                         <Layers
-
-//                           size={18}
-
-//                           className="
-//                             text-modura-secondary
-//                           "
-
-//                         />
-
-//                         <span>
-
-//                           {service}
-
-//                         </span>
-
-//                       </span>
-
-
-
-//                       <ChevronDown
-
-//                         size={17}
-
-//                         className={`
-//                           text-modura-secondary
-//                           transition-transform
-//                           duration-300
-//                           ${
-//                             serviceOpen
-//                               ? "rotate-180"
-//                               : ""
-//                           }
-//                         `}
-
-//                       />
-
-//                     </button>
-
-
-
-
-
-//                     {/* DROPDOWN */}
-
-//                     <AnimatePresence>
-
-//                       {serviceOpen && (
-
-//                         <motion.div
-
-//                           initial={{
-//                             opacity: 0,
-//                             y: -8,
-//                             scale: 0.98,
-//                           }}
-
-//                           animate={{
-//                             opacity: 1,
-//                             y: 0,
-//                             scale: 1,
-//                           }}
-
-//                           exit={{
-//                             opacity: 0,
-//                             y: -8,
-//                             scale: 0.98,
-//                           }}
-
-//                           transition={{
-//                             duration: 0.2,
-//                           }}
-
-//                           className="
-//                             absolute
-//                             left-0
-//                             right-0
-//                             top-[72px]
-//                             z-50
-//                             overflow-hidden
-//                             border
-//                             border-modura-border
-//                             bg-white
-//                             shadow-2xl
-//                           "
-
-//                         >
-
-//                           {services.map(
-//                             (item, index) => (
-
-//                               <button
-
-//                                 type="button"
-
-//                                 key={item}
-
-//                                 onClick={() => {
-
-//                                   setService(item);
-
-//                                   setServiceOpen(false);
-
-//                                 }}
-
-//                                 className="
-//                                   group/item
-//                                   w-full
-//                                   flex
-//                                   items-center
-//                                   gap-3
-//                                   px-5
-//                                   py-3.5
-//                                   text-left
-//                                   font-body
-//                                   text-sm
-//                                   text-modura-primary
-//                                   transition-all
-//                                   duration-300
-//                                   hover:bg-modura-secondary
-//                                   hover:text-white
-//                                 "
-
-//                               >
-
-//                                 <span
-
-//                                   className="
-//                                     h-1.5
-//                                     w-1.5
-//                                     bg-modura-secondary
-//                                     transition-all
-//                                     group-hover/item:bg-white
-//                                   "
-
-//                                 />
-
-//                                 {item}
-
-//                               </button>
-
-//                             )
-//                           )}
-
-//                         </motion.div>
-
-//                       )}
-
-//                     </AnimatePresence>
-
-//                   </div>
-
-
-
-
-
-//                   {/* =================================================
-//                       PROJECT DETAILS
-//                   ================================================= */}
-
-//                   <div>
-
-//                     <p
-
-//                       className="
-//                         mb-2
-//                         font-body
-//                         text-[10px]
-//                         uppercase
-//                         tracking-[2px]
-//                         text-modura-gray-400
-//                       "
-
-//                     >
-
-//                       PROJECT DETAILS
-
-//                     </p>
-
-
-
-//                     <div
-
-//                       className="
-//                         flex
-//                         items-start
-//                         gap-3
-//                         border-b
-//                         border-white/20
-//                         pb-4
-//                         transition
-//                         focus-within:border-modura-secondary
-//                       "
-
-//                     >
-
-//                       <MessageSquare
-
-//                         size={18}
-
-//                         className="
-//                           mt-1
-//                           shrink-0
-//                           text-modura-secondary
-//                         "
-
-//                       />
-
-
-
-//                       <textarea
-
-//                         placeholder="Tell us about your project"
-
-//                         className="
-//                           h-24
-//                           w-full
-//                           resize-none
-//                           bg-transparent
-//                           font-body
-//                           text-sm
-//                           text-white
-//                           outline-none
-//                           placeholder:text-modura-gray-500
-//                         "
-
-//                       />
-
-//                     </div>
-
-//                   </div>
-
-
-
-
-
-//                   {/* =================================================
-//                       SUBMIT
-//                   ================================================= */}
-
-//                   <button
-//   type="button"
-//   className="
-//     group
-//     relative
-//     mt-2
-//     h-[48px]
-//     w-[185px]
-//     overflow-hidden
-//     bg-modura-secondary
-//     font-body
-//     text-[12px]
-//     font-bold
-//     tracking-[2px]
-//     text-white
-//     clip-submit
-//     transition-all
-//     duration-300
-//     hover:w-[200px]
-//   "
-// >
-//   {/* DARK HOVER PANEL */}
-//   <span
-//     className="
-//       absolute
-//       inset-0
-//       translate-x-[-105%]
-//       bg-modura-primary
-//       transition-transform
-//       duration-500
-//       ease-[cubic-bezier(.77,0,.18,1)]
-//       group-hover:translate-x-0
-//     "
-//   />
-
-//   {/* CONTENT */}
-//   <span
-//     className="
-//       relative
-//       z-10
-//       flex
-//       h-full
-//       items-center
-//       justify-center
-//       gap-3
-//       transition-all
-//       duration-500
-//     "
-//   >
-//     <span className="transition-all duration-500 group-hover:tracking-[3px]">
-//       SEND INQUIRY
-//     </span>
-
-//     {/* CUSTOM ARROW */}
-//     <span
-//       className="
-//         relative
-//         flex
-//         h-7
-//         w-8
-//         items-center
-//         justify-center
-//         bg-white
-//         text-modura-primary
-//         clip-submit-arrow
-//         transition-all
-//         duration-500
-//         group-hover:translate-x-2
-//         group-hover:bg-modura-secondary
-//         group-hover:text-white
-//       "
-//     >
-//       <ArrowRight
-//         size={15}
-//         strokeWidth={2}
-//         className="
-//           transition-transform
-//           duration-500
-//           group-hover:translate-x-1
-//         "
-//       />
-//     </span>
-//   </span>
-// </button>
-
-
-//                 </div>
-
-
-
-//               </div>
-
-//             </motion.aside>
-
-//           </>
-
-//         )}
-
-//       </AnimatePresence>
-
-//     </>
-
-//   );
-
-// }
-
-
-
-
-
-
-// /* =============================================================
-//    INPUT COMPONENT
-// ============================================================= */
-
-// function Input({
-
-//   icon,
-//   label,
-//   placeholder,
-
-// }: {
-
-//   icon: ReactNode;
-
-//   label: string;
-
-//   placeholder: string;
-
-// }) {
-
-//   return (
-
-//     <div>
-
-//       <p
-
-//         className="
-//           mb-2
-//           font-body
-//           text-[10px]
-//           uppercase
-//           tracking-[2px]
-//           text-modura-gray-400
-//         "
-
-//       >
-
-//         {label}
-
-//       </p>
-
-
-
-//       <div
-
-//         className="
-//           group
-//           flex
-//           items-center
-//           gap-3
-//           border-b
-//           border-white/20
-//           pb-4
-//           transition-all
-//           duration-300
-//           focus-within:border-modura-secondary
-//         "
-
-//       >
-
-//         <span
-
-//           className="
-//             shrink-0
-//             text-modura-gray-400
-//             transition-colors
-//             duration-300
-//             group-focus-within:text-modura-secondary
-//           "
-
-//         >
-
-//           {icon}
-
-//         </span>
-
-
-
-//         <input
-
-//           type="text"
-
-//           placeholder={placeholder}
-
-//           className="
-//             w-full
-//             bg-transparent
-//             font-body
-//             text-sm
-//             text-white
-//             outline-none
-//             placeholder:text-modura-gray-500
-//           "
-
-//         />
-
-//       </div>
-
-//     </div>
-
-//   );
-
-// }
-
 "use client";
 
 import {
@@ -1130,6 +20,7 @@ import {
   ArrowRight,
   ChevronDown,
   Check,
+  ArrowUpRight,
 } from "lucide-react";
 
 import {
@@ -1137,6 +28,7 @@ import {
   AnimatePresence,
 } from "framer-motion";
 import { apiUrl } from "@/app/(website)/config";
+import { FaWhatsapp } from "react-icons/fa6";
 
 interface FormDataType {
   name: string;
@@ -1527,6 +419,180 @@ export default function GetInTouch() {
           </div>
         </div>
       )}
+
+
+{/* UNIQUE WHATSAPP FLOATING BUTTON */}
+
+<a
+  href="https://api.whatsapp.com/send/?phone=%2B919879860886&text&type=phone_number&app_absent=0"
+  target="_blank"
+  rel="noopener noreferrer"
+  aria-label="Chat with MVNL Engineering on WhatsApp"
+  title="Chat on WhatsApp"
+  className="
+  group
+  fixed
+  bottom-[105px]
+  right-4
+  z-[999]
+  block
+  h-[58px]
+  w-[58px]
+  overflow-hidden
+  bg-modura-primary
+  text-white
+  shadow-xl
+  transition-all
+  duration-500
+  sm:bottom-[112px]
+  sm:right-6
+  sm:h-[64px]
+  sm:w-[64px]
+  md:hover:w-[245px]
+  clip-whatsapp
+"
+>
+  {/* Architectural corner detail */}
+  <span
+    className="
+      pointer-events-none
+      absolute
+      right-0
+      top-0
+      h-[18px]
+      w-[18px]
+      bg-modura-secondary
+      transition-all
+      duration-500
+      group-hover:h-[4px]
+      group-hover:w-full
+    "
+  />
+
+  {/* Blueprint frame */}
+  <span
+    className="
+      pointer-events-none
+      absolute
+      inset-[5px]
+      border
+      border-white/15
+    "
+  />
+
+  {/* Fine technical lines */}
+  <span
+    className="
+      pointer-events-none
+      absolute
+      inset-y-3
+      left-[29px]
+      w-px
+      bg-white/10
+      sm:left-[32px]
+    "
+  />
+
+  {/* WhatsApp icon */}
+  <span
+    className="
+      absolute
+      left-[9px]
+      top-1/2
+      z-10
+      flex
+      h-10
+      w-10
+      -translate-y-1/2
+      items-center
+      justify-center
+      border
+      border-[#25D366]
+      bg-[#25D366]/10
+      text-[#25D366]
+      transition-all
+      duration-500
+      group-hover:bg-[#25D366]
+      group-hover:text-white
+      sm:left-[11px]
+      sm:h-[42px]
+      sm:w-[42px]
+    "
+  >
+    <FaWhatsapp size={24} />
+  </span>
+
+  {/* Expanded label */}
+  <span
+    className="
+      pointer-events-none
+      absolute
+      left-[69px]
+      top-1/2
+      hidden
+      -translate-y-1/2
+      translate-x-4
+      items-center
+      gap-2
+      whitespace-nowrap
+      opacity-0
+      transition-all
+      duration-500
+      group-hover:translate-x-0
+      group-hover:opacity-100
+      md:flex
+    "
+  >
+    <span className="flex flex-col gap-0.5">
+      <span
+        className="
+          font-body
+          text-[9px]
+          font-semibold
+          uppercase
+          tracking-[2px]
+          text-[#25D366]
+        "
+      >
+        Direct Support
+      </span>
+
+      <span
+        className="
+          font-heading
+          text-[13px]
+          font-bold
+          uppercase
+          tracking-[0.8px]
+          text-white
+        "
+      >
+        Chat on WhatsApp
+      </span>
+    </span>
+
+    <ArrowUpRight
+      size={17}
+      className="text-modura-secondary"
+    />
+  </span>
+
+  {/* Bottom measuring line */}
+  <span
+    className="
+      pointer-events-none
+      absolute
+      bottom-0
+      left-0
+      h-[2px]
+      w-0
+      bg-[#25D366]
+      transition-all
+      duration-500
+      group-hover:w-full
+    "
+  />
+</a>
 
       {/* =========================================================
           FLOATING BUTTON

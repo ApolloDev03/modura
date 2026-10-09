@@ -1,569 +1,13 @@
-// "use client";
-
-// import Image from "next/image";
-
-// import { useEffect, useRef } from "react";
-
-// import gsap from "gsap";
-// import { ScrollTrigger } from "gsap/ScrollTrigger";
-
-
-// import {
-// Swiper,
-// SwiperSlide
-// } from "swiper/react";
-
-// import {
-// Autoplay
-// } from "swiper/modules";
-
-
-// import "swiper/css";
-// import { DraftingCompass } from "lucide-react";
-
-
-// gsap.registerPlugin(ScrollTrigger);
-
-
-
-// const testimonials=[
-
-// {
-// name:"David Anderson",
-// role:"Project Director",
-// company:"Global Construction Ltd.",
-// image:"https://randomuser.me/api/portraits/men/32.jpg",
-// text:"MODURA delivered exceptional architectural and engineering solutions with outstanding precision and professionalism."
-// },
-
-// {
-// name:"Sophia Williams",
-// role:"CEO",
-// company:"Urban Developers",
-// image:"https://randomuser.me/api/portraits/women/44.jpg",
-// text:"Their BIM coordination and project management approach helped us achieve better efficiency and quality."
-// },
-
-// {
-// name:"Michael Brown",
-// role:"Managing Partner",
-// company:"BuildTech International",
-// image:"https://randomuser.me/api/portraits/men/46.jpg",
-// text:"A reliable design partner who understands complex projects and delivers innovative solutions."
-// }
-
-// ];
-
-
-
-
-
-// export default function Testimonials(){
-
-
-// const sectionRef = useRef<HTMLDivElement>(null);
-
-
-
-// useEffect(()=>{
-
-
-// const ctx = gsap.context(()=>{
-
-
-// gsap.from(".testimonial-content",{
-
-// opacity:0,
-
-// x:-80,
-
-// duration:1,
-
-// scrollTrigger:{
-
-// trigger:sectionRef.current,
-
-// start:"top 80%"
-
-// }
-
-// });
-
-
-
-
-// gsap.from(".testimonial-card",{
-
-// opacity:0,
-
-// y:80,
-
-// duration:1,
-
-// stagger:.2,
-
-// scrollTrigger:{
-
-// trigger:sectionRef.current,
-
-// start:"top 80%"
-
-// }
-
-// });
-
-
-
-// },sectionRef);
-
-
-
-// return()=>ctx.revert();
-
-
-
-// },[]);
-
-
-
-
-
-
-
-// return(
-
-
-// <section
-
-// ref={sectionRef}
-
-// className="
-// relative
-// overflow-hidden
-// bg-white
-// py-24
-// "
-
-// >
-
-
-// <div className="
-// max-w-7xl
-// mx-auto
-
-// px-6
-
-// lg:px-10
-
-// grid
-
-// lg:grid-cols-2
-
-// gap-16
-
-// items-center
-
-// ">
-
-
-
-
-
-
-
-
-// {/* LEFT */}
-
-
-// <div className="
-// testimonial-content
-// ">
-
-
-// <div className="
-// flex
-// items-center
-// gap-3
-// font-body
-// text-xs
-// uppercase
-// font-bold
-// tracking-[5px]
-// text-modura-secondary
-// ">
-
-
-// <DraftingCompass
-// size={20}
-// strokeWidth={1.5}
-// className="
-// text-modura-secondary
-// "
-// />
-
-
-// <span>
-// Testimonials
-// </span>
-
-
-// </div>
-
-
-
-
-// <h2 className="
-// mt-4
-// font-heading
-// text-5xl
-// lg:text-6xl
-// font-semibold
-// text-modura-primary
-
-// ">
-
-
-// Trusted By
-
-// <span className="
-// text-modura-secondary ml-2
-// ">
-
-//  Industry Leaders
-
-// </span>
-
-
-// </h2>
-
-
-
-
-
-// <p className="
-// mt-6
-
-// font-body
-
-// text-modura-gray-600
-
-// leading-8
-
-// max-w-md
-
-// ">
-
-// Our commitment to precision,
-// innovation and quality has helped us
-// build long-term partnerships worldwide.
-
-// </p>
-
-
-
-
-// </div>
-
-
-
-// {/* RIGHT SLIDER */}
-
-
-
-// <div>
-
-
-// <Swiper
-
-// modules={[Autoplay]}
-
-// slidesPerView={1}
-
-// loop
-
-// autoplay={{
-
-// delay:4000,
-
-// disableOnInteraction:false
-
-// }}
-
-// speed={900}
-
-// >
-
-
-// {
-// testimonials.map((item,index)=>(
-
-
-// <SwiperSlide
-
-// key={index}
-
-// >
-
-
-// <div className="
-// testimonial-card
-
-// relative
-
-// bg-modura-off-white
-
-// p-10
-
-// border
-
-// border-modura-gray-200
-
-// "
-
-// >
-
-
-
-
-
-// {/* quote */}
-
-// <div className="
-// absolute
-
-// top-5
-
-// right-8
-
-// font-heading
-
-// text-8xl
-
-// text-modura-secondary/20
-
-// ">
-
-// "
-
-// </div>
-
-
-
-
-
-
-
-// <p className="
-// relative
-
-// font-body
-
-// text-modura-gray-600
-
-// leading-8
-
-// text-lg
-
-// ">
-
-// {item.text}
-
-// </p>
-
-
-
-
-
-
-
-
-// <div className="
-// mt-8
-
-// flex
-
-// items-center
-
-// gap-5
-
-// ">
-
-
-// <div className="
-// relative
-
-// h-16
-
-// w-16
-
-// overflow-hidden
-
-// rounded-full
-
-// border-2
-
-// border-modura-secondary
-
-// ">
-
-// <img
-
-// src={item.image}
-
-// alt={item.name}
-
-// className="
-// h-full
-// w-full
-// object-cover
-// "
-
-// />
-
-
-// </div>
-
-
-
-
-
-
-// <div>
-
-
-// <h4 className="
-// font-heading
-
-// text-2xl
-
-// text-modura-primary
-
-// ">
-
-// {item.name}
-
-// </h4>
-
-
-
-// <p className="
-// font-body
-
-// text-xs
-
-// uppercase
-
-// tracking-[2px]
-
-// text-modura-secondary
-
-// ">
-
-// {item.role}
-
-// </p>
-
-
-
-// </div>
-
-
-
-// </div>
-
-
-
-
-
-
-
-
-
-// {/* project tag */}
-
-// <div className="
-// absolute
-
-// bottom-0
-
-// right-0
-
-// bg-modura-primary
-
-// px-6
-
-// py-3
-
-// text-white
-
-// font-body
-
-// text-xs
-
-// tracking-[2px]
-
-// uppercase
-
-// ">
-
-// {item.company}
-
-// </div>
-
-
-
-
-
-
-// </div>
-
-
-// </SwiperSlide>
-
-
-// ))
-// }
-
-
-
-// </Swiper>
-
-
-// </div>
-
-
-
-
-
-
-
-// </div>
-
-
-// </section>
-
-
-// )
-
-// }
-
 "use client";
 
 import Image from "next/image";
-
 import { useEffect, useRef } from "react";
 
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
-import {
-  Swiper,
-  SwiperSlide,
-} from "swiper/react";
-
-import {
-  Autoplay,
-} from "swiper/modules";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Autoplay } from "swiper/modules";
 
 import "swiper/css";
 
@@ -591,34 +35,45 @@ interface TestimonialsProps {
 export default function Testimonials({
   testimonials,
 }: TestimonialsProps) {
-  const sectionRef =
-    useRef<HTMLDivElement>(null);
+  const sectionRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-      gsap.from(
+      gsap.fromTo(
         ".testimonial-content",
         {
           opacity: 0,
-          x: -80,
+          x: -50,
+        },
+        {
+          opacity: 1,
+          x: 0,
           duration: 1,
+          ease: "power3.out",
           scrollTrigger: {
             trigger: sectionRef.current,
-            start: "top 80%",
+            start: "top 85%",
+            once: true,
           },
         }
       );
 
-      gsap.from(
-        ".testimonial-card",
+      gsap.fromTo(
+        ".testimonial-slider",
         {
           opacity: 0,
-          y: 80,
+          y: 50,
+        },
+        {
+          opacity: 1,
+          y: 0,
           duration: 1,
-          stagger: 0.2,
+          ease: "power3.out",
+          delay: 0.15,
           scrollTrigger: {
             trigger: sectionRef.current,
-            start: "top 80%",
+            start: "top 85%",
+            once: true,
           },
         }
       );
@@ -627,87 +82,112 @@ export default function Testimonials({
     return () => ctx.revert();
   }, []);
 
+  if (!testimonials || testimonials.length === 0) {
+    return null;
+  }
+
   return (
     <section
       ref={sectionRef}
       className="
         relative
+        w-full
         overflow-hidden
         bg-white
-        py-24
+        py-12
+        sm:py-16
+        lg:py-20
       "
     >
       <div
         className="
-          max-w-7xl
-          mx-auto
-          px-6
-          lg:px-10
-          grid
-          lg:grid-cols-2
-          gap-16
-          items-center
+            mx-auto
+    grid
+    w-full
+    max-w-full
+    grid-cols-1
+    items-center
+    gap-10
+    px-4
+    md:px-6
+    lg:grid-cols-2
+    lg:gap-12
+    lg:px-10
+    xl:gap-16
+    2xl:px-16
         "
       >
-        {/* LEFT */}
+        {/* =========================================
+            LEFT CONTENT
+        ========================================= */}
 
-        <div className="testimonial-content">
+        <div className="testimonial-content min-w-0">
+          {/* LABEL */}
 
           <div
             className="
               flex
               items-center
-              gap-3
+              gap-2.5
               font-body
-              text-xs
-              uppercase
+              text-[10px]
               font-bold
-              tracking-[5px]
+              uppercase
+              tracking-[2px]
               text-modura-secondary
+              sm:gap-3
+              sm:text-xs
+              sm:tracking-[4px]
+              lg:tracking-[5px]
             "
           >
             <DraftingCompass
               size={20}
               strokeWidth={1.5}
-              className="
-                text-modura-secondary
-              "
+              className="shrink-0 text-modura-secondary"
             />
 
-            <span>
-              Testimonials
-            </span>
+            <span>Testimonials</span>
           </div>
+
+          {/* HEADING */}
 
           <h2
             className="
               mt-4
+              max-w-xl
+              break-words
               font-heading
-              text-5xl
-              lg:text-6xl
+              text-[36px]
               font-semibold
+              leading-[1.05]
               text-modura-primary
+              min-[400px]:text-[42px]
+              sm:text-5xl
+              lg:text-[52px]
+              xl:text-6xl
             "
           >
             Trusted By
 
-            <span
-              className="
-                text-modura-secondary
-                ml-2
-              "
-            >
+            <span className="ml-2 text-modura-secondary">
               Industry Leaders
             </span>
           </h2>
 
+          {/* DESCRIPTION */}
+
           <p
             className="
-              mt-6
-              font-body
-              text-modura-gray-600
-              leading-8
+              mt-5
               max-w-md
+              font-body
+              text-sm
+              leading-7
+              text-modura-gray-600
+              sm:mt-6
+              sm:text-base
+              sm:leading-8
             "
           >
             Our commitment to precision,
@@ -715,106 +195,156 @@ export default function Testimonials({
             us build long-term partnerships
             worldwide.
           </p>
-
         </div>
 
-        {/* RIGHT SLIDER */}
+        {/* =========================================
+            RIGHT TESTIMONIAL SLIDER
+        ========================================= */}
 
-        <div>
+        <div className="testimonial-slider w-full min-w-0">
           <Swiper
             modules={[Autoplay]}
             slidesPerView={1}
+            spaceBetween={16}
             loop={testimonials.length > 1}
+            watchOverflow
+            observer
+            observeParents
             autoplay={{
               delay: 4000,
               disableOnInteraction: false,
+              pauseOnMouseEnter: true,
             }}
             speed={900}
+            className="w-full"
           >
             {testimonials.map((item) => (
-              <SwiperSlide
-                key={item.id}
-              >
+              <SwiperSlide key={item.id} className="!h-auto">
                 <div
                   className="
                     testimonial-card
                     relative
-                    bg-modura-off-white
-                    p-10
+                    flex
+                    h-full
+                    min-h-[280px]
+                    min-w-0
+                    flex-col
+                    overflow-hidden
                     border
                     border-modura-gray-200
+                    bg-modura-off-white
+                    p-5
+                    pb-0
+                    sm:min-h-[310px]
+                    sm:p-7
+                    sm:pb-0
+                    lg:p-8
+                    lg:pb-0
+                    xl:p-10
+                    xl:pb-0
                   "
                 >
-
-                  {/* Quote */}
+                  {/* QUOTE */}
 
                   <div
+                    aria-hidden="true"
                     className="
+                      pointer-events-none
                       absolute
-                      top-5
-                      right-8
+                      right-4
+                      top-2
                       font-heading
-                      text-8xl
+                      text-6xl
+                      leading-none
                       text-modura-secondary/20
+                      sm:right-7
+                      sm:top-4
+                      sm:text-8xl
                     "
                   >
-                    "
+                    &ldquo;
                   </div>
 
-                  {/* Testimonial */}
+                  {/* TESTIMONIAL TEXT */}
 
                   <p
                     className="
                       relative
+                      z-10
+                      whitespace-normal
+                      break-words
                       font-body
+                      text-sm
+                      leading-7
                       text-modura-gray-600
-                      leading-8
-                      text-lg
+                      sm:text-base
+                      sm:leading-8
+                      xl:text-lg
                     "
                   >
                     {item.testimonial}
                   </p>
 
-                  {/* User */}
+                  {/* CLIENT DETAILS */}
 
                   <div
                     className="
-                      mt-8
+                      relative
+                      z-10
+                      mt-7
                       flex
+                      min-w-0
                       items-center
-                      gap-5
+                      gap-3
+                      sm:mt-8
+                      sm:gap-5
                     "
                   >
+                    {/* CLIENT PHOTO */}
+
                     <div
                       className="
                         relative
-                        h-16
-                        w-16
+                        h-12
+                        w-12
+                        shrink-0
                         overflow-hidden
                         rounded-full
                         border-2
                         border-modura-secondary
+                        sm:h-16
+                        sm:w-16
                       "
                     >
-                      <Image
-                        src={
-                          item.photoUrl ||
-                          item.photo
-                        }
-                        alt={item.clientName}
-                        fill
-                        className="
-                          object-cover
-                        "
-                      />
+                      {item.photoUrl || item.photo ? (
+                        <Image
+                          src={item.photoUrl || item.photo}
+                          alt={item.clientName}
+                          fill
+                          unoptimized
+                          sizes="64px"
+                          className="object-cover"
+                        />
+                      ) : (
+                        <div className="flex h-full w-full items-center justify-center bg-modura-primary font-heading text-xl font-semibold text-white">
+                          {item.clientName?.charAt(0)?.toUpperCase() || "M"}
+                        </div>
+                      )}
                     </div>
 
-                    <div>
+                    {/* NAME AND DESIGNATION */}
+
+                    <div className="min-w-0 flex-1">
                       <h4
                         className="
+                          break-words
                           font-heading
-                          text-2xl
+                          text-lg
+                          font-semibold
+                          leading-tight
                           text-modura-primary
+                          sm:text-xl
+                          xl:text-2xl
                         "
                       >
                         {item.clientName}
@@ -822,11 +352,16 @@ export default function Testimonials({
 
                       <p
                         className="
+                          mt-1
+                          break-words
                           font-body
-                          text-xs
+                          text-[10px]
                           uppercase
-                          tracking-[2px]
+                          leading-5
+                          tracking-[1px]
                           text-modura-secondary
+                          sm:text-xs
+                          sm:tracking-[2px]
                         "
                       >
                         {item.designation}
@@ -834,32 +369,38 @@ export default function Testimonials({
                     </div>
                   </div>
 
-                  {/* Company */}
+                  {/* COMPANY BADGE */}
 
-                  <div
-                    className="
-                      absolute
-                      bottom-0
-                      right-0
-                      bg-modura-primary
-                      px-6
-                      py-3
-                      text-white
-                      font-body
-                      text-xs
-                      tracking-[2px]
-                      uppercase
-                    "
-                  >
-                    {item.company}
+                  <div className="mt-auto flex justify-end pt-6">
+                    {item.company && (
+                      <div
+                        className="
+                          max-w-full
+                          break-words
+                          bg-modura-primary
+                          px-4
+                          py-3
+                          text-right
+                          font-body
+                          text-[10px]
+                          uppercase
+                          leading-5
+                          tracking-[1px]
+                          text-white
+                          sm:px-6
+                          sm:text-xs
+                          sm:tracking-[2px]
+                        "
+                      >
+                        {item.company}
+                      </div>
+                    )}
                   </div>
-
                 </div>
               </SwiperSlide>
             ))}
           </Swiper>
         </div>
-
       </div>
     </section>
   );

@@ -583,8 +583,14 @@ const getShortDescription = (html: string, limit = 80) => {
           relative
           z-10
           mx-auto
-          max-w-7xl
-          px-6
+          max-w-full
+           px-4
+    md:px-6
+    lg:grid-cols-2
+    lg:gap-12
+    lg:px-10
+    xl:gap-16
+    2xl:px-16
         "
       >
         {/* HEADER */}

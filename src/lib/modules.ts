@@ -17,7 +17,6 @@ const SLUG_HINT = 'Slug is auto-generated from this name and kept unique.';
 const SEO_SECTION: SectionField = { type: 'section', label: 'SEO Settings', note: '(all optional)' };
 
 export const PORTFOLIO_TYPES: Option[] = [
-  { value: 'our_work', label: 'Our Work' },
   { value: '2d', label: '2D' },
   { value: '3d', label: '3D' },
 ];
@@ -148,15 +147,12 @@ export const MODULES: Record<string, ModuleConfig> = {
       { key: 'status', label: 'Status', type: 'status' },
     ],
     fields: [
-      { name: 'title', label: 'Project Title', type: 'text', required: true, maxLength: 200 },
+      { name: 'title', label: 'Project Title', type: 'text',  maxLength: 200 },
       { name: 'portfolioCategoryId', label: 'Portfolio Category', type: 'select', required: true, optionsFrom: { endpoint: '/admin/portfolio-categories', labelKey: 'name' } },
       { name: 'type', label: 'Type', type: 'select', required: true, options: PORTFOLIO_TYPES, default: 'our_work' },
-      { name: 'clientName', label: 'Client Name', type: 'text', maxLength: 150 },
-      { name: 'projectUrl', label: 'Project URL', type: 'url', placeholder: 'https://' },
-      { name: 'videoUrl', label: 'Video / 3D Model URL', type: 'url', placeholder: 'https://' },
-      { name: 'description', label: 'Description', type: 'editor', full: true },
+      { name: 'clientName', label: 'Client Name', type: 'text', maxLength: 150 }, 
       { name: 'imageType', label: 'Image Type', type: 'select', required: true, options: PORTFOLIO_IMAGE_TYPES, default: 'image', hint: 'Image = one gallery · Album = one or more albums (title + images). Changing it removes the other type\'s images on save.' },
-      { name: 'gallery', label: 'Gallery Images (multiple)', type: 'gallery', required: true, full: true, hint: 'First image is used as the cover in listings', showIf: { imageType: 'image' } },
+      { name: 'gallery', label: 'Gallery Images ', type: 'gallery', required: true, full: true, hint: 'First image is used as the cover in listings', showIf: { imageType: 'image' } },
       { name: 'albums', label: 'Albums', type: 'albums', required: true, full: true, hint: 'Add as many albums as you need. The first image of the first album is used as the cover.', showIf: { imageType: 'album' } },
       { name: 'isFeatured', label: 'Mark as Featured', type: 'toggle', default: false, onLabel: 'Featured', offLabel: 'Not featured' },
       { name: 'status', label: 'Status', type: 'toggle', default: true },

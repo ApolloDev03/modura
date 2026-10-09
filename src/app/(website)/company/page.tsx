@@ -780,7 +780,13 @@ useEffect(() => {
         />
       </div>
 
-      <div className="relative mx-auto max-w-7xl px-6 lg:px-10">
+      <div className="relative mx-auto max-w-full  px-4
+    md:px-6
+    lg:grid-cols-2
+    lg:gap-12
+    lg:px-10
+    xl:gap-16
+    2xl:px-16">
 
         {/* =========================
             SECTION HEADING
@@ -1344,7 +1350,13 @@ useEffect(() => {
       </div>
 
 
-      <div className="relative mx-auto max-w-7xl px-6 lg:px-10">
+      <div className="relative mx-auto max-w-full  px-4
+    md:px-6
+    lg:grid-cols-2
+    lg:gap-12
+    lg:px-10
+    xl:gap-16
+    2xl:px-16">
 
 
         {/* =====================================================
@@ -1788,7 +1800,13 @@ useEffect(() => {
   id="team"
   className="relative overflow-hidden bg-white pb-16"
 >
-  <div className="mx-auto max-w-7xl px-6 lg:px-10">
+  <div className="mx-auto max-w-full px-4
+    md:px-6
+    lg:grid-cols-2
+    lg:gap-12
+    lg:px-10
+    xl:gap-16
+    2xl:px-16">
 
     {/* INTRO */}
 
@@ -2205,7 +2223,13 @@ useEffect(() => {
 
      <section  id="certifications" className="relative overflow-hidden bg-white pb-16">
 
-      <div className="mx-auto max-w-7xl px-6 lg:px-10">
+      <div className="mx-auto max-w-full px-4
+    md:px-6
+    lg:grid-cols-2
+    lg:gap-12
+    lg:px-10
+    xl:gap-16
+    2xl:px-16">
 
         {/* =========================
             HEADER
@@ -2419,7 +2443,13 @@ useEffect(() => {
       ========================================= */}
 <section className="bg-modura-light py-16">
 
-  <div className="mx-auto max-w-7xl px-6 lg:px-10">
+  <div className="mx-auto max-w-full px-4
+    md:px-6
+    lg:grid-cols-2
+    lg:gap-12
+    lg:px-10
+    xl:gap-16
+    2xl:px-16">
 
     {/* Heading */}
 
@@ -3074,8 +3104,14 @@ useEffect(() => {
       relative
       z-10
       mx-auto
-      max-w-7xl
-      px-6
+      max-w-full
+       px-4
+    md:px-6
+    lg:grid-cols-2
+    lg:gap-12
+    lg:px-10
+    xl:gap-16
+    2xl:px-16
     "
   >
 
