@@ -3,6 +3,7 @@
 import {
   ChangeEvent,
   FormEvent,
+  Suspense,
   useEffect,
   useState,
   type ElementType,
@@ -535,9 +536,9 @@ export default function CareerSection() {
 
               {/* FORM */}
 
-              <CareerForm
-                careers={careers}
-              />
+            <Suspense fallback={null}>
+  <CareerForm careers={careers} />
+</Suspense>
 
             </div>
 
