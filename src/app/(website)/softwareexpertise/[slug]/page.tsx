@@ -1,82 +1,38 @@
 // "use client";
 
-// import { useParams } from "next/navigation";
-
 // import { useEffect, useLayoutEffect, useRef, useState } from "react";
-
-// import { motion, AnimatePresence } from "framer-motion";
-
-// import {
-
-//   Check,
-
-//   Minus,
-
-//   Plus,
-
-// } from "lucide-react";
-
-
-
-
-
-
-
-// import { ArrowRight, DraftingCompass } from "lucide-react";
-
-// import gsap from "gsap";
-
-// import { ScrollTrigger } from "gsap/ScrollTrigger";
-
-
-
-
-
-
-
-
-// import Link from "next/link";
-
-// import AnimatedButton from "@/components/AnimatedButton";
-
-// import Breadcrumb from "@/components/Breadcrumb";
-// import { apiUrl } from "../../config";
+// import { useParams } from "next/navigation";
 // import axios from "axios";
-
-
-
-
+// import Image from "next/image";
+// import Link from "next/link";
+// import DOMPurify from "dompurify";
+// import { AnimatePresence, motion } from "framer-motion";
+// import { Minus, Plus, ArrowRight, DraftingCompass } from "lucide-react";
+// import gsap from "gsap";
+// import { ScrollTrigger } from "gsap/ScrollTrigger";
+// import Breadcrumb from "@/components/Breadcrumb";
+// import AnimatedButton from "@/components/AnimatedButton";
+// import { apiUrl } from "../../config";
 
 // gsap.registerPlugin(ScrollTrigger);
 
-
-
-
-
-
-
-// // TYPES
-
-// // ============================================================
-
-
-
-// type FAQ = {
-//   id?: number;
-//   question: string;
-//   answer: string;
+// const API_BASE = (apiUrl || "https://mvnl.salexo.co.in/api/v1").replace(/\/+$/, "");
+// const ASSET_ORIGIN = new URL(API_BASE).origin;
+// const getAssetUrl = (value?: string) => {
+//   if (!value) return "";
+//   return /^https?:\/\//i.test(value) ? value : `${ASSET_ORIGIN}/${value.replace(/^\/+/, "")}`;
 // };
 
+// type FAQ = { id?: number; question: string; answer: string };
 // type SoftwareBlog = {
 //   id: number;
 //   title: string;
 //   slug: string;
 //   image?: string;
 //   imageUrl?: string;
-//   description:string;
+//   description?: string;
 //   publishedAt?: string;
 // };
-
 // type SoftwareData = {
 //   id: number;
 //   title: string;
@@ -84,2658 +40,314 @@
 //   shortDescription: string;
 //   longDescription: string;
 //   image: string;
-//   overview: string[];
-//   approach: string[];
-//   applications: string[];
-//   workflow: string[];
 //   faqs: FAQ[];
 //   blogs: SoftwareBlog[];
 // };
 
-
-
-// const getAssetUrl = (value?: string) => {
-//   if (!value) return "";
-//   if (/^https?:\/\//i.test(value)) return value;
-//   return `${apiUrl}${value.startsWith("/") ? "" : "/"}${value}`;
-// };
-
-// const stripHtml = (value = "") =>
-//   value
-//     .replace(/<br\s*\/?>(?!$)/gi, "\n")
-//     .replace(/<\/p>/gi, "\n")
-//     .replace(/<\/li>/gi, "\n")
-//     .replace(/<[^>]*>/g, "")
-//     .replace(/&nbsp;/gi, " ")
-//     .replace(/&amp;/gi, "&")
-//     .replace(/&quot;/gi, '"')
-//     .replace(/&#39;/gi, "'")
-//     .replace(/\s+\n/g, "\n")
-//     .replace(/\n\s+/g, "\n")
-//     .replace(/\n{3,}/g, "\n\n")
-//     .trim();
-
-// const parseSoftwareContent = (longDescription = "") => {
-//   const paragraphs = Array.from(longDescription.matchAll(/<p[^>]*>([\s\S]*?)<\/p>/gi))
-//     .map((match) => stripHtml(match[1]))
-//     .filter(Boolean);
-
-//   const applications = Array.from(longDescription.matchAll(/<li[^>]*>([\s\S]*?)<\/li>/gi))
-//     .map((match) => stripHtml(match[1]))
-//     .filter(Boolean);
-
-//   const cleanParagraphs = paragraphs.length
-//     ? paragraphs
-//     : stripHtml(longDescription).split(/\n{2,}/).map((item) => item.trim()).filter(Boolean);
-
-//   const overview = cleanParagraphs.slice(0, 3);
-//   const approach = cleanParagraphs.slice(1, 4);
-//   const fallbackItems = cleanParagraphs.slice(0, 6);
-
-//   return {
-//     overview: overview.length ? overview : [""],
-//     approach: approach.length ? approach : overview,
-//     applications: applications.length ? applications : fallbackItems,
-//     workflow: applications.length ? applications : fallbackItems,
+// type ApiResponse = {
+//   success: boolean;
+//   message?: string;
+//   data?: {
+//     id?: number;
+//     name?: string;
+//     title?: string;
+//     category?: string | { name?: string };
+//     shortDescription?: string;
+//     longDescription?: string;
+//     image?: string;
+//     imageUrl?: string;
+//     faqs?: FAQ[];
+//     blogs?: SoftwareBlog[];
 //   };
 // };
 
-// const normalizeSoftware = (data: any): SoftwareData => {
-//   const content = parseSoftwareContent(data?.longDescription || "");
-
+// function normalizeSoftware(data: NonNullable<ApiResponse["data"]>): SoftwareData {
+//   const category = typeof data.category === "string" ? data.category : data.category?.name;
 //   return {
-//     id: Number(data?.id || 0),
-//     title: data?.name || "Software Expertise",
-//     category: data?.category || "SOFTWARE EXPERTISE",
-//     shortDescription: data?.shortDescription || "",
-//     longDescription: data?.longDescription || "",
-//     image: getAssetUrl(data?.imageUrl || data?.image),
-//     overview: content.overview,
-//     approach: content.approach,
-//     applications: content.applications,
-//     workflow: content.workflow,
-//     faqs: Array.isArray(data?.faqs) ? data.faqs : [],
-//     blogs: Array.isArray(data?.blogs) ? data.blogs : [],
+//     id: Number(data.id || 0),
+//     title: data.name || data.title || "Software Expertise",
+//     category: category || "Software Expertise",
+//     shortDescription: data.shortDescription || "",
+//     longDescription: data.longDescription || "",
+//     image: getAssetUrl(data.imageUrl || data.image),
+//     faqs: Array.isArray(data.faqs) ? data.faqs : [],
+//     blogs: Array.isArray(data.blogs) ? data.blogs : [],
 //   };
-// };
+// }
 
+// /**
+//  * HTML is sourced from the CMS. Sanitize before rendering; remove inline styles,
+//  * event handlers and unsafe protocols. CSS below owns all visual presentation.
+//  */
+// function RichHTML({ html, className = "" }: { html?: string; className?: string }) {
+//   const [safeHtml, setSafeHtml] = useState("");
 
-// // PAGE
+//   useEffect(() => {
+//     // DOMPurify uses the browser DOM, hence sanitation happens after mount.
+//     const sanitized = DOMPurify.sanitize(html || "", {
+//       USE_PROFILES: { html: true },
+//       FORBID_TAGS: ["style", "script", "iframe", "object", "embed", "form", "input", "button", "svg", "math"],
+//       FORBID_ATTR: ["style", "srcset", "onerror", "onclick", "onload"],
+//     });
 
-// // ============================================================
+//     // Relative assets from the API should resolve against the website, not localhost.
+//     const template = document.createElement("template");
+//     template.innerHTML = sanitized;
+//     template.content.querySelectorAll("img").forEach((img) => {
+//       const src = img.getAttribute("src") || "";
+//       if (src && !src.startsWith("data:")) img.setAttribute("src", getAssetUrl(src));
+//       img.setAttribute("loading", "lazy");
+//       img.setAttribute("decoding", "async");
+//     });
+//     template.content.querySelectorAll("a").forEach((a) => {
+//       const href = a.getAttribute("href") || "";
+//       if (/^https?:\/\//i.test(href)) {
+//         a.setAttribute("target", "_blank");
+//         a.setAttribute("rel", "noopener noreferrer");
+//       }
+//     });
+//     setSafeHtml(template.innerHTML);
+//   }, [html]);
 
-
+//   if (!safeHtml) return null;
+//   return <div className={`software-rich-html min-w-0 max-w-full break-words font-body text-modura-gray-600 ${className}`} dangerouslySetInnerHTML={{ __html: safeHtml }} />;
+// }
 
 // export default function SoftwareDetailPage() {
-
 //   const params = useParams();
-
-//   const slug =
-//     typeof params.slug === "string"
-//       ? params.slug.toLowerCase()
-//       : "";
-
+//   const slug = typeof params.slug === "string" ? params.slug : "";
 //   const [software, setSoftware] = useState<SoftwareData | null>(null);
 //   const [loading, setLoading] = useState(true);
 //   const [error, setError] = useState("");
 //   const [activeFaq, setActiveFaq] = useState<number | null>(null);
-//   const sectionRef = useRef<HTMLDivElement | null>(null);
+//   const blogSectionRef = useRef<HTMLElement | null>(null);
 
-// useEffect(() => {
-//   if (!slug) return;
-
-//   const fetchSoftwareDetail = async () => {
-//     try {
-//       setLoading(true);
-//       setError("");
-
-//       const response = await axios.post(
-//         `${apiUrl}/softwareDetail`,
-//         { slug },
-//         {
-//           headers: {
-//             "Content-Type": "application/json",
-//             Accept: "application/json",
-//           },
-//         }
-//       );
-
-//       const result = response.data;
-
-//       if (!result?.success || !result?.data) {
-//         throw new Error(
-//           result?.message || "Software details not found."
-//         );
-//       }
-
-//       setSoftware(normalizeSoftware(result.data));
-//     } catch (err: any) {
-//       console.error("Software Detail API Error:", err);
-
-//       setSoftware(null);
-
-//       setError(
-//         err?.response?.data?.message ||
-//         err?.message ||
-//         "Unable to load software details."
-//       );
-//     } finally {
-//       setLoading(false);
-//     }
-//   };
-
-//   fetchSoftwareDetail();
-// }, [slug]);
+//   useEffect(() => {
+//     if (!slug) { setSoftware(null); setLoading(false); return; }
+//     const controller = new AbortController();
+//     setLoading(true);
+//     setSoftware(null);
+//     setError("");
+//     setActiveFaq(null);
+//     axios.post<ApiResponse>(`${API_BASE}/softwareDetail`, { slug }, {
+//       headers: { "Content-Type": "application/json" },
+//       signal: controller.signal,
+//     }).then(({ data }) => {
+//       if (!data.success || !data.data) throw new Error(data.message || "Software details not found.");
+//       if (!controller.signal.aborted) setSoftware(normalizeSoftware(data.data));
+//     }).catch((err: unknown) => {
+//       if (controller.signal.aborted || axios.isCancel(err)) return;
+//       setError(err instanceof Error ? err.message : "Unable to load software details.");
+//     }).finally(() => {
+//       if (!controller.signal.aborted) setLoading(false);
+//     });
+//     return () => controller.abort();
+//   }, [slug]);
 
 //   useLayoutEffect(() => {
+//     if (!software || !blogSectionRef.current || !software.blogs.length) return;
+//     const ctx = gsap.context(() => {
+//       gsap.fromTo(".blog-card", { opacity: 0, y: 45 }, {
+//         opacity: 1, y: 0, duration: .8, stagger: .12,
+//         ease: "power3.out", scrollTrigger: { trigger: blogSectionRef.current, start: "top 80%", once: true },
+//       });
+//     }, blogSectionRef);
+//     return () => ctx.revert();
+//   }, [software]);
 
-
-
-
-
-//       const ctx = gsap.context(() => {
-
-
-
-
-
-//          gsap.from(".blog-card",
-
-//             {
-
-//                opacity: 0,
-
-//                y: 70,
-
-//                duration: 1,
-
-//                ease: "power3.out",
-
-//                stagger: 0.2,
-
-
-
-//                scrollTrigger: {
-
-//                   trigger: sectionRef.current,
-
-//                   start: "top 75%",
-
-//                   once: true
-
-//                }
-
-
-
-//             });
-
-
-
-
-
-//       }, sectionRef);
-
-
-
-
-
-
-
-//       return () => ctx.revert();
-
-//    }, [software]);
-
-//   if (loading) {
-//     return (
-//       <main className="w-full min-h-screen bg-white text-modura-primary">
-//         <div className="flex min-h-screen items-center justify-center font-body text-sm text-modura-gray-500">
-//           Loading...
-//         </div>
-//       </main>
-//     );
-//   }
-
-//   if (!software) {
-//     return (
-//       <main className="w-full min-h-screen bg-white text-modura-primary">
-//         <div className="flex min-h-screen flex-col items-center justify-center px-5 text-center">
-//           <h1 className="font-heading text-3xl font-bold text-modura-primary">Software Not Found</h1>
-//           <p className="mt-3 max-w-xl font-body text-sm leading-7 text-modura-gray-600">
-//             {error || "We could not load the requested software details."}
-//           </p>
-//         </div>
-//       </main>
-//     );
-//   }
-
-// const truncateText = (text: string = "", maxLength = 80) => {
-//   if (!text) return "";
-
-//   const cleanText = text
-//     // HTML tags remove
-//     .replace(/<[^>]*>/g, " ")
-
-//     // HTML entities
-//     .replace(/&nbsp;/gi, " ")
-//     .replace(/&amp;/gi, "&")
-//     .replace(/&quot;/gi, '"')
-//     .replace(/&#39;/gi, "'")
-
-//     // New lines / tabs / multiple spaces → single space
-//     .replace(/\s+/g, " ")
-
-//     // Starting and ending spaces remove
-//     .trim();
-
-//   return cleanText.length > maxLength
-//     ? `${cleanText.substring(0, maxLength).trim()}...`
-//     : cleanText;
-// };
+//   if (loading) return <main className="flex min-h-[55vh] items-center justify-center bg-white text-modura-gray-600">Loading software details...</main>;
+//   if (!software) return (
+//     <main className="flex min-h-[55vh] flex-col items-center justify-center gap-4 bg-white px-4 text-center">
+//       <h1 className="font-heading text-3xl font-bold text-modura-primary">Software Not Found</h1>
+//       <p className="text-modura-gray-600">{error || "No software found for the selected link."}</p>
+//       <Link href="/softwareexpertise" className="text-modura-secondary underline">View software expertise</Link>
+//     </main>
+//   );
 
 //   return (
-
-//     <main className="w-full bg-white text-modura-primary">
-
-
-
-//       {/* ======================================================
-
-//           BREADCRUMB
-
-//           Immediately after existing header
-
-//       \====================================================== */}
-
+//     <main className="w-full min-w-0 overflow-x-clip bg-white text-modura-primary">
 //       <Breadcrumb title={software.title} />
 
-
-//       {/* ======================================================
-
-//           HERO
-
-//       \====================================================== */}
-
-
-
+//       {/* HERO: original image / copy layout, responsive for unpredictable lengths */}
 //       <section className="bg-white">
-
-
-
-//         <div
-
-//           className="
-
-//           mx-auto
-
-//             max-w-full
-
-//             px-5
-
-//             py-12
-
-//             lg:px-14
-
-//             sm:py-16
-
-//           "
-
-//         >
-
-
-
-//           <div
-
-//             className="
-
-//               grid
-
-//               items-center
-
-//               gap-8
-
-//               lg:grid-cols-[1.05fr_0.95fr]
-
-//               lg:gap-14
-
-//             "
-
-//           >
-
-
-
-//             {/* IMAGE */}
-
-
-
-//             <motion.div
-
-//               initial={{
-
-//                 opacity: 0,
-
-//                 x: -25,
-
-//               }}
-
-//               animate={{
-
-//                 opacity: 1,
-
-//                 x: 0,
-
-//               }}
-
-//               transition={{
-
-//                 duration: 0.65,
-
-//                 ease: "easeOut",
-
-//               }}
-
-//               className="
-
-//                 relative
-
-//                 overflow-hidden
-
-//               "
-
-//             >
-
-
-
-//               <img
-
-//                 src={software.image}
-
-//                 alt={software.title}
-
-//                 className="
-
-//                   block
-
-//                   h-[270px]
-
-//                   w-full
-
-//                   object-cover
-
-//                   sm:h-[350px]
-
-//                   lg:h-[450px]
-
-//                 "
-
-//               />
-
-
-
+//         <div className="mx-auto w-full max-w-full px-4 py-10 md:px-6 lg:px-10 lg:py-14 2xl:px-16">
+//           <div className="grid min-w-0 items-center gap-7 lg:grid-cols-2 lg:gap-12">
+//             <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: .6 }} className="min-w-0">
+//               <div className="relative min-h-[230px] w-full overflow-hidden bg-modura-off-white sm:min-h-[340px] lg:min-h-[450px]">
+//                 {software.image ? (
+//                   <Image src={software.image} alt={software.title} fill unoptimized sizes="(max-width: 1024px) 100vw, 50vw" className="object-cover" />
+//                 ) : <div className="flex h-full min-h-[230px] items-center justify-center font-heading text-lg text-modura-gray-500">Software Expertise</div>}
+//               </div>
 //             </motion.div>
-
-
-
-
-
-//             {/* TITLE */}
-
-
-
-//             <motion.div
-
-//               initial={{
-
-//                 opacity: 0,
-
-//                 x: 25,
-
-//               }}
-
-//               animate={{
-
-//                 opacity: 1,
-
-//                 x: 0,
-
-//               }}
-
-//               transition={{
-
-//                 delay: 0.1,
-
-//                 duration: 0.65,
-
-//                 ease: "easeOut",
-
-//               }}
-
-//             >
-
-
-
-//               <div className="flex items-center gap-3">
-
-
-
-//                 <span
-
-//                   className="
-
-//                     h-[2px]
-
-//                     w-9
-
-//                     bg-modura-secondary
-
-//                   "
-
-//                 />
-
-
-
-//                 <span
-
-//                   className="
-
-//                     font-body
-
-//                     text-[10px]
-
-//                     font-bold
-
-//                     uppercase
-
-//                     tracking-[0.25em]
-
-//                     text-modura-secondary
-
-//                   "
-
-//                 >
-
-//                   {software.category}
-
-//                 </span>
-
-
-
+//             <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: .6 }} className="min-w-0">
+//               <div className="flex min-w-0 items-center gap-3">
+//                 <span className="h-[2px] w-9 shrink-0 bg-modura-secondary" />
+//                 <span className="min-w-0 break-words font-body text-[10px] font-bold uppercase tracking-[.2em] text-modura-secondary">{software.category}</span>
 //               </div>
-
-
-
-
-
-//               <h1
-
-//                 className="
-
-//                   mt-5
-
-//                   font-heading
-
-//                   text-[46px]
-
-//                   font-bold
-
-//                   leading-[0.95]
-
-//                   tracking-tight
-
-//                   text-modura-primary
-
-//                   sm:text-[60px]
-
-//                   lg:text-[72px]
-
-//                 "
-
-//               >
-
-//                 {software.title}
-
-//               </h1>
-
-
-
-
-
-//               <p
-
-//                 className="
-
-//                   mt-6
-
-//                   max-w-[620px]
-
-//                   font-body
-
-//                   text-[15px]
-
-//                   leading-8
-
-//                   text-modura-gray-600
-
-//                   sm:text-[17px]
-
-//                 "
-
-//               >
-
-//                 {software.shortDescription}
-
-//               </p>
-
-
-
+//               <h1 className="mt-5 break-words font-heading text-[clamp(32px,5vw,70px)] font-bold leading-[1.08] tracking-tight text-modura-primary">{software.title}</h1>
+//               {software.shortDescription && (
+//                 <RichHTML html={software.shortDescription} className="mt-6 text-[15px] leading-7 sm:text-[17px]" />
+//               )}
 //             </motion.div>
-
-
-
 //           </div>
-
-
-
 //         </div>
-
-
-
 //       </section>
 
-
-
-
-
-//       {/* ======================================================
-
-//           OVERVIEW
-
-//       \====================================================== */}
-
-
-
-//       <section className="bg-modura-off-white">
-
-
-
-//         <div
-
-//           className="
-
-//              mx-auto
-
-//             max-w-full
-
-//             px-5
-
-//             py-12
-
-//             lg:px-14
-
-//             sm:py-16
-
-//           "
-
-//         >
-
-
-
-//           <SectionHeading
-
-//             label="Overview"
-
-//             title="About"
-
-//             accent={software.title}
-
-//           />
-
-
-
-
-
-//           <div className="mt-7 max-w-[1000px] space-y-5">
-
-
-
-//             {software.overview.map(
-
-//               (paragraph, index) => (
-
-//                 <motion.p
-
-//                   key={index}
-
-//                   initial={{
-
-//                     opacity: 0,
-
-//                     y: 10,
-
-//                   }}
-
-//                   whileInView={{
-
-//                     opacity: 1,
-
-//                     y: 0,
-
-//                   }}
-
-//                   viewport={{
-
-//                     once: true,
-
-//                     amount: 0.2,
-
-//                   }}
-
-//                   transition={{
-
-//                     duration: 0.45,
-
-//                     delay: index * 0.04,
-
-//                   }}
-
-//                   className="
-
-//                     font-body
-
-//                     text-[14px]
-
-//                     leading-8
-
-//                     text-modura-gray-600
-
-//                     sm:text-[15px]
-
-//                     sm:leading-[2]
-
-//                   "
-
-//                 >
-
-//                   {paragraph}
-
-//                 </motion.p>
-
-//               )
-
-//             )}
-
-
-
+//       {/* CMS CONTENT: one single content stream, no guessed / duplicated sections */}
+//       {software.longDescription.trim() && (
+//         <section className="bg-modura-off-white">
+//           <div className="mx-auto w-full max-w-full px-4 py-10 md:px-6 lg:px-10 lg:py-16 2xl:px-16">
+//             <SectionHeading label="Software Expertise" title="Detailed" accent="Overview" />
+//             <div className="mt-6 min-w-0 max-w-[1100px] border-l-[3px] border-modura-secondary bg-white px-4 py-6 shadow-[0_8px_35px_rgba(11,29,51,0.04)] sm:px-8 sm:py-9 lg:px-10">
+//               <RichHTML html={software.longDescription} className="text-[14px] leading-[1.85] sm:text-[16px]" />
+//             </div>
 //           </div>
-
-
-
-//         </div>
-
-
-
-//       </section>
-
-
-
-
-
-//       {/* ======================================================
-
-//           OUR APPROACH
-
-//       \====================================================== */}
-
-
-
-//       <section className="bg-white">
-
-
-
-//         <div
-
-//           className="
-
-//            mx-auto
-
-//             max-w-full
-
-//             px-5
-
-//             py-12
-
-//             lg:px-14
-
-//             sm:py-16
-
-//           "
-
-//         >
-
-
-
-//           <SectionHeading
-
-//             label="Our Approach"
-
-//             title="How We Use"
-
-//             accent={software.title}
-
-//           />
-
-
-
-
-
-//           <div className="mt-7 max-w-[1000px] space-y-5">
-
-
-
-//             {software.approach.map(
-
-//               (paragraph, index) => (
-
-//                 <p
-
-//                   key={index}
-
-//                   className="
-
-//                     font-body
-
-//                     text-[14px]
-
-//                     leading-8
-
-//                     text-modura-gray-600
-
-//                     sm:text-[15px]
-
-//                     sm:leading-[2]
-
-//                   "
-
-//                 >
-
-//                   {paragraph}
-
-//                 </p>
-
-//               )
-
-//             )}
-
-
-
-//           </div>
-
-
-
-//         </div>
-
-
-
-//       </section>
-
-
-
-
-
-//       {/* ======================================================
-
-//           COMMON APPLICATIONS
-
-//       \====================================================== */}
-
-
-
-//       <section className="bg-modura-off-white">
-
-
-
-//         <div
-
-//           className="
-
-//             mx-auto
-
-//             max-w-full
-
-//             px-5
-
-//             py-12
-
-//             lg:px-14
-
-//             sm:py-16
-
-//           "
-
-//         >
-
-
-
-//           <SectionHeading
-
-//             label="Common Applications"
-
-//             title="Where"
-
-//             accent={`${software.title} Is Used`}
-
-//           />
-
-
-
-
-
-//           <p
-
-//             className="
-
-//               mt-7
-
-//               max-w-[950px]
-
-//               font-body
-
-//               text-[14px]
-
-//               leading-8
-
-//               text-modura-gray-600
-
-//               sm:text-[15px]
-
-//             "
-
-//           >
-
-//             Our expertise can be applied across different project
-
-//             types and documentation requirements. Depending on
-
-//             the project scope, the software can support design,
-
-//             coordination, drafting, detailing and construction
-
-//             documentation.
-
-//           </p>
-
-
-
-
-
-//           <div
-
-//             className="
-
-//               mt-8
-
-//               grid
-
-//               gap-x-10
-
-//               sm:grid-cols-2
-
-//             "
-
-//           >
-
-
-
-//             {software.applications.map((item) => (
-
-//               <div
-
-//                 key={item}
-
-//                 className="
-
-//                   flex
-
-//                   items-center
-
-//                   gap-4
-
-//                   border-b
-
-//                   border-modura-gray-200
-
-//                   py-4
-
-//                 "
-
-//               >
-
-
-
-//                 <span
-
-//                   className="
-
-//                     flex
-
-//                     h-8
-
-//                     w-8
-
-//                     shrink-0
-
-//                     items-center
-
-//                     justify-center
-
-//                     bg-modura-secondary
-
-//                     text-white
-
-//                   "
-
-//                 >
-
-//                   <Check
-
-//                     size={14}
-
-//                     strokeWidth={2}
-
-//                   />
-
-//                 </span>
-
-
-
-//                 <span
-
-//                   className="
-
-//                     font-body
-
-//                     text-[14px]
-
-//                     text-modura-gray-600
-
-//                     sm:text-[15px]
-
-//                   "
-
-//                 >
-
-//                   {item}
-
-//                 </span>
-
-
-
-//               </div>
-
-//             ))}
-
-
-
-//           </div>
-
-
-
-//         </div>
-
-
-
-//       </section>
-
-
-
-
-
-//       {/* ======================================================
-
-//           WORKFLOW
-
-//       \====================================================== */}
-
-
-
-//       <section className="bg-white">
-
-
-
-//         <div
-
-//           className="
-
-//             mx-auto
-
-//             max-w-full
-
-//             px-5
-
-//             py-12
-
-//             lg:px-14
-
-//             sm:py-16
-
-//           "
-
-//         >
-
-
-
-//           <SectionHeading
-
-//             label="Project Workflow"
-
-//             title="Our"
-
-//             accent="Process"
-
-//           />
-
-
-
-
-
-//           <p
-
-//             className="
-
-//               mt-7
-
-//               max-w-[900px]
-
-//               font-body
-
-//               text-[14px]
-
-//               leading-8
-
-//               text-modura-gray-600
-
-//               sm:text-[15px]
-
-//             "
-
-//           >
-
-//             Every project is handled through a structured workflow
-
-//             designed to keep documentation clear, coordinated and
-
-//             aligned with the required project standards.
-
-//           </p>
-
-
-
-
-
-//           <div className="mt-8">
-
-
-
-//             {software.workflow.map((step) => (
-
-//               <div
-
-//                 key={step}
-
-//                 className="
-
-//                   flex
-
-//                   items-center
-
-//                   gap-5
-
-//                   border-t
-
-//                   border-modura-gray-200
-
-//                   py-5
-
-//                   last:border-b
-
-//                 "
-
-//               >
-
-
-
-//                 <span
-
-//                   className="
-
-//                     flex
-
-//                     h-9
-
-//                     w-9
-
-//                     shrink-0
-
-//                     items-center
-
-//                     justify-center
-
-//                     border
-
-//                     border-modura-secondary
-
-//                     text-modura-secondary
-
-//                   "
-
-//                 >
-
-//                   <Check
-
-//                     size={16}
-
-//                     strokeWidth={1.8}
-
-//                   />
-
-//                 </span>
-
-
-
-//                 <span
-
-//                   className="
-
-//                     font-body
-
-//                     text-[14px]
-
-//                     text-modura-gray-600
-
-//                     sm:text-[15px]
-
-//                   "
-
-//                 >
-
-//                   {step}
-
-//                 </span>
-
-
-
-//               </div>
-
-//             ))}
-
-
-
-//           </div>
-
-
-
-//         </div>
-
-
-
-//       </section>
-
-
-
-
-
-//       {/* ======================================================
-
-//           FAQ
-
-//       \====================================================== */}
-
-
-
-//       <section className="bg-modura-off-white">
-
-
-
-//         <div
-
-//           className="
-
-//             mx-auto
-
-//             max-w-[1100px]
-
-//             px-5
-
-//             py-12
-
-//             sm:py-16
-
-//           "
-
-//         >
-
-
-
-//           <SectionHeading
-
-//             label="FAQ"
-
-//             title="Frequently Asked"
-
-//             accent="Questions"
-
-//           />
-
-
-
-
-
-//           <div
-
-//             className="
-
-//               mt-8
-
-//               border-t
-
-//               border-modura-gray-300
-
-//             "
-
-//           >
-
-
-
-//             {software.faqs.map(
-
-//               (faq, index) => {
-
-
-
-//                 const open =
-
-//                   activeFaq === index;
-
-
-
+//         </section>
+//       )}
+
+//       {software.faqs.length > 0 && (
+//         <section className="bg-white">
+//           <div className="mx-auto w-full max-w-full px-4 py-10 md:px-6 lg:px-10 lg:py-14 2xl:px-16">
+//             <SectionHeading label="FAQ" title="Frequently Asked" accent="Questions" />
+//             <div className="mt-7 border-t border-modura-gray-300">
+//               {software.faqs.map((faq, index) => {
+//                 const open = activeFaq === index;
 //                 return (
-
-//                   <div
-
-//                     key={faq.question}
-
-//                     className="
-
-//                       border-b
-
-//                       border-modura-gray-300
-
-//                     "
-
-//                   >
-
-
-
-//                     <button
-
-//                       type="button"
-
-//                       onClick={() =>
-
-//                         setActiveFaq(
-
-//                           open ? null : index
-
-//                         )
-
-//                       }
-
-//                       className="
-
-//                         flex
-
-//                         w-full
-
-//                         items-center
-
-//                         gap-5
-
-//                         py-6
-
-//                         text-left
-
-//                       "
-
-//                     >
-
-
-
-//                       {/* FAQ ICON */}
-
-
-
-//                       <span
-
-//                         className={`
-
-//                           flex
-
-//                           h-9
-
-//                           w-9
-
-//                           shrink-0
-
-//                           items-center
-
-//                           justify-center
-
-//                           border
-
-//                           transition-all
-
-//                           duration-300
-
-//                           ${
-
-//                             open
-
-//                               ? "border-modura-secondary bg-modura-secondary text-white"
-
-//                               : "border-modura-gray-300 text-modura-secondary"
-
-//                           }
-
-//                         `}
-
-//                       >
-
-//                         {open ? (
-
-//                           <Minus
-
-//                             size={16}
-
-//                             strokeWidth={1.8}
-
-//                           />
-
-//                         ) : (
-
-//                           <Plus
-
-//                             size={16}
-
-//                             strokeWidth={1.8}
-
-//                           />
-
-//                         )}
-
+//                   <div key={faq.id ?? index} className="border-b border-modura-gray-300">
+//                     <button type="button" aria-expanded={open} onClick={() => setActiveFaq(open ? null : index)} className="flex w-full min-w-0 items-center gap-4 py-5 text-left">
+//                       <span className={`flex h-9 w-9 shrink-0 items-center justify-center border ${open ? "border-modura-secondary bg-modura-secondary text-white" : "border-modura-gray-300 text-modura-secondary"}`}>
+//                         {open ? <Minus size={16} /> : <Plus size={16} />}
 //                       </span>
-
-
-
-
-
-//                       {/* QUESTION */}
-
-
-
-//                       <span
-
-//                         className={`
-
-//                           flex-1
-
-//                           font-heading
-
-//                           text-[16px]
-
-//                           font-bold
-
-//                           transition-colors
-
-//                           duration-300
-
-//                           sm:text-[19px]
-
-//                           ${
-
-//                             open
-
-//                               ? "text-modura-secondary"
-
-//                               : "text-modura-primary"
-
-//                           }
-
-//                         `}
-
-//                       >
-
-//                         {faq.question}
-
-//                       </span>
-
-
-
+//                       <span className={`min-w-0 flex-1 break-words font-heading text-[16px] font-semibold sm:text-[19px] ${open ? "text-modura-secondary" : "text-modura-primary"}`}>{faq.question}</span>
 //                     </button>
-
-
-
-
-
-//                     {/* ANSWER */}
-
-
-
-//                     <AnimatePresence
-
-//                       initial={false}
-
-//                     >
-
-
-
-//                       {open && (
-
-//                         <motion.div
-
-//                           initial={{
-
-//                             height: 0,
-
-//                             opacity: 0,
-
-//                           }}
-
-//                           animate={{
-
-//                             height: "auto",
-
-//                             opacity: 1,
-
-//                           }}
-
-//                           exit={{
-
-//                             height: 0,
-
-//                             opacity: 0,
-
-//                           }}
-
-//                           transition={{
-
-//                             duration: 0.3,
-
-//                             ease: "easeInOut",
-
-//                           }}
-
-//                         >
-
-
-
-//                           <div
-
-//                             className="
-
-//                               pb-7
-
-//                               pl-14
-
-//                               pr-5
-
-//                               sm:pl-14
-
-//                               sm:pr-10
-
-//                             "
-
-//                           >
-
-
-
-//                             <p
-
-//                               className="
-
-//                                 max-w-[850px]
-
-//                                 border-l
-
-//                                 border-modura-secondary
-
-//                                 pl-5
-
-//                                 font-body
-
-//                                 text-[13px]
-
-//                                 leading-7
-
-//                                 text-modura-gray-600
-
-//                                 sm:text-[14px]
-
-//                                 sm:leading-8
-
-//                               "
-
-//                             >
-
-//                               {faq.answer}
-
-//                             </p>
-
-
-
-//                           </div>
-
-
-
-//                         </motion.div>
-
-//                       )}
-
-
-
+//                     <AnimatePresence initial={false}>
+//                       {open && <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: "auto", opacity: 1 }} exit={{ height: 0, opacity: 0 }} transition={{ duration: .3 }} className="overflow-hidden">
+//                         <div className="pb-7 pl-0 sm:pl-[52px]">
+//                           <div className="border-l-2 border-modura-secondary pl-4 sm:pl-5"><RichHTML html={faq.answer} className="text-[14px] leading-7" /></div>
+//                         </div>
+//                       </motion.div>}
 //                     </AnimatePresence>
-
-
-
 //                   </div>
-
 //                 );
-
-//               }
-
-//             )}
-
-
-
+//               })}
+//             </div>
 //           </div>
-
-
-
-//         </div>
-
-
-
-//       </section>
-
-
-
-//     <section
-
-
-
-//          ref={sectionRef}
-
-
-
-//          className="
-
-// relative
-
-// overflow-hidden
-
-// bg-modura-off-white
-
-// py-16
-
-// "
-
-
-
-//       >
-
-
-
-
-
-//          <div
-
-
-
-//             className="
-
-// relative
-
-// z-10
-
-// max-w-7xl
-
-// mx-auto
-
-// px-6
-
-// "
-
-
-
-//          >
-
-
-
-
-
-
-
-
-
-//             {/* HEADER */}
-
-
-
-//             <div
-
-//                className="
-
-// text-center
-
-// mb-14
-
-// "
-
-
-
-//             >
-
-
-
-
-
-//                <div className="
-
-// flex
-
-// items-center
-
-// gap-3
-
-// font-body
-
-// justify-center
-
-// font-bold
-
-// text-xs
-
-// uppercase
-
-// tracking-[5px]
-
-// text-modura-secondary
-
-// ">
-
-
-
-
-
-//                   <DraftingCompass
-
-//                      size={20}
-
-//                      strokeWidth={1.5}
-
-//                      className="
-
-// text-modura-secondary
-
-// "
-
-//                   />
-
-
-
-
-
-//                   <span>
-
-//                      OUR BLOG
-
-//                   </span>
-
-
-
-
-
-//                </div>
-
-
-
-
-
-
-
-//                <h2
-
-//                   className="
-
-// mt-4
-
-// font-heading
-
-// text-5xl
-
-// lg:text-6xl
-
-// font-semibold
-
-// text-modura-primary
-
-// "
-
-//                >
-
-
-
-//                   Engineering
-
-//                   <span
-
-//                      className="
-
-// text-modura-secondary ml-2
-
-// "
-
-//                   >
-
-//                      Insights
-
-//                   </span>
-
-
-
-
-
-//                </h2>
-
-
-
-
-
-
-
+//         </section>
+//       )}
+
+//       {software.blogs.length > 0 && (
+//         <section ref={blogSectionRef} className="bg-modura-off-white py-10 lg:py-14">
+//           <div className="mx-auto w-full max-w-full px-4 md:px-6 lg:px-10 2xl:px-16">
+//             <div className="mb-8 text-center">
+//               <div className="flex items-center justify-center gap-3 text-xs font-bold uppercase tracking-[.25em] text-modura-secondary"><DraftingCompass size={20} /> OUR BLOG</div>
+//               <h2 className="mt-4 font-heading text-3xl font-semibold text-modura-primary sm:text-4xl lg:text-5xl">Engineering <span className="text-modura-secondary">Insights</span></h2>
 //             </div>
-
-
-
-
-
-
-
-//             {/* BLOG GRID */}
-
-
-
-
-
-//             <div
-
-
-
-//                className="
-
-// grid
-
-// md:grid-cols-2
-
-// lg:grid-cols-3
-
-// gap-8
-
-// "
-
-
-
-//             >
-
-
-//                {
-
-//                   software.blogs.map((blog, index) => (
-
-
-//                      <motion.article
-
-
-//                         key={index}
-//            whileHover={{
-
-//                            y: -12
-
-//                         }}
-
-
-
-
-
-//                         transition={{
-
-//                            duration: .35
-
-//                         }}
-
-
-
-
-
-
-
-//                         className="
-
-// blog-card
-
-// bg-white
-
-// shadow-xl
-
-// overflow-hidden
-
-// blog-card-shape
-
-// h-[500px]
-
-// "
-
-
-
-//                      >
-
-
-//                         {/* IMAGE */}
-
-
-
-//                         <Link
-
-//                            href="blogDetail">
-
-
-
-//                            <div
-
-
-
-//                               className="
-
-// relative
-
-// h-[230px]
-
-// overflow-hidden
-
-// blog-image-shape
-
-// "
-
-
-
-//                            >
-
-
-
-
-
-//                               <img
-//                                 src={getAssetUrl(blog.imageUrl || blog.image)}
-//                                 alt={blog.title}
-//                                 className="
-
-// object-cover
-
-// transition-transform
-
-// duration-700
-
-// group-hover:scale-110
-
-// "
-//                              />
-
-
-//                            </div>
-
-
-
-
-
-//                            {/* CONTENT */}
-
-
-
-
-
-//                            <div
-
-
-
-//                               className="
-
-// px-8
-
-// py-5
-
-// "
-
-
-
-//                            >
-
-
-
-
-
-//                               {/* DATE */}
-
-
-
-//                               <div
-
-//                                  className="
-
-// mb-2
-
-// font-heading
-
-// text-modura-black
-
-// font-bold
-
-// text-lg
-
-// tracking-wide
-
-// "
-
-//                               >
-
-
-
-//                                  {blog.publishedAt ? new Date(blog.publishedAt).toLocaleDateString("en-US", { day: "2-digit", month: "short", year: "numeric" }) : ""}
-
-
-
-//                               </div>
-
-//                               <h3
-
-
-
-//                                  className="
-
-// font-heading
-
-// text-[20px]
-
-// font-semibold
-
-// leading-tight
-
-// text-modura-secondary
-
-// "
-
-
-
-//                               >
-
-
-
-//                                  {blog.title}
-
-
-
-//                               </h3>
-
-
-//   <p
-//     className="
-//       mt-2
-//       font-body
-//       text-sm
-//       leading-7
-//       text-modura-black
-//     "
-//   >
-//     {truncateText(
-//       blog.description  || "",
-//       80
-//     )}
-//   </p>
-
-
-
-
-
-//                               <button
-
-//                                  className="
-
-// group
-
-// relative
-
-// mt-3
-
-// flex
-
-// h-[58px]
-
-// w-[200px]
-
-// items-center
-
-// justify-between
-
-// overflow-hidden
-
-// bg-modura-white
-
-// px-7
-
-// font-body
-
-// font-semibold
-
-// text-modura-primary
-
-// clip-read-btn
-
-// transition-all
-
-// duration-500
-
-// border-2
-
-// border-modura-secondary
-
-
-
-// "
-
-//                               >
-
-
-
-
-
-//                                  {/* Hover Layer */}
-
-
-
-//                                  <span
-
-//                                     className="
-
-// absolute
-
-// inset-0
-
-// bg-modura-secondary
-
-// translate-y-full
-
-// transition-transform
-
-// duration-500
-
-// ease-out
-
-// group-hover:translate-y-0
-
-
-
-// "
-
-//                                  />
-
-
-
-
-
-
-
-//                                  {/* Text */}
-
-
-
-//                                  <span
-
-//                                     className="
-
-// relative
-
-// z-10
-
-// transition-all
-
-// duration-500
-
-// group-hover:tracking-wider
-
-// "
-
-//                                  >
-
-//                                     Read More
-
-//                                  </span>
-
-
-
-
-
-
-
-
-
-
-
-//                                  {/* Arrow */}
-
-
-
-//                                  <span
-
-//                                     className="
-
-// relative
-
-// z-10
-
-// flex
-
-// h-10
-
-// w-12
-
-// items-center
-
-// justify-center
-
-// bg-modura-secondary
-
-// text-modura-primary
-
-// clip-arrow-box
-
-// transition-all
-
-// duration-500
-
-// group-hover:rotate-12
-
-// group-hover:translate-x-1
-
-// group-hover:bg-modura-primary
-
-// group-hover:text-white
-
-// "
-
-//                                  >
-
-
-
-//                                     <ArrowRight
-
-//                                        size={18}
-
-//                                        className="
-
-// transition-transform
-
-// duration-500
-
-// group-hover:translate-x-1
-
-// "
-
-//                                     />
-
-
-
-//                                  </span>
-
-
-
-
-
-
-
-//                               </button>
-
-
-
-//                            </div>
-
-//                         </Link>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-//                      </motion.article>
-
-
-
-
-
-
-
-//                   ))
-
-//                }
-
-
-
-
-
-
-
-
-
+//             <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3 lg:gap-8">
+//               {software.blogs.map(blog => (
+//                 <article key={blog.id} className="blog-card group min-w-0 overflow-hidden bg-white shadow-[0_10px_30px_rgba(11,29,51,.08)]">
+//                   <Link href={`/blogDetail/${blog.slug}`} className="block h-full">
+//                     <div className="relative h-[220px] overflow-hidden bg-modura-light">
+//                       {getAssetUrl(blog.imageUrl || blog.image) ? <Image src={getAssetUrl(blog.imageUrl || blog.image)} alt={blog.title} fill unoptimized sizes="(max-width: 768px) 100vw, 33vw" className="object-cover transition-transform duration-500 group-hover:scale-105" /> : null}
+//                     </div>
+//                     <div className="p-5 sm:p-6">
+//                       {blog.publishedAt && !Number.isNaN(new Date(blog.publishedAt).getTime()) && <p className="mb-2 text-sm font-semibold text-modura-primary">{new Date(blog.publishedAt).toLocaleDateString("en-US", { month: "short", day: "2-digit", year: "numeric" })}</p>}
+//                       <h3 className="break-words font-heading text-xl font-semibold text-modura-secondary">{blog.title}</h3>
+//                       <div className="mt-2 line-clamp-3"><BlogExcerpt html={blog.description || ""} /></div>
+//                       <span className="mt-5 inline-flex items-center gap-3 border border-modura-secondary px-5 py-3 font-body text-sm font-semibold text-modura-primary transition-colors group-hover:bg-modura-secondary group-hover:text-white">Read More <ArrowRight size={17}/></span>
+//                     </div>
+//                   </Link>
+//                 </article>
+//               ))}
 //             </div>
-
-
-
-
-
-//          </div>
-
-
-
-
-
-
-
-//       </section>
-
-//       {/* ======================================================
-
-//           START YOUR PROJECT CTA
-
-//       \====================================================== */}
-
-
+//           </div>
+//         </section>
+//       )}
 
 //       <section className="bg-modura-light">
-
-
-
-//         <div
-
-//           className="
-
-//             mx-auto
-
-//             flex
-
-//             max-w-full
-
-//             flex-col
-
-//             gap-7
-
-//             px-5
-
-//             py-12
-
-//             sm:px-14
-
-//             sm:py-14
-
-//             md:flex-row
-
-//             md:items-center
-
-//             md:justify-between
-
-//             lg:py-10
-
-//           "
-
-//         >
-
-
-
-//           <div className="max-w-[700px]">
-
-
-
-//             <span
-
-//               className="
-
-//                 font-body
-
-//                 text-[10px]
-
-//                 font-bold
-
-//                 uppercase
-
-//                 tracking-[0.25em]
-
-//                 text-modura-secondary
-
-//               "
-
-//             >
-
-//               Let's Work Together
-
-//             </span>
-
-
-
-
-
-//             <h2
-
-//               className="
-
-//                 mt-3
-
-//                 font-heading
-
-//                 text-[34px]
-
-//                 font-bold
-
-//                 leading-tight
-
-//                 text-modura-primary
-
-//                 sm:text-[46px]
-
-//               "
-
-//             >
-
-//               Start Your Project{" "}
-
-//               <span className="text-modura-secondary">
-
-//                 With Us
-
-//               </span>
-
-//             </h2>
-
-
-
-
-
-//             <p
-
-//               className="
-
-//                 mt-3
-
-//                 max-w-[620px]
-
-//                 font-body
-
-//                 text-[13px]
-
-//                 leading-7
-
-//                 text-modura-gray-600
-
-//                 sm:text-[14px]
-
-//               "
-
-//             >
-
-//               Have a project that requires reliable{" "}
-
-//               {software.title} expertise? Let's discuss
-
-//               your requirements and find the right technical
-
-//               approach for your project.
-
-//             </p>
-
-
-
+//         <div className="mx-auto flex w-full max-w-full flex-col gap-7 px-4 py-10 md:flex-row md:items-center md:justify-between md:px-6 lg:px-10 2xl:px-16">
+//           <div className="min-w-0 max-w-[700px]">
+//             <span className="font-body text-[10px] font-bold uppercase tracking-[.25em] text-modura-secondary">Let&apos;s Work Together</span>
+//             <h2 className="mt-3 break-words font-heading text-[clamp(32px,5vw,48px)] font-bold leading-tight">Start Your Project <span className="text-modura-secondary">With Us</span></h2>
+//             <p className="mt-3 font-body text-sm leading-7 text-modura-gray-600">Have a project that requires reliable {software.title} expertise? Let&apos;s discuss your requirements.</p>
 //           </div>
-
-
-
-
-
-//           <div className="shrink-0">
-
-
-
-//             <AnimatedButton
-
-//               href="/inquiry"
-
-//               title="Get In Touch"
-
-//             />
-
-
-
-//           </div>
-
-
-
+//           <div className="shrink-0 self-start md:self-center"><AnimatedButton href="/inquiry" title="Get In Touch" /></div>
 //         </div>
-
-
-
 //       </section>
-
-
-
 //     </main>
-
 //   );
-
 // }
 
+// function BlogExcerpt({ html }: { html: string }) {
+//   const [text, setText] = useState("");
+//   useEffect(() => {
+//     const sanitized = DOMPurify.sanitize(html, { ALLOWED_TAGS: [] });
+//     const decoded = document.createElement("textarea");
+//     decoded.innerHTML = sanitized;
+//     setText(decoded.value.replace(/\s+/g, " ").trim());
+//   }, [html]);
+//   return <p className="font-body text-sm leading-6 text-modura-gray-600">{text}</p>;
+// }
 
-
-
-
-// // ============================================================
-
-// // SECTION HEADING
-
-// // ============================================================
-
-
-
-// function SectionHeading({
-
-//   label,
-
-//   title,
-
-//   accent,
-
-// }: {
-
-//   label: string;
-
-//   title: string;
-
-//   accent: string;
-
-// }) {
-
+// function SectionHeading({ label, title, accent }: { label: string; title: string; accent: string }) {
 //   return (
-
-//     <div>
-
-
-
-//       <div className="flex items-center gap-3">
-
-
-
-//         <span
-
-//           className="
-
-//             h-[2px]
-
-//             w-9
-
-//             bg-modura-secondary
-
-//           "
-
-//         />
-
-
-
-//         <span
-
-//           className="
-
-//             font-body
-
-//             text-[10px]
-
-//             font-bold
-
-//             uppercase
-
-//             tracking-[0.25em]
-
-//             text-modura-secondary
-
-//           "
-
-//         >
-
-//           {label}
-
-//         </span>
-
-
-
-//       </div>
-
-
-
-
-
-//       <h2
-
-//         className="
-
-//           mt-3
-
-//           font-heading
-
-//           text-[36px]
-
-//           font-bold
-
-//           leading-tight
-
-//           text-modura-primary
-
-//           sm:text-[48px]
-
-//         "
-
-//       >
-
-//         {title}{" "}
-
-
-
-//         <span className="text-modura-secondary">
-
-//           {accent}
-
-//         </span>
-
-//       </h2>
-
-
-
+//     <div className="min-w-0">
+//       <div className="flex items-center gap-3"><span className="h-[2px] w-9 shrink-0 bg-modura-secondary"/><span className="font-body text-[10px] font-bold uppercase tracking-[.2em] text-modura-secondary">{label}</span></div>
+//       <h2 className="mt-3 break-words font-heading text-[clamp(30px,5vw,48px)] font-bold leading-tight text-modura-primary">{title} <span className="text-modura-secondary">{accent}</span></h2>
 //     </div>
-
 //   );
-
 // }
 
 "use client";
 
-import { useParams } from "next/navigation";
+
 
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 
-import { motion, AnimatePresence } from "framer-motion";
+import { useParams } from "next/navigation";
 
-import {
+import axios from "axios";
 
-  Check,
+import Image from "next/image";
 
-  Minus,
+import Link from "next/link";
 
-  Plus,
+import DOMPurify from "dompurify";
 
-} from "lucide-react";
+import { AnimatePresence, motion } from "framer-motion";
 
-import { ArrowRight, DraftingCompass } from "lucide-react";
+import { Minus, Plus, ArrowRight, DraftingCompass } from "lucide-react";
 
 import gsap from "gsap";
 
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
-import Link from "next/link";
+import Breadcrumb from "@/components/Breadcrumb";
 
 import AnimatedButton from "@/components/AnimatedButton";
 
-import Breadcrumb from "@/components/Breadcrumb";
-
 import { apiUrl } from "../../config";
 
-import axios from "axios";
+
 
 gsap.registerPlugin(ScrollTrigger);
 
-// TYPES
 
-// ============================================================
 
-type FAQ = {
+const API_BASE = (apiUrl || "https://mvnl.salexo.co.in/api/v1").replace(/\/+$/, "");
 
-  id?: number;
+const ASSET_ORIGIN = new URL(API_BASE).origin;
 
-  question: string;
+const getAssetUrl = (value?: string) => {
 
-  answer: string;
+  if (!value) return "";
+
+  return /^https?:\/\//i.test(value) ? value : `${ASSET_ORIGIN}/${value.replace(/^\/+/, "")}`;
 
 };
+
+
+
+type FAQ = { id?: number; question: string; answer: string };
 
 type SoftwareBlog = {
 
@@ -2749,7 +361,7 @@ type SoftwareBlog = {
 
   imageUrl?: string;
 
-  description:string;
+  description?: string;
 
   publishedAt?: string;
 
@@ -2769,147 +381,241 @@ type SoftwareData = {
 
   image: string;
 
-  overview: string[];
-
-  approach: string[];
-
-  applications: string[];
-
-  workflow: string[];
-
   faqs: FAQ[];
 
   blogs: SoftwareBlog[];
 
 };
 
-const getAssetUrl = (value?: string) => {
 
-  if (!value) return "";
 
-  if (/^https?:\/\//i.test(value)) return value;
+type ApiResponse = {
 
-  return `${apiUrl}${value.startsWith("/") ? "" : "/"}${value}`;
+  success: boolean;
 
-};
+  message?: string;
 
-const stripHtml = (value = "") =>
+  data?: {
 
-  value
+    id?: number;
 
-    .replace(/<br\s*\/?>(?!$)/gi, "\n")
+    name?: string;
 
-    .replace(/<\/p>/gi, "\n")
+    title?: string;
 
-    .replace(/<\/li>/gi, "\n")
+    category?: string | { name?: string };
 
-    .replace(/<[^>]*>/g, "")
+    shortDescription?: string;
 
-    .replace(/&nbsp;/gi, " ")
+    longDescription?: string;
 
-    .replace(/&amp;/gi, "&")
+    image?: string;
 
-    .replace(/&quot;/gi, '"')
+    imageUrl?: string;
 
-    .replace(/&#39;/gi, "'")
+    faqs?: FAQ[];
 
-    .replace(/\s+\n/g, "\n")
-
-    .replace(/\n\s+/g, "\n")
-
-    .replace(/\n{3,}/g, "\n\n")
-
-    .trim();
-
-const parseSoftwareContent = (longDescription = "") => {
-
-  const paragraphs = Array.from(longDescription.matchAll(/<p[^>]*>([\s\S]*?)<\/p>/gi))
-
-    .map((match) => stripHtml(match[1]))
-
-    .filter(Boolean);
-
-  const applications = Array.from(longDescription.matchAll(/<li[^>]*>([\s\S]*?)<\/li>/gi))
-
-    .map((match) => stripHtml(match[1]))
-
-    .filter(Boolean);
-
-  const cleanParagraphs = paragraphs.length
-
-    ? paragraphs
-
-    : stripHtml(longDescription).split(/\n{2,}/).map((item) => item.trim()).filter(Boolean);
-
-  const overview = cleanParagraphs.slice(0, 3);
-
-  const approach = cleanParagraphs.slice(1, 4);
-
-  const fallbackItems = cleanParagraphs.slice(0, 6);
-
-  return {
-
-    overview: overview.length ? overview : [""],
-
-    approach: approach.length ? approach : overview,
-
-    applications: applications.length ? applications : fallbackItems,
-
-    workflow: applications.length ? applications : fallbackItems,
+    blogs?: SoftwareBlog[];
 
   };
 
 };
 
-const normalizeSoftware = (data: any): SoftwareData => {
 
-  const content = parseSoftwareContent(data?.longDescription || "");
+
+function normalizeSoftware(data: NonNullable<ApiResponse["data"]>): SoftwareData {
+
+  const category = typeof data.category === "string" ? data.category : data.category?.name;
 
   return {
 
-    id: Number(data?.id || 0),
+    id: Number(data.id || 0),
 
-    title: data?.name || "Software Expertise",
+    title: data.name || data.title || "Software Expertise",
 
-    category: data?.category || "SOFTWARE EXPERTISE",
+    category: category || "Software Expertise",
 
-    shortDescription: data?.shortDescription || "",
+    shortDescription: data.shortDescription || "",
 
-    longDescription: data?.longDescription || "",
+    longDescription: data.longDescription || "",
 
-    image: getAssetUrl(data?.imageUrl || data?.image),
+    image: getAssetUrl(data.imageUrl || data.image),
 
-    overview: content.overview,
+    faqs: Array.isArray(data.faqs) ? data.faqs : [],
 
-    approach: content.approach,
-
-    applications: content.applications,
-
-    workflow: content.workflow,
-
-    faqs: Array.isArray(data?.faqs) ? data.faqs : [],
-
-    blogs: Array.isArray(data?.blogs) ? data.blogs : [],
+    blogs: Array.isArray(data.blogs) ? data.blogs : [],
 
   };
 
-};
+}
 
-// PAGE
 
-// ============================================================
+
+const RICH_CONTENT_CLASSES = `
+  software-rich-html
+  min-w-0 w-full max-w-full break-words
+  font-body text-[14px] leading-[1.85] text-modura-gray-600
+  sm:text-[16px] sm:leading-[1.9]
+
+  [&_p]:mb-5 [&_p]:max-w-full [&_p]:break-words
+  [&_p]:text-[14px] [&_p]:leading-[1.85]
+  sm:[&_p]:text-[16px] sm:[&_p]:leading-[1.9]
+  [&_p:last-child]:mb-0
+  [&_.ql-align-justify]:text-justify
+  [&_.ql-align-center]:text-center
+  [&_.ql-align-right]:text-right
+
+  [&_h1]:mb-5 [&_h1]:mt-10 [&_h1]:break-words
+  [&_h1]:font-heading [&_h1]:text-[30px] [&_h1]:font-bold
+  [&_h1]:leading-[1.2] [&_h1]:text-modura-primary
+  sm:[&_h1]:text-[38px]
+
+  [&_h2]:mb-5 [&_h2]:mt-9 [&_h2]:break-words
+  [&_h2]:border-l-[3px] [&_h2]:border-modura-secondary
+  [&_h2]:pl-4 [&_h2]:font-heading [&_h2]:text-[24px]
+  [&_h2]:font-bold [&_h2]:leading-[1.3] [&_h2]:text-modura-primary
+  sm:[&_h2]:text-[30px]
+
+  [&_h3]:mb-4 [&_h3]:mt-8 [&_h3]:break-words
+  [&_h3]:font-heading [&_h3]:text-[21px] [&_h3]:font-bold
+  [&_h3]:leading-[1.35] [&_h3]:text-modura-secondary
+  sm:[&_h3]:text-[25px]
+
+  [&_h4]:mb-3 [&_h4]:mt-7 [&_h4]:font-heading
+  [&_h4]:text-[19px] [&_h4]:font-semibold [&_h4]:text-modura-primary
+  [&_h5]:mb-3 [&_h5]:mt-6 [&_h5]:font-heading
+  [&_h5]:text-[17px] [&_h5]:font-semibold [&_h5]:text-modura-primary
+  [&_h6]:mb-3 [&_h6]:mt-5 [&_h6]:font-heading
+  [&_h6]:text-[15px] [&_h6]:font-bold [&_h6]:text-modura-secondary
+
+  [&_ul]:mb-6 [&_ul]:mt-4 [&_ul]:list-disc [&_ul]:space-y-2
+  [&_ul]:pl-6 [&_ul]:marker:text-modura-secondary
+  sm:[&_ul]:pl-8
+  [&_ol]:mb-6 [&_ol]:mt-4 [&_ol]:list-decimal [&_ol]:space-y-2
+  [&_ol]:pl-6 [&_ol]:marker:font-bold [&_ol]:marker:text-modura-secondary
+  sm:[&_ol]:pl-8
+  [&_li]:break-words [&_li]:pl-1 [&_li]:leading-[1.8]
+  [&_li_p]:mb-1
+  [&_li_ul]:mb-2 [&_li_ol]:mb-2
+
+  [&_strong]:font-bold [&_strong]:text-modura-primary
+  [&_b]:font-bold [&_b]:text-modura-primary
+  [&_em]:italic [&_i]:italic
+  [&_u]:underline
+  [&_a]:break-all [&_a]:font-medium [&_a]:text-modura-secondary
+  [&_a]:underline [&_a]:underline-offset-4
+  hover:[&_a]:text-modura-primary
+
+  [&_blockquote]:my-7 [&_blockquote]:border-l-4
+  [&_blockquote]:border-modura-secondary [&_blockquote]:bg-modura-off-white
+  [&_blockquote]:px-5 [&_blockquote]:py-4 [&_blockquote]:italic
+  [&_blockquote]:text-modura-primary
+
+  [&_img]:my-7 [&_img]:block [&_img]:h-auto [&_img]:max-w-full
+  [&_figure]:my-7 [&_figure]:max-w-full
+  [&_figcaption]:mt-2 [&_figcaption]:text-center
+  [&_figcaption]:text-xs [&_figcaption]:text-modura-gray-500
+
+  [&_table]:my-6 [&_table]:block [&_table]:max-w-full
+  [&_table]:overflow-x-auto [&_table]:border-collapse
+  [&_th]:border [&_th]:border-modura-gray-200
+  [&_th]:bg-modura-primary [&_th]:px-4 [&_th]:py-3
+  [&_th]:text-left [&_th]:text-sm [&_th]:font-semibold [&_th]:text-white
+  [&_td]:border [&_td]:border-modura-gray-200
+  [&_td]:px-4 [&_td]:py-3 [&_td]:align-top
+  [&_hr]:my-8 [&_hr]:border-modura-gray-200
+  [&_pre]:my-5 [&_pre]:max-w-full [&_pre]:overflow-x-auto
+  [&_pre]:bg-modura-primary [&_pre]:p-5 [&_pre]:text-white
+  [&_code]:break-words [&_code]:font-mono
+  [&_code]:text-[13px]
+  [&_div]:max-w-full
+  [&_h1:first-child]:mt-0 [&_h2:first-child]:mt-0
+  [&_h3:first-child]:mt-0
+`;
+
+function RichHTML({ html, className = "" }: { html?: string; className?: string }) {
+
+  const [safeHtml, setSafeHtml] = useState("");
+
+
+
+  useEffect(() => {
+
+    // Render untrusted CMS HTML safely; presentation is controlled by Tailwind.
+
+    const sanitized = DOMPurify.sanitize(html || "", {
+
+      USE_PROFILES: { html: true },
+
+      FORBID_TAGS: ["style", "script", "iframe", "object", "embed", "form", "input", "button", "svg", "math"],
+
+      FORBID_ATTR: ["style", "srcset", "onerror", "onclick", "onload"],
+
+    });
+
+
+
+    // Relative assets from the API should resolve against the website, not localhost.
+
+    const template = document.createElement("template");
+
+    template.innerHTML = sanitized;
+
+  // React Quill can encode every gap as &nbsp;, which prevents wrapping.
+  // Restore ordinary spaces so long paragraphs wrap on mobile screens.
+  const textWalker = document.createTreeWalker(template.content, NodeFilter.SHOW_TEXT);
+  let textNode: Node | null;
+  while ((textNode = textWalker.nextNode())) {
+    if (textNode.textContent?.includes("\u00a0")) {
+      textNode.textContent = textNode.textContent.replace(/\u00a0/g, " ");
+    }
+  }
+
+    template.content.querySelectorAll("img").forEach((img) => {
+
+      const src = img.getAttribute("src") || "";
+
+      if (src && !src.startsWith("data:")) img.setAttribute("src", getAssetUrl(src));
+
+      img.setAttribute("loading", "lazy");
+
+      img.setAttribute("decoding", "async");
+
+    });
+
+    template.content.querySelectorAll("a").forEach((a) => {
+
+      const href = a.getAttribute("href") || "";
+
+      if (/^https?:\/\//i.test(href)) {
+
+        a.setAttribute("target", "_blank");
+
+        a.setAttribute("rel", "noopener noreferrer");
+
+      }
+
+    });
+
+    setSafeHtml(template.innerHTML);
+
+  }, [html]);
+
+
+
+  if (!safeHtml) return null;
+
+  return <div className={`${RICH_CONTENT_CLASSES} ${className}`} dangerouslySetInnerHTML={{ __html: safeHtml }} />;
+
+}
+
+
 
 export default function SoftwareDetailPage() {
 
   const params = useParams();
 
-  const slug =
-
-    typeof params.slug === "string"
-
-      ? params.slug.toLowerCase()
-
-      : "";
+  const slug = typeof params.slug === "string" ? params.slug : "";
 
   const [software, setSoftware] = useState<SoftwareData | null>(null);
 
@@ -2919,453 +625,141 @@ export default function SoftwareDetailPage() {
 
   const [activeFaq, setActiveFaq] = useState<number | null>(null);
 
-  const sectionRef = useRef<HTMLDivElement | null>(null);
+  const blogSectionRef = useRef<HTMLElement | null>(null);
 
-useEffect(() => {
 
-  if (!slug) return;
 
-  const fetchSoftwareDetail = async () => {
+  useEffect(() => {
 
-    try {
+    if (!slug) { setSoftware(null); setLoading(false); return; }
 
-      setLoading(true);
+    const controller = new AbortController();
 
-      setError("");
+    setLoading(true);
 
-      const response = await axios.post(
+    setSoftware(null);
 
-        `${apiUrl}/softwareDetail`,
+    setError("");
 
-        { slug },
+    setActiveFaq(null);
 
-        {
+    axios.post<ApiResponse>(`${API_BASE}/softwareDetail`, { slug }, {
 
-          headers: {
+      headers: { "Content-Type": "application/json" },
 
-            "Content-Type": "application/json",
+      signal: controller.signal,
 
-            Accept: "application/json",
+    }).then(({ data }) => {
 
-          },
+      if (!data.success || !data.data) throw new Error(data.message || "Software details not found.");
 
-        }
+      if (!controller.signal.aborted) setSoftware(normalizeSoftware(data.data));
 
-      );
+    }).catch((err: unknown) => {
 
-      const result = response.data;
+      if (controller.signal.aborted || axios.isCancel(err)) return;
 
-      if (!result?.success || !result?.data) {
+      setError(err instanceof Error ? err.message : "Unable to load software details.");
 
-        throw new Error(
+    }).finally(() => {
 
-          result?.message || "Software details not found."
+      if (!controller.signal.aborted) setLoading(false);
 
-        );
+    });
 
-      }
+    return () => controller.abort();
 
-      setSoftware(normalizeSoftware(result.data));
+  }, [slug]);
 
-    } catch (err: any) {
 
-      console.error("Software Detail API Error:", err);
-
-      setSoftware(null);
-
-      setError(
-
-        err?.response?.data?.message ||
-
-        err?.message ||
-
-        "Unable to load software details."
-
-      );
-
-    } finally {
-
-      setLoading(false);
-
-    }
-
-  };
-
-  fetchSoftwareDetail();
-
-}, [slug]);
 
   useLayoutEffect(() => {
 
-      const ctx = gsap.context(() => {
+    if (!software || !blogSectionRef.current || !software.blogs.length) return;
 
-         gsap.from(".blog-card",
+    const ctx = gsap.context(() => {
 
-            {
+      gsap.fromTo(".blog-card", { opacity: 0, y: 45 }, {
 
-               opacity: 0,
+        opacity: 1, y: 0, duration: .8, stagger: .12,
 
-               y: 70,
+        ease: "power3.out", scrollTrigger: { trigger: blogSectionRef.current, start: "top 80%", once: true },
 
-               duration: 1,
+      });
 
-               ease: "power3.out",
+    }, blogSectionRef);
 
-               stagger: 0.2,
+    return () => ctx.revert();
 
-               scrollTrigger: {
+  }, [software]);
 
-                  trigger: sectionRef.current,
 
-                  start: "top 75%",
 
-                  once: true
+  if (loading) return <main className="flex min-h-[55vh] items-center justify-center bg-white text-modura-gray-600">Loading software details...</main>;
 
-               }
+  if (!software) return (
 
-            });
+    <main className="flex min-h-[55vh] flex-col items-center justify-center gap-4 bg-white px-4 text-center">
 
-      }, sectionRef);
+      <h1 className="font-heading text-3xl font-bold text-modura-primary">Software Not Found</h1>
 
-      return () => ctx.revert();
+      <p className="text-modura-gray-600">{error || "No software found for the selected link."}</p>
 
-   }, [software]);
+      <Link href="/softwareexpertise" className="text-modura-secondary underline">View software expertise</Link>
 
-  if (loading) {
+    </main>
 
-    return (
+  );
 
-      <main className="w-full min-h-screen bg-white text-modura-primary">
 
-        <div className="flex min-h-screen items-center justify-center font-body text-sm text-modura-gray-500">
-
-          Loading...
-
-        </div>
-
-      </main>
-
-    );
-
-  }
-
-  if (!software) {
-
-    return (
-
-      <main className="w-full min-h-screen bg-white text-modura-primary">
-
-        <div className="flex min-h-screen flex-col items-center justify-center px-5 text-center">
-
-          <h1 className="font-heading text-3xl font-bold text-modura-primary">Software Not Found</h1>
-
-          <p className="mt-3 max-w-xl font-body text-sm leading-7 text-modura-gray-600">
-
-            {error || "We could not load the requested software details."}
-
-          </p>
-
-        </div>
-
-      </main>
-
-    );
-
-  }
-
-const truncateText = (text: string = "", maxLength = 80) => {
-
-  if (!text) return "";
-
-  const cleanText = text
-
-    // HTML tags remove
-
-    .replace(/<[^>]*>/g, " ")
-
-    // HTML entities
-
-    .replace(/&nbsp;/gi, " ")
-
-    .replace(/&amp;/gi, "&")
-
-    .replace(/&quot;/gi, '"')
-
-    .replace(/&#39;/gi, "'")
-
-    // New lines / tabs / multiple spaces → single space
-
-    .replace(/\s+/g, " ")
-
-    // Starting and ending spaces remove
-
-    .trim();
-
-  return cleanText.length > maxLength
-
-    ? `${cleanText.substring(0, maxLength).trim()}...`
-
-    : cleanText;
-
-};
 
   return (
 
-    <main className="w-full overflow-x-clip bg-white text-modura-primary">
-
-      {/* ======================================================
-
-          BREADCRUMB
-
-          Immediately after existing header
-
-      \\====================================================== */}
+    <main className="w-full min-w-0 overflow-x-clip bg-white text-modura-primary">
 
       <Breadcrumb title={software.title} />
 
-      {/* ======================================================
 
-          HERO
 
-      \\====================================================== */}
+      {/* HERO: original image / copy layout, responsive for unpredictable lengths */}
 
       <section className="bg-white">
 
-        <div
+        <div className="mx-auto w-full max-w-full px-4 py-10 md:px-6 lg:px-10 lg:py-14 2xl:px-16">
 
-          className="
+          <div className="grid min-w-0 items-center gap-7 lg:grid-cols-2 lg:gap-12">
 
-          mx-auto
+            <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: .6 }} className="min-w-0">
 
-            max-w-full
+              <div className="relative min-h-[230px] w-full overflow-hidden bg-modura-off-white sm:min-h-[340px] lg:min-h-[450px]">
 
-            px-4
+                {software.image ? (
 
-            md:px-6
+                  <Image src={software.image} alt={software.title} fill unoptimized sizes="(max-width: 1024px) 100vw, 50vw" className="object-cover" />
 
-            lg:px-10
-
-            2xl:px-16
-
-            py-8
-
-            sm:py-10
-
-          "
-
-        >
-
-          <div
-
-            className="
-
-              grid
-
-              items-center
-
-              gap-5 md:gap-8
-
-              lg:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)]
-
-              lg:gap-10
-
-            "
-
-          >
-
-            {/* IMAGE */}
-
-            <motion.div
-
-              initial={{
-
-                opacity: 0,
-
-                x: -25,
-
-              }}
-
-              animate={{
-
-                opacity: 1,
-
-                x: 0,
-
-              }}
-
-              transition={{
-
-                duration: 0.65,
-
-                ease: "easeOut",
-
-              }}
-
-              className="
-
-                relative
-
-                overflow-hidden
-
-              "
-
-            >
-
-              <img
-
-                src={software.image}
-
-                alt={software.title}
-
-                className="
-
-                  block
-
-                  h-[270px]
-
-                  w-full
-
-                  object-cover
-
-                  sm:h-[350px]
-
-                  lg:h-[450px]
-
-                "
-
-              />
-
-            </motion.div>
-
-            {/* TITLE */}
-
-            <motion.div
-
-              initial={{
-
-                opacity: 0,
-
-                x: 25,
-
-              }}
-
-              animate={{
-
-                opacity: 1,
-
-                x: 0,
-
-              }}
-
-              transition={{
-
-                delay: 0.1,
-
-                duration: 0.65,
-
-                ease: "easeOut",
-
-              }}
-
-            >
-
-              <div className="flex items-center gap-3">
-
-                <span
-
-                  className="
-
-                    h-[2px]
-
-                    w-9
-
-                    bg-modura-secondary
-
-                  "
-
-                />
-
-                <span
-
-                  className="
-
-                    font-body
-
-                    text-[10px]
-
-                    font-bold
-
-                    uppercase
-
-                    tracking-[0.25em]
-
-                    text-modura-secondary
-
-                  "
-
-                >
-
-                  {software.category}
-
-                </span>
+                ) : <div className="flex h-full min-h-[230px] items-center justify-center font-heading text-lg text-modura-gray-500">Software Expertise</div>}
 
               </div>
 
-              <h1
+            </motion.div>
 
-                className="
+            <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: .6 }} className="min-w-0">
 
-                  mt-5
+              <div className="flex min-w-0 items-center gap-3">
 
-                  font-heading
+                <span className="h-[2px] w-9 shrink-0 bg-modura-secondary" />
 
-                  text-[clamp(32px,7vw,46px)]
+                <span className="min-w-0 break-words font-body text-[10px] font-bold uppercase tracking-[.2em] text-modura-secondary">{software.category}</span>
 
-                  font-bold
+              </div>
 
-                  leading-[0.95]
+              <h1 className="mt-5 break-words font-heading text-[clamp(32px,5vw,70px)] font-bold leading-[1.08] tracking-tight text-modura-primary">{software.title}</h1>
 
-                  tracking-tight
+              {software.shortDescription && (
 
-                  text-modura-primary
+                <RichHTML html={software.shortDescription} className="mt-6 text-[15px] leading-7 sm:text-[17px]" />
 
-                  sm:text-[60px]
-
-                  lg:text-[clamp(48px,5vw,72px)]
-
-                "
-
-              >
-
-                {software.title}
-
-              </h1>
-
-              <p
-
-                className="
-
-                  mt-6
-
-                  max-w-[620px]
-
-                  font-body
-
-                  text-[15px]
-
-                  leading-7
-
-                  text-modura-gray-600
-
-                  sm:text-[17px]
-
-                "
-
-              >
-
-                {software.shortDescription}
-
-              </p>
+              )}
 
             </motion.div>
 
@@ -3375,867 +769,73 @@ const truncateText = (text: string = "", maxLength = 80) => {
 
       </section>
 
-      {/* ======================================================
 
-          OVERVIEW
 
-      \\====================================================== */}
+      {/* CMS CONTENT: one single content stream, no guessed / duplicated sections */}
 
-      <section className="bg-modura-off-white">
+      {software.longDescription.trim() && (
 
-        <div
+        <section className="bg-modura-off-white">
 
-          className="
+          <div className="mx-auto w-full max-w-full px-4 py-10 md:px-6 lg:px-10 lg:py-16 2xl:px-16">
 
-             mx-auto
+            <SectionHeading label="Software Expertise" title="Detailed" accent="Overview" />
 
-            max-w-full
+            <div className="mt-7 min-w-0 w-full max-w-full bg-white px-4 py-7 sm:px-8 sm:py-10 lg:px-10 2xl:px-16">
 
-            px-4
+              <RichHTML html={software.longDescription} className="" />
 
-            md:px-6
-
-            lg:px-10
-
-            2xl:px-16
-
-            py-8
-
-            sm:py-10
-
-          "
-
-        >
-
-          <SectionHeading
-
-            label="Overview"
-
-            title="About"
-
-            accent={software.title}
-
-          />
-
-          <div className="mt-5 max-w-[1000px] space-y-3">
-
-            {software.overview.map(
-
-              (paragraph, index) => (
-
-                <motion.p
-
-                  key={index}
-
-                  initial={{
-
-                    opacity: 0,
-
-                    y: 10,
-
-                  }}
-
-                  whileInView={{
-
-                    opacity: 1,
-
-                    y: 0,
-
-                  }}
-
-                  viewport={{
-
-                    once: true,
-
-                    amount: 0.2,
-
-                  }}
-
-                  transition={{
-
-                    duration: 0.45,
-
-                    delay: index * 0.04,
-
-                  }}
-
-                  className="
-
-                    font-body
-
-                    text-[14px]
-
-                    leading-7
-
-                    text-modura-gray-600
-
-                    sm:text-[15px]
-
-                    sm:leading-[2]
-
-                  "
-
-                >
-
-                  {paragraph}
-
-                </motion.p>
-
-              )
-
-            )}
+            </div>
 
           </div>
 
-        </div>
+        </section>
 
-      </section>
+      )}
 
-      {/* ======================================================
 
-          OUR APPROACH
 
-      \\====================================================== */}
+      {software.faqs.length > 0 && (
 
-      <section className="bg-white">
+        <section className="bg-white">
 
-        <div
+          <div className="mx-auto w-full max-w-full px-4 py-10 md:px-6 lg:px-10 lg:py-14 2xl:px-16">
 
-          className="
+            <SectionHeading label="FAQ" title="Frequently Asked" accent="Questions" />
 
-           mx-auto
+            <div className="mt-7 border-t border-modura-gray-300">
 
-            max-w-full
+              {software.faqs.map((faq, index) => {
 
-            px-4
-
-            md:px-6
-
-            lg:px-10
-
-            2xl:px-16
-
-            py-8
-
-            sm:py-10
-
-          "
-
-        >
-
-          <SectionHeading
-
-            label="Our Approach"
-
-            title="How We Use"
-
-            accent={software.title}
-
-          />
-
-          <div className="mt-5 max-w-[1000px] space-y-3">
-
-            {software.approach.map(
-
-              (paragraph, index) => (
-
-                <p
-
-                  key={index}
-
-                  className="
-
-                    font-body
-
-                    text-[14px]
-
-                    leading-7
-
-                    text-modura-gray-600
-
-                    sm:text-[15px]
-
-                    sm:leading-[2]
-
-                  "
-
-                >
-
-                  {paragraph}
-
-                </p>
-
-              )
-
-            )}
-
-          </div>
-
-        </div>
-
-      </section>
-
-      {/* ======================================================
-
-          COMMON APPLICATIONS
-
-      \\====================================================== */}
-
-      <section className="bg-modura-off-white">
-
-        <div
-
-          className="
-
-            mx-auto
-
-            max-w-full
-
-            px-4
-
-            md:px-6
-
-            lg:px-10
-
-            2xl:px-16
-
-            py-8
-
-            sm:py-10
-
-          "
-
-        >
-
-          <SectionHeading
-
-            label="Common Applications"
-
-            title="Where"
-
-            accent={`${software.title} Is Used`}
-
-          />
-
-          <p
-
-            className="
-
-              mt-5
-
-              max-w-[950px]
-
-              font-body
-
-              text-[14px]
-
-              leading-7
-
-              text-modura-gray-600
-
-              sm:text-[15px]
-
-            "
-
-          >
-
-            Our expertise can be applied across different project
-
-            types and documentation requirements. Depending on
-
-            the project scope, the software can support design,
-
-            coordination, drafting, detailing and construction
-
-            documentation.
-
-          </p>
-
-          <div
-
-            className="
-
-              mt-5 md:mt-6
-
-              grid
-
-              gap-x-10
-
-              sm:grid-cols-2
-
-            "
-
-          >
-
-            {software.applications.map((item) => (
-
-              <div
-
-                key={item}
-
-                className="
-
-                  flex
-
-                  items-center
-
-                  gap-4
-
-                  border-b
-
-                  border-modura-gray-200
-
-                  py-4
-
-                "
-
-              >
-
-                <span
-
-                  className="
-
-                    flex
-
-                    h-8
-
-                    w-8
-
-                    shrink-0
-
-                    items-center
-
-                    justify-center
-
-                    bg-modura-secondary
-
-                    text-white
-
-                  "
-
-                >
-
-                  <Check
-
-                    size={14}
-
-                    strokeWidth={2}
-
-                  />
-
-                </span>
-
-                <span
-
-                  className="
-
-                    font-body
-
-                    text-[14px]
-
-                    text-modura-gray-600
-
-                    sm:text-[15px]
-
-                  "
-
-                >
-
-                  {item}
-
-                </span>
-
-              </div>
-
-            ))}
-
-          </div>
-
-        </div>
-
-      </section>
-
-      {/* ======================================================
-
-          WORKFLOW
-
-      \\====================================================== */}
-
-      <section className="bg-white">
-
-        <div
-
-          className="
-
-            mx-auto
-
-            max-w-full
-
-            px-4
-
-            md:px-6
-
-            lg:px-10
-
-            2xl:px-16
-
-            py-8
-
-            sm:py-10
-
-          "
-
-        >
-
-          <SectionHeading
-
-            label="Project Workflow"
-
-            title="Our"
-
-            accent="Process"
-
-          />
-
-          <p
-
-            className="
-
-              mt-5
-
-              max-w-[900px]
-
-              font-body
-
-              text-[14px]
-
-              leading-7
-
-              text-modura-gray-600
-
-              sm:text-[15px]
-
-            "
-
-          >
-
-            Every project is handled through a structured workflow
-
-            designed to keep documentation clear, coordinated and
-
-            aligned with the required project standards.
-
-          </p>
-
-          <div className="mt-5 md:mt-6">
-
-            {software.workflow.map((step) => (
-
-              <div
-
-                key={step}
-
-                className="
-
-                  flex
-
-                  items-center
-
-                  gap-5
-
-                  border-t
-
-                  border-modura-gray-200
-
-                  py-4
-
-                  last:border-b
-
-                "
-
-              >
-
-                <span
-
-                  className="
-
-                    flex
-
-                    h-9
-
-                    w-9
-
-                    shrink-0
-
-                    items-center
-
-                    justify-center
-
-                    border
-
-                    border-modura-secondary
-
-                    text-modura-secondary
-
-                  "
-
-                >
-
-                  <Check
-
-                    size={16}
-
-                    strokeWidth={1.8}
-
-                  />
-
-                </span>
-
-                <span
-
-                  className="
-
-                    font-body
-
-                    text-[14px]
-
-                    text-modura-gray-600
-
-                    sm:text-[15px]
-
-                  "
-
-                >
-
-                  {step}
-
-                </span>
-
-              </div>
-
-            ))}
-
-          </div>
-
-        </div>
-
-      </section>
-
-      {/* ======================================================
-
-          FAQ
-
-      \\====================================================== */}
-
-      <section className="bg-modura-off-white">
-
-        <div
-
-          className="
-
-            mx-auto
-
-            max-w-full
-
-            px-4
-
-            md:px-6
-
-            lg:px-10
-
-            2xl:px-16
-
-            py-8
-
-            sm:py-10
-
-          "
-
-        >
-
-          <SectionHeading
-
-            label="FAQ"
-
-            title="Frequently Asked"
-
-            accent="Questions"
-
-          />
-
-          <div
-
-            className="
-
-              mt-5 md:mt-6
-
-              border-t
-
-              border-modura-gray-300
-
-            "
-
-          >
-
-            {software.faqs.map(
-
-              (faq, index) => {
-
-                const open =
-
-                  activeFaq === index;
+                const open = activeFaq === index;
 
                 return (
 
-                  <div
+                  <div key={faq.id ?? index} className="border-b border-modura-gray-300">
 
-                    key={faq.question}
+                    <button type="button" aria-expanded={open} onClick={() => setActiveFaq(open ? null : index)} className="flex w-full min-w-0 items-center gap-4 py-5 text-left">
 
-                    className="
+                      <span className={`flex h-9 w-9 shrink-0 items-center justify-center border ${open ? "border-modura-secondary bg-modura-secondary text-white" : "border-modura-gray-300 text-modura-secondary"}`}>
 
-                      border-b
-
-                      border-modura-gray-300
-
-                    "
-
-                  >
-
-                    <button
-
-                      type="button"
-
-                      onClick={() =>
-
-                        setActiveFaq(
-
-                          open ? null : index
-
-                        )
-
-                      }
-
-                      className="
-
-                        flex
-
-                        w-full
-
-                        items-center
-
-                        gap-5
-
-                        py-4
-
-                        text-left
-
-                      "
-
-                    >
-
-                      {/* FAQ ICON */}
-
-                      <span
-
-                        className={`
-
-                          flex
-
-                          h-9
-
-                          w-9
-
-                          shrink-0
-
-                          items-center
-
-                          justify-center
-
-                          border
-
-                          transition-all
-
-                          duration-300
-
-                          ${
-
-                            open
-
-                              ? "border-modura-secondary bg-modura-secondary text-white"
-
-                              : "border-modura-gray-300 text-modura-secondary"
-
-                          }
-
-                        `}
-
-                      >
-
-                        {open ? (
-
-                          <Minus
-
-                            size={16}
-
-                            strokeWidth={1.8}
-
-                          />
-
-                        ) : (
-
-                          <Plus
-
-                            size={16}
-
-                            strokeWidth={1.8}
-
-                          />
-
-                        )}
+                        {open ? <Minus size={16} /> : <Plus size={16} />}
 
                       </span>
 
-                      {/* QUESTION */}
-
-                      <span
-
-                        className={`
-
-                          flex-1
-
-                          font-heading
-
-                          text-[16px]
-
-                          font-bold
-
-                          transition-colors
-
-                          duration-300
-
-                          sm:text-[19px]
-
-                          ${
-
-                            open
-
-                              ? "text-modura-secondary"
-
-                              : "text-modura-primary"
-
-                          }
-
-                        `}
-
-                      >
-
-                        {faq.question}
-
-                      </span>
+                      <span className={`min-w-0 flex-1 break-words font-heading text-[16px] font-semibold sm:text-[19px] ${open ? "text-modura-secondary" : "text-modura-primary"}`}>{faq.question}</span>
 
                     </button>
 
-                    {/* ANSWER */}
+                    <AnimatePresence initial={false}>
 
-                    <AnimatePresence
+                      {open && <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: "auto", opacity: 1 }} exit={{ height: 0, opacity: 0 }} transition={{ duration: .3 }} className="overflow-hidden">
 
-                      initial={false}
+                        <div className="pb-7 pl-0 sm:pl-[52px]">
 
-                    >
+                          <div className="border-l-2 border-modura-secondary pl-4 sm:pl-5"><RichHTML html={faq.answer} className="text-[14px] leading-7" /></div>
 
-                      {open && (
+                        </div>
 
-                        <motion.div
-
-                          initial={{
-
-                            height: 0,
-
-                            opacity: 0,
-
-                          }}
-
-                          animate={{
-
-                            height: "auto",
-
-                            opacity: 1,
-
-                          }}
-
-                          exit={{
-
-                            height: 0,
-
-                            opacity: 0,
-
-                          }}
-
-                          transition={{
-
-                            duration: 0.3,
-
-                            ease: "easeInOut",
-
-                          }}
-
-                        >
-
-                          <div
-
-                            className="
-
-                              pb-7
-
-                              pl-14
-
-                              pr-5
-
-                              sm:pl-14
-
-                              sm:pr-10
-
-                            "
-
-                          >
-
-                            <p
-
-                              className="
-
-                                max-w-[850px]
-
-                                border-l
-
-                                border-modura-secondary
-
-                                pl-5
-
-                                font-body
-
-                                text-[13px]
-
-                                leading-7
-
-                                text-modura-gray-600
-
-                                sm:text-[14px]
-
-                                sm:leading-7
-
-                              "
-
-                            >
-
-                              {faq.answer}
-
-                            </p>
-
-                          </div>
-
-                        </motion.div>
-
-                      )}
+                      </motion.div>}
 
                     </AnimatePresence>
 
@@ -4243,666 +843,353 @@ const truncateText = (text: string = "", maxLength = 80) => {
 
                 );
 
-              }
+              })}
 
-            )}
+            </div>
 
           </div>
 
+        </section>
+
+      )}
+
+
+
+    
+      
+{software.blogs.length > 0 && (
+  <section
+    ref={blogSectionRef}
+    className="
+      relative
+      overflow-hidden
+      bg-modura-off-white
+      py-10
+      md:py-12
+    "
+  >
+    <div
+      className="
+        relative
+        z-10
+        mx-auto
+        w-full
+        max-w-full
+        px-4
+        md:px-6
+        lg:px-10
+        2xl:px-16
+      "
+    >
+      {/* HEADER */}
+
+      <div className="mb-8 text-center">
+        <div
+          className="
+            flex
+            items-center
+            justify-center
+            gap-3
+            font-body
+            text-xs
+            font-bold
+            uppercase
+            tracking-[5px]
+            text-modura-secondary
+          "
+        >
+          <DraftingCompass
+            size={20}
+            strokeWidth={1.5}
+          />
+
+          <span>OUR BLOG</span>
         </div>
 
-      </section>
+        <h2
+          className="
+            mt-4
+            font-heading
+            text-3xl
+            font-semibold
+            text-modura-primary
+            sm:text-5xl
+            lg:text-6xl
+          "
+        >
+          Engineering{" "}
+          <span className="text-modura-secondary">
+            Insights
+          </span>
+        </h2>
+      </div>
 
-    <section
+      {/* BLOG GRID */}
 
-         ref={sectionRef}
-
-         className="
-
-relative
-
-overflow-hidden
-
-bg-modura-off-white
-
-py-8 md:py-10
-
-"
-
+      <div
+        className="
+          grid
+          gap-5
+          md:grid-cols-2
+          md:gap-8
+          lg:grid-cols-3
+        "
       >
+        {software.blogs.map((blog) => {
+          const imageSrc = getAssetUrl(
+            blog.imageUrl || blog.image
+          );
 
-         <div
+          const blogHref = `/blogDetail/${blog.slug}`;
 
-            className="
-
-relative
-
-z-10
-
-max-w-full
-mx-auto
-px-4
-md:px-6
-lg:px-10
-2xl:px-16
-
-"
-
-         >
-
-            {/* HEADER */}
-
-            <div
-
-               className="
-
-text-center
-
-mb-8 md:mb-10
-
-"
-
+          return (
+            <motion.article
+              key={blog.id}
+              whileHover={{ y: -12 }}
+              transition={{ duration: 0.35 }}
+              className="
+                blog-card
+                group
+                flex
+                h-full
+                min-w-0
+                flex-col
+                overflow-hidden
+                bg-white
+                shadow-xl
+              "
             >
+              {/* IMAGE */}
 
-               <div className="
-
-flex
-
-items-center
-
-gap-3
-
-font-body
-
-justify-center
-
-font-bold
-
-text-xs
-
-uppercase
-
-tracking-[5px]
-
-text-modura-secondary
-
-">
-
-                  <DraftingCompass
-
-                     size={20}
-
-                     strokeWidth={1.5}
-
-                     className="
-
-text-modura-secondary
-
-"
-
-                  />
-
-                  <span>
-
-                     OUR BLOG
-
-                  </span>
-
-               </div>
-
-               <h2
-
+              <Link
+                href={blogHref}
+                className="block"
+              >
+                <div
                   className="
+                    relative
+                    h-[200px]
+                    overflow-hidden
+                    bg-modura-light
+                    sm:h-[230px]
+                  "
+                >
+                  {imageSrc && (
+                    <Image
+                      src={imageSrc}
+                      alt={blog.title}
+                      fill
+                      unoptimized
+                      sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                      className="
+                        object-cover
+                        transition-transform
+                        duration-700
+                        group-hover:scale-110
+                      "
+                    />
+                  )}
+                </div>
+              </Link>
 
-mt-4
+              {/* CONTENT */}
 
-font-heading
+              <div
+                className="
+                  flex
+                  min-w-0
+                  flex-1
+                  flex-col
+                  px-4
+                  py-5
+                  sm:px-6
+                  lg:px-8
+                "
+              >
+                {/* DATE */}
 
-text-3xl sm:text-4xl lg:text-5xl
+                {blog.publishedAt &&
+                  !Number.isNaN(
+                    new Date(blog.publishedAt).getTime()
+                  ) && (
+                    <div
+                      className="
+                        mb-1
+                        font-heading
+                        text-md
+                        font-bold
+                        uppercase
+                        tracking-wide
+                        text-modura-black
+                      "
+                    >
+                      {new Date(
+                        blog.publishedAt
+                      ).toLocaleDateString("en-US", {
+                        day: "2-digit",
+                        month: "short",
+                        year: "numeric",
+                      })}
+                    </div>
+                  )}
 
-lg:text-6xl
+                {/* TITLE */}
 
-font-semibold
+                <h3
+                  className="
+                    break-words
+                    font-heading
+                    text-[20px]
+                    font-semibold
+                    leading-tight
+                    text-modura-secondary
+                  "
+                >
+                  <Link href={blogHref}>
+                    {blog.title}
+                  </Link>
+                </h3>
 
-text-modura-primary
+                {/* DESCRIPTION */}
 
-"
+                {blog.description && (
+                  <div
+                    className="
+                      mt-1
+                      line-clamp-3
+                      font-body
+                      text-sm
+                      leading-7
+                      text-modura-black
+                    "
+                  >
+                    <BlogExcerpt
+                      html={blog.description}
+                    />
+                  </div>
+                )}
 
-               >
+                {/* READ MORE BUTTON */}
 
-                  Engineering
+                <Link
+                  href={blogHref}
+                  className="
+                    group/btn
+                    relative
+                    mt-auto
+                    flex
+                    h-[58px]
+                    w-[200px]
+                    max-w-full
+                    items-center
+                    justify-between
+                    overflow-hidden
+                    border-2
+                    border-modura-secondary
+                    bg-white
+                    px-7
+                    font-body
+                    font-semibold
+                    text-modura-primary
+                    clip-read-btn
+                    transition-all
+                    duration-500
+                    pt-0
+                  "
+                  style={{
+                    marginTop: "auto",
+                  }}
+                >
+                  {/* HOVER LAYER */}
 
                   <span
+                    className="
+                      absolute
+                      inset-0
+                      translate-y-full
+                      bg-modura-secondary
+                      transition-transform
+                      duration-500
+                      ease-out
+                      group-hover/btn:translate-y-0
+                    "
+                  />
 
-                     className="
+                  {/* TEXT */}
 
-text-modura-secondary ml-2
-
-"
-
+                  <span
+                    className="
+                      relative
+                      z-10
+                      whitespace-nowrap
+                      transition-all
+                      duration-500
+                      group-hover/btn:tracking-wider
+                      group-hover/btn:text-white
+                    "
                   >
-
-                     Insights
-
+                    Read More
                   </span>
 
-               </h2>
+                  {/* ARROW */}
+
+                  <span
+                    className="
+                      relative
+                      z-10
+                      flex
+                      h-10
+                      w-12
+                      items-center
+                      justify-center
+                      bg-modura-secondary
+                      text-modura-primary
+                      clip-arrow-box
+                      transition-all
+                      duration-500
+                      group-hover/btn:rotate-12
+                      group-hover/btn:translate-x-1
+                      group-hover/btn:bg-modura-primary
+                      group-hover/btn:text-white
+                    "
+                  >
+                    <ArrowRight
+                      size={18}
+                      className="
+                        transition-transform
+                        duration-500
+                        group-hover/btn:translate-x-1
+                      "
+                    />
+                  </span>
+                </Link>
+              </div>
+            </motion.article>
+          );
+        })}
+      </div>
+    </div>
+  </section>
+)}
 
-            </div>
 
-            {/* BLOG GRID */}
 
-            <div
-
-               className="
-
-grid
-
-md:grid-cols-2
-
-lg:grid-cols-3
-
-gap-5 md:gap-8
-
-"
-
-            >
-
-               {
-
-                  software.blogs.map((blog, index) => (
-
-                     <motion.article
-
-                        key={index}
-
-           whileHover={{
-
-                           y: -12
-
-                        }}
-
-                        transition={{
-
-                           duration: .35
-
-                        }}
-
-                        className="
-
-blog-card
-
-bg-white
-
-shadow-xl
-
-overflow-hidden
-
-blog-card-shape
-
-min-h-[400px] h-auto
-
-"
-
-                     >
-
-                        {/* IMAGE */}
-
-                        <Link
-
-                           href="blogDetail">
-
-                           <div
-
-                              className="
-
-relative
-
-h-[230px]
-
-overflow-hidden
-
-blog-image-shape
-
-"
-
-                           >
-
-                              <img
-
-                                src={getAssetUrl(blog.imageUrl || blog.image)}
-
-                                alt={blog.title}
-
-                                className="
-
-object-cover
-
-transition-transform
-
-duration-700
-
-group-hover:scale-110
-
-"
-
-                             />
-
-                           </div>
-
-                           {/* CONTENT */}
-
-                           <div
-
-                              className="
-
-px-4 sm:px-6 lg:px-8
-
-py-4
-
-"
-
-                           >
-
-                              {/* DATE */}
-
-                              <div
-
-                                 className="
-
-mb-2
-
-font-heading
-
-text-modura-black
-
-font-bold
-
-text-lg
-
-tracking-wide
-
-"
-
-                              >
-
-                                 {blog.publishedAt ? new Date(blog.publishedAt).toLocaleDateString("en-US", { day: "2-digit", month: "short", year: "numeric" }) : ""}
-
-                              </div>
-
-                              <h3
-
-                                 className="
-
-font-heading
-
-text-[20px]
-
-font-semibold
-
-leading-tight
-
-text-modura-secondary
-
-"
-
-                              >
-
-                                 {blog.title}
-
-                              </h3>
-
-  <p
-
-    className="
-
-      mt-2
-
-      font-body
-
-      text-sm
-
-      leading-7
-
-      text-modura-black
-
-    "
-
-  >
-
-    {truncateText(
-
-      blog.description  || "",
-
-      80
-
-    )}
-
-  </p>
-
-                              <button
-
-                                 className="
-
-group
-
-relative
-
-mt-3
-
-flex
-
-h-[58px]
-
-w-[200px]
-
-items-center
-
-justify-between
-
-overflow-hidden
-
-bg-modura-white
-
-px-7
-
-font-body
-
-font-semibold
-
-text-modura-primary
-
-clip-read-btn
-
-transition-all
-
-duration-500
-
-border-2
-
-border-modura-secondary
-
-"
-
-                              >
-
-                                 {/* Hover Layer */}
-
-                                 <span
-
-                                    className="
-
-absolute
-
-inset-0
-
-bg-modura-secondary
-
-translate-y-full
-
-transition-transform
-
-duration-500
-
-ease-out
-
-group-hover:translate-y-0
-
-"
-
-                                 />
-
-                                 {/* Text */}
-
-                                 <span
-
-                                    className="
-
-relative
-
-z-10
-
-transition-all
-
-duration-500
-
-group-hover:tracking-wider
-
-"
-
-                                 >
-
-                                    Read More
-
-                                 </span>
-
-                                 {/* Arrow */}
-
-                                 <span
-
-                                    className="
-
-relative
-
-z-10
-
-flex
-
-h-10
-
-w-12
-
-items-center
-
-justify-center
-
-bg-modura-secondary
-
-text-modura-primary
-
-clip-arrow-box
-
-transition-all
-
-duration-500
-
-group-hover:rotate-12
-
-group-hover:translate-x-1
-
-group-hover:bg-modura-primary
-
-group-hover:text-white
-
-"
-
-                                 >
-
-                                    <ArrowRight
-
-                                       size={18}
-
-                                       className="
-
-transition-transform
-
-duration-500
-
-group-hover:translate-x-1
-
-"
-
-                                    />
-
-                                 </span>
-
-                              </button>
-
-                           </div>
-
-                        </Link>
-
-                     </motion.article>
-
-                  ))
-
-               }
-
-            </div>
-
-         </div>
-
-      </section>
-
-      {/* ======================================================
-
-          START YOUR PROJECT CTA
-
-      \\====================================================== */}
 
       <section className="bg-modura-light">
 
-        <div
-
-          className="
-
-            mx-auto
-
-            flex
-
-            max-w-full
-
-            flex-col
-
-            gap-7
-
-            px-4
-
-            py-8
-
-            md:px-6
-
-           lg:px-10
-
-           2xl:px-16
-
-            sm:py-10
-
-            md:flex-row
-
-            md:items-center
-
-            md:justify-between
-
-            lg:py-10
-
-          "
-
-        >
+        <div className="mx-auto flex w-full max-w-full flex-col gap-7 px-4 py-10 md:flex-row md:items-center md:justify-between md:px-6 lg:px-10 2xl:px-16">
 
           <div className="min-w-0 max-w-[700px]">
 
-            <span
+            <span className="font-body text-[10px] font-bold uppercase tracking-[.25em] text-modura-secondary">Let's Work Together</span>
 
-              className="
+            <h2 className="mt-3 break-words font-heading text-[clamp(32px,5vw,48px)] font-bold leading-tight">Start Your Project <span className="text-modura-secondary">With Us</span></h2>
 
-                font-body
-
-                text-[10px]
-
-                font-bold
-
-                uppercase
-
-                tracking-[0.25em]
-
-                text-modura-secondary
-
-              "
-
-            >
-
-              Let's Work Together
-
-            </span>
-
-            <h2
-
-              className="
-
-                mt-3
-
-                font-heading
-
-                text-[34px]
-
-                font-bold
-
-                leading-tight
-
-                text-modura-primary
-
-                sm:text-[clamp(32px,7vw,46px)]
-
-              "
-
-            >
-
-              Start Your Project{" "}
-
-              <span className="text-modura-secondary">
-
-                With Us
-
-              </span>
-
-            </h2>
-
-            <p
-
-              className="
-
-                mt-3
-
-                max-w-[620px]
-
-                font-body
-
-                text-[13px]
-
-                leading-7
-
-                text-modura-gray-600
-
-                sm:text-[14px]
-
-              "
-
-            >
-
-              Have a project that requires reliable{" "}
-
-              {software.title} expertise? Let's discuss
-
-              your requirements and find the right technical
-
-              approach for your project.
-
-            </p>
+            <p className="mt-3 font-body text-sm leading-7 text-modura-gray-600">Have a project that requires reliable {software.title} expertise? Let's discuss your requirements.</p>
 
           </div>
 
-          <div className="shrink-0 self-start md:self-center">
-
-            <AnimatedButton
-
-              href="/inquiry"
-
-              title="Get In Touch"
-
-            />
-
-          </div>
+          <div className="shrink-0 self-start md:self-center"><AnimatedButton href="/inquiry" title="Get In Touch" /></div>
 
         </div>
 
@@ -4914,107 +1201,39 @@ group-hover:translate-x-1
 
 }
 
-// ============================================================
 
-// SECTION HEADING
 
-// ============================================================
+function BlogExcerpt({ html }: { html: string }) {
 
-function SectionHeading({
+  const [text, setText] = useState("");
 
-  label,
+  useEffect(() => {
 
-  title,
+    const sanitized = DOMPurify.sanitize(html, { ALLOWED_TAGS: [] });
 
-  accent,
+    const decoded = document.createElement("textarea");
 
-}: {
+    decoded.innerHTML = sanitized;
 
-  label: string;
+    setText(decoded.value.replace(/\s+/g, " ").trim());
 
-  title: string;
+  }, [html]);
 
-  accent: string;
+  return <p className="font-body text-sm leading-6 text-modura-gray-600">{text}</p>;
 
-}) {
+}
+
+
+
+function SectionHeading({ label, title, accent }: { label: string; title: string; accent: string }) {
 
   return (
 
-    <div>
+    <div className="min-w-0">
 
-      <div className="flex items-center gap-3">
+      <div className="flex items-center gap-3"><span className="h-[2px] w-9 shrink-0 bg-modura-secondary"/><span className="font-body text-[10px] font-bold uppercase tracking-[.2em] text-modura-secondary">{label}</span></div>
 
-        <span
-
-          className="
-
-            h-[2px]
-
-            w-9
-
-            bg-modura-secondary
-
-          "
-
-        />
-
-        <span
-
-          className="
-
-            font-body
-
-            text-[10px]
-
-            font-bold
-
-            uppercase
-
-            tracking-[0.25em]
-
-            text-modura-secondary
-
-          "
-
-        >
-
-          {label}
-
-        </span>
-
-      </div>
-
-      <h2
-
-        className="
-
-          mt-3
-
-          font-heading
-
-          text-[clamp(30px,6vw,36px)]
-
-          font-bold
-
-          leading-tight
-
-          text-modura-primary
-
-          sm:text-[48px]
-
-        "
-
-      >
-
-        {title}{" "}
-
-        <span className="text-modura-secondary">
-
-          {accent}
-
-        </span>
-
-      </h2>
+      <h2 className="mt-3 break-words font-heading text-[clamp(30px,5vw,48px)] font-bold leading-tight text-modura-primary">{title} <span className="text-modura-secondary">{accent}</span></h2>
 
     </div>
 

@@ -757,7 +757,7 @@ export default function Header() {
 
                                             <span
                                                 className="
-                                                    text-[9px]
+                                                    text-[12px]
                                                     font-bold
                                                     uppercase
                                                     tracking-[0.2em]
@@ -989,7 +989,7 @@ export default function Header() {
 
                                                 <span
                                                     className="
-                                                        text-[9px]
+                                                        text-[12px]
                                                         font-bold
                                                         uppercase
                                                         tracking-[0.2em]
@@ -1072,20 +1072,7 @@ export default function Header() {
                                         </div>
 
 
-                                        {/* DESCRIPTION */}
-
-                                        <p
-                                            className="
-                                                mt-4
-                                                text-[11px]
-                                                leading-[1.7]
-                                                text-modura-gray-500
-                                            "
-                                        >
-                                            Explore our professional
-                                            engineering and architectural
-                                            services.
-                                        </p>
+                                     
 
 
                                         {/* SERVICE LIST */}

@@ -277,9 +277,17 @@ export default function FormField({ field, value, onChange, error, setError, rec
     case 'code':
       control = <textarea rows={5} className={`code ${invalid ? 'invalid' : ''}`} placeholder="<script> ... </script>" value={text} onChange={(e) => onChange(e.target.value)} spellCheck={false} />;
       break;
-    case 'editor':
-      control = <RichEditor value={text} onChange={onChange} small={field.small} invalid={invalid} />;
-      break;
+ case "editor":
+  control = (
+    <RichEditor
+      value={text}
+      onChange={(html: string) => onChange(html)}
+      small={field.small ?? false}
+      invalid={invalid}
+    />
+  );
+  break;
+  break;
     case 'select':
       control = <SelectField field={field} value={text} onChange={onChange} invalid={invalid} />;
       break;

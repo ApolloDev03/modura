@@ -4683,9 +4683,9 @@ function ContactItem({
 
           flex
 
-          h-10
+          h-11
 
-          w-10
+          w-11
 
           shrink-0
 
@@ -4717,7 +4717,7 @@ function ContactItem({
 
               font-body
 
-              text-[9px]
+              text-[13px]
 
               font-bold
 
@@ -4745,7 +4745,7 @@ function ContactItem({
 
             font-body
 
-            text-sm
+            text-md
 
             font-semibold
 
@@ -4767,11 +4767,11 @@ function ContactItem({
 
             font-body
 
-            text-[11px]
+            text-[12px]
 
             leading-5
 
-            text-white/50
+            text-white
 
           "
 
