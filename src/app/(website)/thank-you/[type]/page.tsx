@@ -11,7 +11,6 @@ const thankYouContent = {
     message:
       "Thank you for your inquiry. We will get back to you shortly.",
   },
-
   apply: {
     title: "Thank",
     subtitle: "for Applying",
@@ -36,284 +35,280 @@ export default function ThankYouPage() {
     <main
       className="
         relative
-        h-[calc(100svh-80px)]
-        min-h-0
+        flex
+        min-h-[calc(100svh-110px)]
         w-full
+        items-center
+        justify-center
         overflow-hidden
         bg-modura-off-white
+        px-4
+        py-10
+        sm:min-h-[calc(100svh-90px)]
+        sm:px-6
+        sm:py-14
+        lg:px-10
       "
     >
-      {/* Background */}
+      {/* SUBTLE BACKGROUND */}
+
       <div
         className="
           pointer-events-none
           absolute
           inset-0
-          bg-[radial-gradient(circle_at_center,rgba(89,106,121,0.05),transparent_45%)]
+          bg-[radial-gradient(ellipse_at_center,rgba(89,106,121,0.07)_0%,transparent_65%)]
         "
       />
 
-      {/* Main */}
+      {/* CONTENT */}
+
       <section
         className="
           relative
+          z-10
+          mx-auto
           flex
-          h-full
           w-full
-          items-start
+          max-w-[850px]
+          flex-col
+          items-center
           justify-center
-          overflow-hidden
+          text-center
         "
       >
+        {/* ANIMATED SVG */}
+
         <div
           className="
-            flex
             w-full
-            max-w-[900px]
-            flex-col
-            items-center
-            justify-start
-            px-5
-            text-center
-            pt-0
+            max-w-[350px]
+            min-[400px]:max-w-[390px]
+            sm:max-w-[560px]
+            md:max-w-[650px]
+            lg:max-w-[700px]
           "
         >
-
-          {/* =================================================
-              THANK YOU ANIMATION
-          ================================================= */}
-
-          <div
-            className="
-              w-full
-              max-w-[700px]
-              shrink-0
-            "
+          <svg
+            viewBox="0 0 760 350"
+            preserveAspectRatio="xMidYMid meet"
+            className="block h-auto w-full"
+            role="img"
+            aria-label={`${content.title} ${content.subtitle}`}
           >
-            <svg
-              viewBox="0 0 760 455"
-              preserveAspectRatio="xMidYMid meet"
-              className="
-                block
-                h-auto
-                w-full
-                overflow-visible
-              "
+            {/* THANK */}
+
+            <motion.text
+              x="380"
+              y="140"
+              textAnchor="middle"
+              className="font-heading"
+              style={{
+                fontSize: "148px",
+                fontStyle: "italic",
+                fontWeight: 900,
+                fontFamily: "var(--font-heading)",
+                letterSpacing: "-4px",
+              }}
+              fill="none"
+              stroke="var(--modura-secondary)"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeDasharray="1800"
+              initial={{
+                strokeDashoffset: 1800,
+                opacity: 0,
+              }}
+              animate={{
+                strokeDashoffset: 0,
+                opacity: 1,
+              }}
+              transition={{
+                opacity: {
+                  duration: 0.1,
+                },
+                strokeDashoffset: {
+                  duration: 1.9,
+                  ease: "easeInOut",
+                },
+              }}
             >
+              {content.title}
+            </motion.text>
 
-              {/* THANK */}
+            {/* SECOND LINE */}
 
-              <motion.text
-                x="380"
-                y="175"
-                textAnchor="middle"
-                className="font-heading italic"
-                style={{
-                  fontSize: "165px",
-                  fontStyle: "italic",
-                  fontWeight: 900,
-                  fontFamily: "var(--font-heading)",
-                  letterSpacing: "-4px",
-                }}
-                fill="none"
-                stroke="var(--modura-secondary)"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeDasharray="1800"
-                initial={{
-                  strokeDashoffset: 1800,
-                  opacity: 0,
-                }}
-                animate={{
-                  strokeDashoffset: 0,
-                  opacity: 1,
-                }}
-                transition={{
-                  opacity: {
-                    duration: 0.1,
-                  },
-                  strokeDashoffset: {
-                    duration: 4,
-                    ease: "easeInOut",
-                  },
-                }}
-              >
-                {content.title}
-              </motion.text>
-
-
-              {/* FOR INQUIRY / FOR APPLYING */}
-
-              <motion.text
-                x="380"
-                y="320"
-                textAnchor="middle"
-                className="font-heading italic"
-                style={{
-                  fontSize: "140px",
-                  fontStyle: "italic",
-                  fontWeight: 900,
-                  fontFamily: "var(--font-heading)",
-                  letterSpacing: "-4px",
-                }}
-                fill="none"
-                stroke="var(--modura-secondary)"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeDasharray="1800"
-                initial={{
-                  strokeDashoffset: 1800,
-                  opacity: 0,
-                }}
-                animate={{
-                  strokeDashoffset: 0,
-                  opacity: 1,
-                }}
-                transition={{
-                  opacity: {
-                    delay: 3.5,
-                    duration: 0.1,
-                  },
-                  strokeDashoffset: {
-                    delay: 3.5,
-                    duration: 3.5,
-                    ease: "easeInOut",
-                  },
-                }}
-              >
-                {content.subtitle}
-              </motion.text>
-
-
-              {/* MAIN LINE */}
-
-              <motion.path
-                d="
-                  M 205 355
-                  C 275 371,
-                    350 374,
-                    425 365
-                  C 500 356,
-                    565 350,
-                    635 362
-                "
-                fill="none"
-                stroke="var(--modura-secondary)"
-                strokeWidth="1.8"
-                strokeLinecap="round"
-                initial={{
-                  pathLength: 0,
-                  opacity: 0,
-                }}
-                animate={{
-                  pathLength: 1,
-                  opacity: 0.9,
-                }}
-                transition={{
-                  delay: 6.7,
-                  duration: 1.5,
+            <motion.text
+              x="380"
+              y="270"
+              textAnchor="middle"
+              textLength={
+                type === "apply" ? 680 : undefined
+              }
+              lengthAdjust="spacingAndGlyphs"
+              className="font-heading"
+              style={{
+                fontSize: "112px",
+                fontStyle: "italic",
+                fontWeight: 900,
+                fontFamily: "var(--font-heading)",
+                letterSpacing: "-3px",
+              }}
+              fill="none"
+              stroke="var(--modura-secondary)"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeDasharray="1800"
+              initial={{
+                strokeDashoffset: 1800,
+                opacity: 0,
+              }}
+              animate={{
+                strokeDashoffset: 0,
+                opacity: 1,
+              }}
+              transition={{
+                opacity: {
+                  delay: 1.7,
+                  duration: 0.1,
+                },
+                strokeDashoffset: {
+                  delay: 1.7,
+                  duration: 1.8,
                   ease: "easeInOut",
-                }}
-              />
+                },
+              }}
+            >
+              {content.subtitle}
+            </motion.text>
 
+            {/* MAIN UNDERLINE */}
 
-              {/* SECOND LINE */}
-
-              <motion.path
-                d="
-                  M 305 377
-                  C 360 383,
-                    420 383,
-                    485 376
-                "
-                fill="none"
-                stroke="var(--modura-primary)"
-                strokeWidth="0.8"
-                strokeLinecap="round"
-                initial={{
-                  pathLength: 0,
-                  opacity: 0,
-                }}
-                animate={{
-                  pathLength: 1,
-                  opacity: 0.35,
-                }}
-                transition={{
-                  delay: 7.1,
-                  duration: 1,
-                  ease: "easeInOut",
-                }}
-              />
-
-            </svg>
-          </div>
-
-
-          {/* =================================================
-              MESSAGE
-          ================================================= */}
-
-          <motion.div
-            initial={{
-              opacity: 0,
-              y: 8,
-            }}
-            animate={{
-              opacity: 1,
-              y: 0,
-            }}
-            transition={{
-              delay: 7.8,
-              duration: 0.8,
-            }}
-            className="
-              -mt-16
-              max-w-[600px]
-              px-4
-              font-body
-              text-[11px]
-              leading-5
-              tracking-wide
-              text-modura-gray-600
-              sm:-mt-7
-              sm:text-sm
-            "
-          >
-            {content.message}
-          </motion.div>
-
-
-          {/* =================================================
-              BUTTON
-          ================================================= */}
-
-          <motion.div
-            initial={{
-              opacity: 0,
-              y: 8,
-            }}
-            animate={{
-              opacity: 1,
-              y: 0,
-            }}
-            transition={{
-              delay: 8.1,
-              duration: 0.8,
-            }}
-            className="
-              mt-4
-              shrink-0
-            "
-          >
-            <AnimatedButton
-              href="/"
-              title="Back To Home"
+            <motion.path
+              d="
+                M 205 305
+                C 275 320,
+                  350 322,
+                  425 312
+                C 500 302,
+                  565 300,
+                  635 310
+              "
+              fill="none"
+              stroke="var(--modura-secondary)"
+              strokeWidth="2"
+              strokeLinecap="round"
+              initial={{
+                pathLength: 0,
+                opacity: 0,
+              }}
+              animate={{
+                pathLength: 1,
+                opacity: 0.9,
+              }}
+              transition={{
+                delay: 3.4,
+                duration: 0.8,
+                ease: "easeInOut",
+              }}
             />
-          </motion.div>
 
+            {/* SECOND UNDERLINE */}
+
+            <motion.path
+              d="
+                M 305 327
+                C 360 333,
+                  420 333,
+                  485 325
+              "
+              fill="none"
+              stroke="var(--modura-primary)"
+              strokeWidth="1"
+              strokeLinecap="round"
+              initial={{
+                pathLength: 0,
+                opacity: 0,
+              }}
+              animate={{
+                pathLength: 1,
+                opacity: 0.4,
+              }}
+              transition={{
+                delay: 3.7,
+                duration: 0.7,
+                ease: "easeInOut",
+              }}
+            />
+          </svg>
         </div>
+
+        {/* MESSAGE */}
+
+        <motion.p
+          initial={{
+            opacity: 0,
+            y: 15,
+          }}
+          animate={{
+            opacity: 1,
+            y: 0,
+          }}
+          transition={{
+            delay: 4.1,
+            duration: 0.6,
+            ease: "easeOut",
+          }}
+          className="
+            mt-5
+            max-w-[560px]
+            px-2
+            font-body
+            text-[13px]
+            font-normal
+            leading-6
+            tracking-[0.01em]
+            text-modura-gray-600
+            sm:mt-6
+            sm:text-[15px]
+            sm:leading-7
+            md:text-base
+          "
+        >
+          {content.message}
+        </motion.p>
+
+        {/* BUTTON */}
+
+        <motion.div
+          initial={{
+            opacity: 0,
+            y: 15,
+          }}
+          animate={{
+            opacity: 1,
+            y: 0,
+          }}
+          transition={{
+            delay: 4.35,
+            duration: 0.6,
+            ease: "easeOut",
+          }}
+          className="
+            mt-7
+            flex
+            items-center
+            justify-center
+            sm:mt-8
+          "
+        >
+          <AnimatedButton
+            href="/"
+            title="Back To Home"
+          />
+        </motion.div>
       </section>
     </main>
   );
