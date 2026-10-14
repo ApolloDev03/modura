@@ -25,7 +25,6 @@ import {
   ArrowRight,
 } from "lucide-react";
 
-
 gsap.registerPlugin(ScrollTrigger);
 
 import about_building from "../assets/images/about-building.jpeg";
@@ -85,8 +84,6 @@ const advantages = [
   },
 ];
 
-
-
 const qualityPoints = [
   {
     title: "Quality First",
@@ -113,7 +110,6 @@ const qualityPoints = [
     icon: RefreshCw,
   },
 ];
-
 
  type FAQ = {
   id: number;
@@ -238,8 +234,7 @@ const [active, setActive] = useState<number | null>(0);
             },
           }
         );
-    
-    
+
         /* =========================================
            CARDS
         ========================================= */
@@ -248,8 +243,7 @@ const [active, setActive] = useState<number | null>(0);
           opacity: 0,
           y: 60,
         });
-    
-    
+
         ScrollTrigger.batch(".why-card", {
           start: "top 90%",
     
@@ -266,8 +260,7 @@ const [active, setActive] = useState<number | null>(0);
             });
           },
         });
-    
-    
+
         /* =========================================
            BOTTOM
         ========================================= */
@@ -290,8 +283,7 @@ const [active, setActive] = useState<number | null>(0);
             },
           }
         );
-    
-    
+
         /* Refresh after images/layout are ready */
     
         requestAnimationFrame(() => {
@@ -299,8 +291,7 @@ const [active, setActive] = useState<number | null>(0);
         });
     
       }, sectionRef);
-    
-    
+
       return () => {
         ctx.revert();
         ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
@@ -311,11 +302,22 @@ const [active, setActive] = useState<number | null>(0);
      const [selectedMember, setSelectedMember] =
         useState<TeamMember | null>(null);
 
-
-
+  // Keep the popup within the viewport and restore page scroll on close.
+  useEffect(() => {
+    if (!selectedMember) return;
+    const oldOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    const handleEscape = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setSelectedMember(null);
+    };
+    window.addEventListener("keydown", handleEscape);
+    return () => {
+      document.body.style.overflow = oldOverflow;
+      window.removeEventListener("keydown", handleEscape);
+    };
+  }, [selectedMember]);
 
  const sectiontestimonialRef = useRef<HTMLDivElement>(null);
-
 
   useEffect(() => {
 
@@ -331,7 +333,6 @@ const [active, setActive] = useState<number | null>(0);
         },
       });
 
-
       gsap.from(".testimonial-heading", {
         opacity: 0,
         x: -60,
@@ -341,7 +342,6 @@ const [active, setActive] = useState<number | null>(0);
           start: "top 75%",
         },
       });
-
 
       gsap.from(".testimonial-side-card", {
         opacity: 0,
@@ -355,20 +355,16 @@ const [active, setActive] = useState<number | null>(0);
 
     }, sectiontestimonialRef);
 
-
     return () => ctx.revert();
 
   }, []);
 
-
   const sectionblogRef = useRef<HTMLDivElement | null>(null);
    
   useLayoutEffect(()=>{
-  
-  
+
   const ctx = gsap.context(()=>{
-  
-  
+
   gsap.from(".blog-card",
   {
   opacity:0,
@@ -384,18 +380,12 @@ const [active, setActive] = useState<number | null>(0);
   }
   
   });
-  
-  
-  },sectionblogRef);
-  
-  
-  
-  return()=>ctx.revert();
-  
-  
-  
-  },[]);
 
+  },sectionblogRef);
+
+  return()=>ctx.revert();
+
+  },[]);
 
   useEffect(() => {
   const fetchFAQs = async () => {
@@ -427,7 +417,6 @@ const [active, setActive] = useState<number | null>(0);
 
   fetchFAQs();
 }, []);
-
 
 useEffect(() => {
   const fetchBlogs = async () => {
@@ -488,7 +477,6 @@ const getShortDescription = (
   return `${text.substring(0, 80).trim()}...`;
 };
 
-
 useEffect(() => {
   const fetchTeam = async () => {
     try {
@@ -517,7 +505,7 @@ useEffect(() => {
   fetchTeam();
 }, []);
   return (
-    <main className="min-h-screen bg-white">
+    <main className="min-h-screen w-full min-w-0 overflow-x-clip bg-white">
 
       <Breadcrumb title="Company" />
 
@@ -526,50 +514,49 @@ useEffect(() => {
       ========================================= */}
 
     <section id="about" className="relative overflow-hidden bg-white pt-16">
-    
-    
-    
+
     <div className="
     mx-auto
     max-w-7xl
-    px-6
+    px-4
+    sm:px-6
     lg:px-10
     ">
-    
-    
+
     <div className="
     grid
     items-center
-    gap-12
+    gap-7
+    sm:gap-12
     lg:grid-cols-2
     ">
-    
-    
-    
-    
-    
+
     {/* LEFT */}
     
     <div className="
     relative
-    h-[500px]
+    h-[310px]
+    min-w-0
+    sm:h-[410px]
+    lg:h-[500px]
     ">
-    
-    
-    
+
     {/* Main Image */}
     
     <div className="
     absolute
-    left-16
+    left-[10%]
     top-0
-    h-[390px]
-    w-[450px]
+    h-[270px]
+    w-[85%]
+    sm:left-16
+    sm:h-[350px]
+    sm:w-[min(450px,85%)]
+    lg:h-[390px]
     overflow-hidden
     clip-main
     ">
-    
-    
+
     <Image
     
     src={about_building}
@@ -583,30 +570,28 @@ useEffect(() => {
     "
     
     />
-    
-    
+
     </div>
-    
-    
-    
-    
-    
+
     {/* Blueprint */}
     
     <div className="
     absolute
-    bottom-5
-    left-5
-    h-[170px]
-    w-[220px]
+    bottom-2
+    left-0
+    h-[120px]
+    w-[150px]
+    sm:bottom-5
+    sm:left-5
+    sm:h-[170px]
+    sm:w-[220px]
     overflow-hidden
     border-8
     border-white
     shadow-xl
     clip-blueprint
     ">
-    
-    
+
     <Image
     
     src={blueprint}
@@ -618,23 +603,15 @@ useEffect(() => {
     className="object-cover"
     
     />
-    
-    
+
     </div>
-    
-    
-    
-    
-    
+
     </div>
-    
-    
+
     {/* RIGHT */}
-    
-    
+
     <div>
-    
-    
+
     <div className="
     flex
     items-center
@@ -656,21 +633,17 @@ useEffect(() => {
     About Us
     
     </div>
-    
-    
-    
-    
-    
+
     <h2 className="
     mt-4
     font-heading
-    text-5xl
+    text-[clamp(32px,8vw,48px)]
     lg:text-6xl
     font-semibold
+    leading-[1.1]
     text-modura-primary
     ">
-    
-    
+
     Building Tomorrow
     
     <br/>
@@ -682,15 +655,9 @@ useEffect(() => {
     Through Smart Design
     
     </span>
-    
-    
+
     </h2>
-    
-    
-    
-    
-    
-    
+
     <p className="
     mt-6
     max-w-xl
@@ -698,23 +665,19 @@ useEffect(() => {
     font-body
     text-modura-gray-600
     ">
-    
-    
+
     MODURA Design Group is a multidisciplinary
     architecture and engineering consultancy
     delivering innovative solutions across
     Architecture, BIM, Structural Design and
     Project Management.
-    
-    
+
     <br/><br/>
-    
-    
+
     We combine creativity, technology and
     technical expertise to create functional,
     sustainable and future-ready spaces.
-    
-    
+
     </p>
     
     <div className="mt-9 grid gap-4 sm:grid-cols-2">
@@ -731,14 +694,11 @@ useEffect(() => {
 
             </div>
     </div>
-    
-    
+
     </div>
-    
-    
+
     </div>
-    
-    
+
     </section>
 
   <section
@@ -782,10 +742,7 @@ useEffect(() => {
 
       <div className="relative mx-auto max-w-full  px-4
     md:px-6
-    lg:grid-cols-2
-    lg:gap-12
     lg:px-10
-    xl:gap-16
     2xl:px-16">
 
         {/* =========================
@@ -818,7 +775,7 @@ useEffect(() => {
             className="
               mt-5
               font-heading
-              text-5xl
+              text-[clamp(32px,8vw,48px)]
               font-semibold
               leading-[0.9]
               text-modura-primary
@@ -833,7 +790,6 @@ useEffect(() => {
           </h2>
 
         </div>
-
 
         {/* =========================
             VISION + MISSION
@@ -863,9 +819,6 @@ useEffect(() => {
             "
           >
 
-          
-
-
             {/* Watermark */}
 
             <span
@@ -887,7 +840,6 @@ useEffect(() => {
               V
             </span>
 
-
             {/* Orange vertical accent */}
 
             <div
@@ -903,7 +855,6 @@ useEffect(() => {
                 group-hover:w-2
               "
             />
-
 
             <div className="relative z-10 flex h-full flex-col justify-between p-8 sm:p-10 lg:p-12">
 
@@ -946,17 +897,16 @@ useEffect(() => {
 
                 </div>
 
-
                 <h3
                   className="
                     mt-7
                     max-w-md
                     font-heading
-                    text-4xl
+                    text-[clamp(28px,7vw,36px)]
                     font-semibold
                     leading-[0.95]
                     text-modura-primary
-                    sm:text-5xl
+                    sm:text-[clamp(32px,8vw,48px)]
                   "
                 >
                   Engineering
@@ -966,7 +916,6 @@ useEffect(() => {
                   <br />
                   Boundaries
                 </h3>
-
 
                 <p
                   className="
@@ -989,7 +938,6 @@ useEffect(() => {
                 </p>
 
               </div>
-
 
               {/* Bottom */}
 
@@ -1021,7 +969,6 @@ useEffect(() => {
                   </span>
 
                 </div>
-
 
                 <div
                   className="
@@ -1057,7 +1004,6 @@ useEffect(() => {
             </div>
           </div>
 
-
           {/* =========================
               MISSION
           ========================== */}
@@ -1074,9 +1020,6 @@ useEffect(() => {
               clip-vm-card-reverse
             "
           >
-
-          
-
 
             {/* Watermark */}
 
@@ -1099,7 +1042,6 @@ useEffect(() => {
               M
             </span>
 
-
             {/* Orange accent */}
 
             <div
@@ -1115,7 +1057,6 @@ useEffect(() => {
                 group-hover:w-2
               "
             />
-
 
             <div className="relative z-10 flex h-full flex-col justify-between p-8 sm:p-10 lg:p-12">
 
@@ -1158,17 +1099,16 @@ useEffect(() => {
 
                 </div>
 
-
                 <h3
                   className="
                     mt-7
                     max-w-md
                     font-heading
-                    text-4xl
+                    text-[clamp(28px,7vw,36px)]
                     font-semibold
                     leading-[0.95]
                     text-white
-                    sm:text-5xl
+                    sm:text-[clamp(32px,8vw,48px)]
                   "
                 >
                   Creating
@@ -1178,7 +1118,6 @@ useEffect(() => {
                   <br />
                   Through Expertise
                 </h3>
-
 
                 <p
                   className="
@@ -1200,7 +1139,6 @@ useEffect(() => {
                 </p>
 
               </div>
-
 
               {/* Bottom */}
 
@@ -1232,7 +1170,6 @@ useEffect(() => {
                   </span>
 
                 </div>
-
 
                 <div
                   className="
@@ -1349,15 +1286,10 @@ useEffect(() => {
 
       </div>
 
-
       <div className="relative mx-auto max-w-full  px-4
     md:px-6
-    lg:grid-cols-2
-    lg:gap-12
     lg:px-10
-    xl:gap-16
     2xl:px-16">
-
 
         {/* =====================================================
             TOP CONTENT
@@ -1401,7 +1333,6 @@ useEffect(() => {
 
             </div>
 
-
             {/* Heading */}
 
             <h2
@@ -1409,7 +1340,7 @@ useEffect(() => {
                 mt-6
                 max-w-2xl
                 font-heading
-                text-[58px]
+                text-[clamp(38px,10vw,58px)]
                 font-semibold
                 uppercase
                 leading-[0.82]
@@ -1429,7 +1360,6 @@ useEffect(() => {
 
               {" "}Engineering?
             </h2>
-
 
             {/* Small statement */}
 
@@ -1453,7 +1383,6 @@ useEffect(() => {
             </div>
 
           </div>
-
 
           {/* RIGHT */}
 
@@ -1489,7 +1418,6 @@ useEffect(() => {
                   />
                 </div>
 
-
                 <div>
 
                   <p
@@ -1520,7 +1448,6 @@ useEffect(() => {
 
               </div>
 
-
               <p
                 className="
                   font-body
@@ -1540,7 +1467,6 @@ useEffect(() => {
                 economic challenges, ensuring your projects excel
                 while keeping costs under control.
               </p>
-
 
               {/* CTA */}
 
@@ -1615,7 +1541,6 @@ useEffect(() => {
           </div>
 
         </div>
-
 
         {/* =====================================================
             ADVANTAGE CARDS
@@ -1694,7 +1619,6 @@ useEffect(() => {
 
                 </div>
 
-
                 {/* Orange geometric image frame */}
 
                 <div
@@ -1714,7 +1638,6 @@ useEffect(() => {
                     group-hover:opacity-70
                   "
                 />
-
 
                 {/* Icon */}
 
@@ -1742,7 +1665,6 @@ useEffect(() => {
                   />
                 </div>
 
-
                 {/* Content */}
 
                 <div className="relative z-10 mt-7 pr-2">
@@ -1762,7 +1684,6 @@ useEffect(() => {
                   >
                     {item.title}
                   </h3>
-
 
                   <p
                     className="
@@ -1784,13 +1705,9 @@ useEffect(() => {
 
         </div>
 
-
-     
-
       </div>
 
     </section>
-
 
       {/* =========================================
           OUR TEAM
@@ -1802,10 +1719,7 @@ useEffect(() => {
 >
   <div className="mx-auto max-w-full px-4
     md:px-6
-    lg:grid-cols-2
-    lg:gap-12
     lg:px-10
-    xl:gap-16
     2xl:px-16">
 
     {/* INTRO */}
@@ -1839,12 +1753,11 @@ useEffect(() => {
 
         </div>
 
-
         <h2
           className="
             mt-5
             font-heading
-            text-5xl
+            text-[clamp(32px,8vw,48px)]
             font-semibold
             uppercase
             leading-[0.88]
@@ -1864,7 +1777,6 @@ useEffect(() => {
         </h2>
 
       </div>
-
 
       <div className="lg:pb-2">
 
@@ -1890,7 +1802,6 @@ useEffect(() => {
       </div>
 
     </div>
-
 
     {/* TEAM */}
 
@@ -1942,8 +1853,7 @@ useEffect(() => {
 
   </div>
 </section>
-   
-   
+
          {/* ======================================================
              BIO MODAL
          ====================================================== */}
@@ -1959,8 +1869,12 @@ useEffect(() => {
                items-center
                justify-center
                bg-modura-primary/70
-               px-4
-               py-8
+               overflow-y-auto
+               overscroll-contain
+               px-3
+               py-3
+               sm:px-5
+               sm:py-6
                backdrop-blur-md
              "
              onClick={() => setSelectedMember(null)}
@@ -1970,20 +1884,22 @@ useEffect(() => {
                className="
                  relative
                  w-full
+                 my-auto
                  max-w-4xl
-                 overflow-hidden
+                 max-h-[calc(100dvh-24px)]
+                 overflow-y-auto
+                 overscroll-contain
                  bg-white
                  shadow-2xl
+                 sm:max-h-[calc(100dvh-48px)]
                "
                onClick={(e) => e.stopPropagation()}
              >
-   
-   
+
                {/* TOP ORANGE LINE */}
    
                <div className="h-1 w-full bg-modura-secondary" />
-   
-   
+
                {/* CLOSE */}
    
                <button
@@ -1992,9 +1908,11 @@ useEffect(() => {
                  aria-label="Close biography"
                  className="
                    absolute
-                   right-5
-                   top-5
-                   z-10
+                   right-3
+                   top-3
+                   z-30
+                   sm:right-5
+                   sm:top-5
                    flex
                    h-10
                    w-10
@@ -2009,27 +1927,26 @@ useEffect(() => {
                >
                  <X size={19} />
                </button>
-   
-   
+
                {/* ==================================================
                    MODAL CONTENT
                ================================================== */}
    
-               <div className="grid md:grid-cols-[0.85fr_1.15fr]">
-   
-   
+               <div className="grid min-w-0 grid-cols-1 md:grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)]">
+
                  {/* IMAGE */}
    
-                 <div className="relative min-h-[360px] bg-modura-light md:min-h-[500px]">
+                 <div className="relative h-[190px] min-w-0 bg-modura-light min-[400px]:h-[230px] sm:h-[280px] md:h-auto md:min-h-[430px] lg:min-h-[500px]">
    
                    <Image
-                     src={selectedMember.photo}
+                     src={selectedMember.photoUrl || (selectedMember.photo?.startsWith("http") ? selectedMember.photo : `https://mvnl.salexo.co.in/${(selectedMember.photo || "").replace(/^\/+/, "")}`)}
                      alt={selectedMember.name}
                      fill
+                     unoptimized
+                     sizes="(max-width: 767px) 100vw, 45vw"
                      className="object-cover"
                    />
-   
-   
+
                    {/* IMAGE OVERLAY */}
    
                    <div
@@ -2042,11 +1959,10 @@ useEffect(() => {
                        to-transparent
                      "
                    />
-   
-   
+
                    {/* ROLE */}
    
-                   <div className="absolute bottom-7 left-7">
+                   <div className="absolute bottom-4 left-4 right-4 sm:bottom-7 sm:left-7">
    
                      <div
                        className="
@@ -2066,8 +1982,7 @@ useEffect(() => {
    
                        Modura Team
                      </div>
-   
-   
+
                      <p
                        className="
                          max-w-xs
@@ -2085,13 +2000,11 @@ useEffect(() => {
                    </div>
    
                  </div>
-   
-   
+
                  {/* CONTENT */}
    
-                 <div className="relative flex flex-col justify-center p-8 md:p-12 lg:p-14">
-   
-   
+                 <div className="relative flex min-w-0 flex-col justify-center p-5 sm:p-8 md:p-10 lg:p-14">
+
                    {/* SMALL LABEL */}
    
                    <div
@@ -2113,8 +2026,7 @@ useEffect(() => {
                      Team Profile
    
                    </div>
-   
-   
+
                    {/* NAME */}
    
                    <h3
@@ -2122,62 +2034,67 @@ useEffect(() => {
                        mt-5
                        max-w-xl
                        font-heading
-                       text-4xl
+                       break-words
+                       text-[clamp(25px,7vw,36px)]
                        font-semibold
                        uppercase
-                       leading-[0.95]
+                       leading-[1.05]
                        text-modura-primary
-                       md:text-5xl
+                       sm:text-[clamp(28px,7vw,36px)]
+                       md:text-[clamp(32px,8vw,48px)]
                      "
                    >
                      {selectedMember.name}
                    </h3>
-   
-   
+
                    {/* DESIGNATION */}
    
                    <p
                      className="
                        mt-4
                        font-body
-                       text-xs
+                       break-words
+                       text-[11px]
                        font-bold
                        uppercase
-                       tracking-[2px]
+                       tracking-[1px]
                        text-modura-secondary
+                       sm:text-xs
+                       sm:tracking-[2px]
                      "
                    >
                      {selectedMember.designation}
                    </p>
-   
-   
+
                    {/* DIVIDER */}
    
-                   <div className="my-7 h-px w-full bg-modura-gray-200" />
-   
-   
+                   <div className="my-5 h-px w-full bg-modura-gray-200 sm:my-7" />
+
                    {/* BIO */}
    
                    <p
                      className="
                        max-w-xl
+                       break-words
                        font-body
-                       text-sm
-                       leading-8
+                       text-[13px]
+                       leading-6
                        text-modura-gray-600
+                       sm:text-sm
+                       sm:leading-8
                      "
                    >
                      {selectedMember.bio}
                    </p>
-   
-   
+
                    {/* BOTTOM */}
    
                    <div
                      className="
-                       mt-8
+                       mt-5
                        flex
                        items-center
+                       sm:mt-8
                        gap-3
                        border-t
                        border-modura-gray-200
@@ -2205,8 +2122,7 @@ useEffect(() => {
                  </div>
    
                </div>
-   
-   
+
                {/* BOTTOM ORANGE BAR */}
    
                <div className="h-[3px] w-full bg-modura-secondary" />
@@ -2225,10 +2141,7 @@ useEffect(() => {
 
       <div className="mx-auto max-w-full px-4
     md:px-6
-    lg:grid-cols-2
-    lg:gap-12
     lg:px-10
-    xl:gap-16
     2xl:px-16">
 
         {/* =========================
@@ -2258,12 +2171,11 @@ useEffect(() => {
 
   </div>
 
-
   <h2
     className="
       mt-5
       font-heading
-      text-5xl
+      text-[clamp(32px,8vw,48px)]
       font-semibold
       uppercase
       leading-[0.95]
@@ -2277,7 +2189,6 @@ useEffect(() => {
       Policy
     </span>
   </h2>
-
 
   <p
     className="
@@ -2356,11 +2267,9 @@ useEffect(() => {
                   "
                 />
 
-
                 {/* Number */}
 
                 <div className="flex items-start justify-end">
-
 
                   {/* Icon */}
 
@@ -2391,9 +2300,6 @@ useEffect(() => {
 
                 </div>
 
-
-
-
                 {/* Title */}
 
                 <h3
@@ -2410,7 +2316,6 @@ useEffect(() => {
                   {item.title}
                 </h3>
 
-
                 {/* Description */}
 
                 <p
@@ -2425,14 +2330,11 @@ useEffect(() => {
                   {item.description}
                 </p>
 
-
-
               </div>
             );
           })}
 
         </div>
-
 
       </div>
 
@@ -2445,10 +2347,7 @@ useEffect(() => {
 
   <div className="mx-auto max-w-full px-4
     md:px-6
-    lg:grid-cols-2
-    lg:gap-12
     lg:px-10
-    xl:gap-16
     2xl:px-16">
 
     {/* Heading */}
@@ -2483,12 +2382,11 @@ useEffect(() => {
 
       </div>
 
-
       <h2
         className="
           mt-4
           font-heading
-          text-5xl
+          text-[clamp(32px,8vw,48px)]
           font-semibold
           uppercase
           leading-none
@@ -2498,7 +2396,6 @@ useEffect(() => {
       >
         Certifications
       </h2>
-
 
       <p
         className="
@@ -2516,7 +2413,6 @@ useEffect(() => {
       </p>
 
     </div>
-
 
     {/* Cards */}
 
@@ -2573,7 +2469,6 @@ useEffect(() => {
 
       )}
 
-
       {/* Empty */}
 
       {!loading && certifications.length === 0 && (
@@ -2593,7 +2488,6 @@ useEffect(() => {
         </div>
 
       )}
-
 
       {/* Dynamic Cards */}
 
@@ -2639,7 +2533,6 @@ useEffect(() => {
 
             </div>
 
-
             {/* Issued By + Year */}
 
             <div
@@ -2679,7 +2572,6 @@ useEffect(() => {
 
             </div>
 
-
             {/* Title */}
 
             <h3
@@ -2695,7 +2587,6 @@ useEffect(() => {
             >
               {item.title}
             </h3>
-
 
             {/* Description */}
 
@@ -2720,7 +2611,6 @@ useEffect(() => {
   </div>
 
 </section>
-
 
       {/* =========================================
           FAQ
@@ -2766,7 +2656,7 @@ useEffect(() => {
       <h2
         className="
           font-heading
-          text-5xl
+          text-[clamp(32px,8vw,48px)]
           font-semibold
           uppercase
           leading-none
@@ -2796,7 +2686,6 @@ useEffect(() => {
       </p>
 
     </div>
-
 
     {/* FAQ LIST */}
 
@@ -2834,7 +2723,6 @@ useEffect(() => {
         </div>
       )}
 
-
       {/* API ERROR */}
 
       {!faqLoading && faqError && (
@@ -2853,7 +2741,6 @@ useEffect(() => {
         </div>
       )}
 
-
       {/* NO FAQ */}
 
       {!faqLoading && !faqError && faqs.length === 0 && (
@@ -2871,7 +2758,6 @@ useEffect(() => {
 
         </div>
       )}
-
 
       {/* FAQ ITEMS */}
 
@@ -2911,7 +2797,6 @@ useEffect(() => {
                   }
                 `}
               />
-
 
               {/* QUESTION BUTTON */}
 
@@ -2966,7 +2851,6 @@ useEffect(() => {
                   />
                 </span>
 
-
                 {/* QUESTION */}
 
                 <span
@@ -2989,7 +2873,6 @@ useEffect(() => {
                 >
                   {faq.question}
                 </span>
-
 
                 {/* PLUS */}
 
@@ -3027,7 +2910,6 @@ useEffect(() => {
                 </span>
 
               </button>
-
 
               {/* ANSWER */}
 
@@ -3107,10 +2989,7 @@ useEffect(() => {
       max-w-full
        px-4
     md:px-6
-    lg:grid-cols-2
-    lg:gap-12
     lg:px-10
-    xl:gap-16
     2xl:px-16
     "
   >
@@ -3159,12 +3038,11 @@ useEffect(() => {
 
         </div>
 
-
         <h2
           className="
             mt-4
             font-heading
-            text-5xl
+            text-[clamp(32px,8vw,48px)]
             font-semibold
             leading-none
             text-modura-primary
@@ -3180,7 +3058,6 @@ useEffect(() => {
 
       </div>
 
-
       {/* BUTTON */}
 
       <div className="lg:pb-1">
@@ -3193,7 +3070,6 @@ useEffect(() => {
       </div>
 
     </div>
-
 
    { blogs.length === 0 ? (
 
@@ -3272,7 +3148,6 @@ useEffect(() => {
 
               </div>
 
-
               {/* CONTENT */}
 
               <div
@@ -3304,7 +3179,6 @@ useEffect(() => {
                   )}
                 </div>
 
-
                 {/* TITLE */}
 
                 <h3
@@ -3318,7 +3192,6 @@ useEffect(() => {
                 >
                   {blog.title}
                 </h3>
-
 
                 {/* DESCRIPTION */}
 
@@ -3337,7 +3210,6 @@ useEffect(() => {
                     }).description || ""
                   )}
                 </p>
-
 
                 {/* READ MORE */}
 
@@ -3380,7 +3252,6 @@ useEffect(() => {
                     "
                   />
 
-
                   {/* TEXT */}
 
                   <span
@@ -3394,7 +3265,6 @@ useEffect(() => {
                   >
                     Read More
                   </span>
-
 
                   {/* ARROW */}
 
@@ -3449,7 +3319,6 @@ useEffect(() => {
     </main>
   );
 }
-
 
 function Feature({
   icon: Icon,
@@ -3533,7 +3402,7 @@ function TeamGroup({
               uppercase
               leading-none
               text-modura-primary
-              md:text-4xl
+              md:text-[clamp(28px,7vw,36px)]
             "
           >
             {title}
@@ -3557,7 +3426,6 @@ function TeamGroup({
         </span>
 
       </div>
-
 
       {/* TEAM GRID */}
 
@@ -3610,7 +3478,6 @@ function TeamGroup({
                 "
               />
 
-
               {/* OVERLAY */}
 
               <div
@@ -3623,7 +3490,6 @@ function TeamGroup({
                   to-transparent
                 "
               />
-
 
               {/* ORANGE CORNER */}
 
@@ -3641,7 +3507,6 @@ function TeamGroup({
                     "polygon(100% 0, 100% 100%, 0 0)",
                 }}
               />
-
 
               {/* VIEW BIO */}
 
@@ -3671,7 +3536,6 @@ function TeamGroup({
                   strokeWidth={1.5}
                 />
               </button>
-
 
               {/* NAME */}
 
@@ -3714,7 +3578,6 @@ function TeamGroup({
               </div>
 
             </div>
-
 
             {/* BOTTOM LINE */}
 

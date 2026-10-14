@@ -313,7 +313,6 @@ export const MODULES: Record<string, ModuleConfig> = {
     endpoint: '/admin/careers',
     columns: [
       { key: 'jobTitle', label: 'Job Title' },
-      { key: 'department', label: 'Department' },
       { key: 'experience', label: 'Experience' },
       { key: 'location', label: 'Location' },
       { key: 'openings', label: 'Openings' },
@@ -322,7 +321,6 @@ export const MODULES: Record<string, ModuleConfig> = {
     ],
     fields: [
       { name: 'jobTitle', label: 'Job Title', type: 'text', required: true, maxLength: 200 },
-      { name: 'department', label: 'Department', type: 'select', options: ['Design', 'Development', 'BIM', 'Structural', 'Marketing', 'Other'].map((v) => ({ value: v, label: v })), placeholder: 'Select department' },
       { name: 'experience', label: 'Experience Required', type: 'text', placeholder: 'e.g. 2-4 years', maxLength: 100 },
       { name: 'location', label: 'Location', type: 'text', maxLength: 150 },
       { name: 'jobType', label: 'Job Type', type: 'select', required: true, options: JOB_TYPES, default: 'full_time' },
