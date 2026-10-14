@@ -519,11 +519,15 @@ function cleanDescription(
 
             ================================================= */}
 
-            <Breadcrumb
-
-                title={service.title}
-
-            />
+         <Breadcrumb
+  title={service.title}
+  parent={service.category?.name || "Services"}
+  parentHref={
+    service.category?.slug
+      ? `/services/${service.category.slug}`
+      : "/services"
+  }
+/>
 
             {/* =================================================
 

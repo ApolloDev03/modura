@@ -1,1706 +1,762 @@
-// "use client";
-
-// import {
-//   useEffect,
-//   useState,
-// } from "react";
-
-// import Image from "next/image";
-
-// import {
-//   Factory,
-//   Building2,
-//   Settings,
-//   Droplets,
-//   Truck,
-//   ArrowRight,
-//   DraftingCompass,
-// } from "lucide-react";
-
-// import {
-//   motion,
-//   AnimatePresence,
-// } from "framer-motion";
-
-
-// interface SoftwareItem {
-//   id: number;
-//   title?: string;
-//   name?: string;
-//   sub?: string;
-//   description?: string;
-//   image?: string;
-//   imageUrl?: string;
-// }
-
-
-// interface IndustriesProps {
-//   software: SoftwareItem[];
-// }
-
-
-// const icons = [
-//   Factory,
-//   Building2,
-//   Settings,
-//   Droplets,
-//   Truck,
-//   Factory,
-// ];
-
-
-// const circleCards = [
-//   {
-//     position: "top-5 left-1/2 -translate-x-1/2",
-//     index: 0,
-//   },
-
-//   {
-//     position: "top-32 right-5",
-//     index: 1,
-//   },
-
-//   {
-//     position: "top-32 left-5",
-//     index: 2,
-//   },
-
-//   {
-//     position: "bottom-32 left-5",
-//     index: 3,
-//   },
-
-//   {
-//     position: "bottom-32 right-5",
-//     index: 4,
-//   },
-
-//   {
-//     position: "bottom-5 left-1/2 -translate-x-1/2",
-//     index: 5,
-//   },
-// ];
-
-
-// export default function Industries({
-//   software,
-// }: IndustriesProps) {
-
-//   const [active, setActive] = useState(0);
-
-
-//   /*
-//    * Prevent active index from going
-//    * outside API data length.
-//    */
-//   useEffect(() => {
-//     if (
-//       software?.length &&
-//       active >= software.length
-//     ) {
-//       setActive(0);
-//     }
-//   }, [software, active]);
-
-
-//   /*
-//    * Auto change active item
-//    */
-//   useEffect(() => {
-
-//     if (!software?.length) return;
-
-//     const timer = setInterval(() => {
-
-//       setActive((prev) =>
-//         prev === software.length - 1
-//           ? 0
-//           : prev + 1
-//       );
-
-//     }, 4500);
-
-
-//     return () => clearInterval(timer);
-
-//   }, [software]);
-
-
-//   if (!software?.length) {
-//     return null;
-//   }
-
-
-//   /*
-//    * Keep your existing 6-card design.
-//    * If API has more than 6 items,
-//    * only first 6 are displayed in orbit.
-//    */
-//   const displayItems = software.slice(0, 6);
-
-
-//   return (
-
-//     <section
-//       className="
-//         relative
-//         overflow-hidden
-//         bg-modura-off-white
-//         py-16
-//       "
-//     >
-
-//       <div
-//         className="
-//           mx-auto
-//           max-w-7xl
-//           px-6
-//           lg:px-8
-//         "
-//       >
-
-//         <div
-//           className="
-//             grid
-//             items-center
-//             gap-16
-//             lg:grid-cols-[400px_1fr]
-//           "
-//         >
-
-//           {/* LEFT */}
-
-//           <div>
-
-//             <div
-//               className="
-//                 flex
-//                 items-center
-//                 gap-3
-//                 font-body
-//                 text-xs
-//                 font-bold
-//                 uppercase
-//                 tracking-[5px]
-//                 text-modura-secondary
-//               "
-//             >
-
-//               <DraftingCompass
-//                 size={20}
-//                 strokeWidth={1.5}
-//                 className="
-//                   text-modura-secondary
-//                 "
-//               />
-
-//               <span>
-//                 OUR EXPERTISE
-//               </span>
-
-//             </div>
-
-
-//             <h2
-//               className="
-//                 mt-4
-//                 font-heading
-//                 text-5xl
-//                 font-semibold
-//                 text-modura-primary
-//                 lg:text-6xl
-//               "
-//             >
-
-//               Industries
-
-//               <span
-//                 className="
-//                   block
-//                   text-modura-secondary
-//                 "
-//               >
-//                 We Serve
-//               </span>
-
-//             </h2>
-
-
-//             <p
-//               className="
-//                 mt-8
-//                 max-w-sm
-//                 font-body
-//                 leading-7
-//                 text-modura-gray-600
-//               "
-//             >
-//               Delivering innovative and sustainable
-//               engineering solutions across diverse
-//               industries worldwide.
-//             </p>
-
-
-//             <div
-//               className="
-//                 scrollbar-hide
-//                 relative
-//                 mt-12
-//                 h-[520px]
-//                 space-y-4
-//                 overflow-y-auto
-//                 pr-4
-//               "
-//             >
-
-//               <div
-//                 className="
-//                   absolute
-//                   bottom-5
-//                   left-7
-//                   top-5
-//                   w-px
-//                   bg-modura-border
-//                 "
-//               />
-
-
-//               {displayItems.map(
-//                 (item, index) => {
-
-//                   const Icon =
-//                     icons[index] || Factory;
-
-//                   const title =
-//                     item.title ||
-//                     item.name ||
-//                     "Industry";
-
-//                   const sub =
-//                     item.sub ||
-//                     item.description ||
-//                     "Engineering Solutions";
-
-
-//                   return (
-
-//                     <motion.button
-//                       key={item.id ?? index}
-//                       onClick={() =>
-//                         setActive(index)
-//                       }
-//                       whileHover={{
-//                         x: 8,
-//                       }}
-//                       className={`
-//                         relative
-//                         z-10
-//                         flex
-//                         w-full
-//                         items-center
-//                         gap-5
-//                         rounded-full
-//                         px-6
-//                         py-5
-//                         transition-all
-//                         duration-500
-
-//                         ${
-//                           active === index
-//                             ? "bg-modura-primary text-white shadow-xl"
-//                             : "text-modura-primary hover:bg-white"
-//                         }
-//                       `}
-//                     >
-
-//                       <div
-//                         className={`
-//                           flex
-//                           h-12
-//                           w-12
-//                           shrink-0
-//                           items-center
-//                           justify-center
-//                           rounded-full
-//                           border
-
-//                           ${
-//                             active === index
-//                               ? "border-[#c49a45] bg-[#c49a45]"
-//                               : "border-modura-border bg-white"
-//                           }
-//                         `}
-//                       >
-
-//                         <Icon size={22} />
-
-//                       </div>
-
-
-//                       <div className="text-left">
-
-//                         <h4
-//                           className="
-//                             font-heading
-//                             text-lg
-//                             font-semibold
-//                           "
-//                         >
-//                           {title}
-//                         </h4>
-
-
-//                         <p
-//                           className="
-//                             font-body
-//                             text-sm
-//                             opacity-70
-//                           "
-//                         >
-//                           {sub}
-//                         </p>
-
-//                       </div>
-
-
-//                       <ArrowRight
-//                         size={20}
-//                         className="ml-auto"
-//                       />
-
-//                     </motion.button>
-
-//                   );
-
-//                 }
-//               )}
-
-//             </div>
-
-//           </div>
-
-
-//           {/* RIGHT SECTION */}
-
-//           <div
-//             className="
-//               relative
-//               flex
-//               h-[720px]
-//               items-center
-//               justify-center
-//             "
-//           >
-
-//             {/* CUSTOM ORBIT DESIGN */}
-
-//             <div
-//               className="
-//                 absolute
-//                 h-[560px]
-//                 w-[560px]
-//                 rounded-full
-//                 border
-//                 border-[#c49a45]/30
-//               "
-//             >
-
-//               <div
-//                 className="
-//                   absolute
-//                   left-0
-//                   top-1/2
-//                   h-3
-//                   w-3
-//                   -translate-y-1/2
-//                   rounded-full
-//                   bg-[#c49a45]
-//                 "
-//               />
-
-
-//               <div
-//                 className="
-//                   absolute
-//                   right-0
-//                   top-1/2
-//                   h-3
-//                   w-3
-//                   -translate-y-1/2
-//                   rounded-full
-//                   bg-[#c49a45]
-//                 "
-//               />
-
-//             </div>
-
-
-//             <div
-//               className="
-//                 absolute
-//                 h-[430px]
-//                 w-[430px]
-//                 rounded-full
-//                 bg-white/60
-//                 shadow-inner
-//               "
-//             />
-
-
-//             {/* IMAGE CARDS */}
-
-//             {circleCards.map(
-//               (card, index) => {
-
-//                 const item =
-//                   displayItems[card.index];
-
-//                 if (!item) return null;
-
-
-//                 const image =
-//                   item.imageUrl ||
-//                   item.image ||
-//                   "";
-
-
-//                 const title =
-//                   item.title ||
-//                   item.name ||
-//                   "Industry";
-
-
-//                 return (
-
-//                   <motion.div
-//                     key={
-//                       item.id ??
-//                       index
-//                     }
-//                     onClick={() =>
-//                       setActive(card.index)
-//                     }
-//                     whileHover={{
-//                       scale: 1.08,
-//                       y: -8,
-//                     }}
-//                     transition={{
-//                       duration: 0.4,
-//                     }}
-//                     className={`
-//                       absolute
-//                       ${card.position}
-//                       z-20
-//                       h-[140px]
-//                       w-[200px]
-//                       cursor-pointer
-//                       overflow-hidden
-//                       border-[6px]
-//                       border-white
-//                       bg-white
-//                       shadow-xl
-//                       clip-industry
-//                     `}
-//                   >
-
-//                     <Image
-//                       src={image}
-//                       alt={title}
-//                       fill
-//                       sizes="200px"
-//                       className="
-//                         object-cover
-//                       "
-//                     />
-
-//                   </motion.div>
-
-//                 );
-
-//               }
-//             )}
-
-
-//             {/* CENTER IMAGE AREA */}
-
-//             <div
-//               className="
-//                 relative
-//                 z-30
-//                 h-[370px]
-//                 w-[370px]
-//                 overflow-hidden
-//                 rounded-full
-//                 border-[12px]
-//                 border-white
-//                 shadow-2xl
-//                 ring-8
-//                 ring-[#c49a45]/20
-//               "
-//             >
-
-//               <AnimatePresence mode="wait">
-
-//                 <motion.div
-//                   key={active}
-//                   initial={{
-//                     opacity: 0,
-//                     scale: 1.15,
-//                   }}
-//                   animate={{
-//                     opacity: 1,
-//                     scale: 1,
-//                   }}
-//                   transition={{
-//                     duration: 0.7,
-//                   }}
-//                   className="
-//                     absolute
-//                     inset-0
-//                   "
-//                 >
-
-//                   <Image
-//                     src={
-//                       displayItems[active]
-//                         ?.imageUrl ||
-//                       displayItems[active]
-//                         ?.image ||
-//                       ""
-//                     }
-//                     alt={
-//                       displayItems[active]
-//                         ?.title ||
-//                       displayItems[active]
-//                         ?.name ||
-//                       "Industry"
-//                     }
-//                     fill
-//                     sizes="370px"
-//                     className="
-//                       object-cover
-//                     "
-//                   />
-
-
-//                   <div
-//                     className="
-//                       absolute
-//                       inset-0
-//                       bg-gradient-to-t
-//                       from-modura-primary/90
-//                       via-modura-primary/30
-//                       to-transparent
-//                     "
-//                   />
-
-//                 </motion.div>
-
-//               </AnimatePresence>
-
-
-//               <div
-//                 className="
-//                   absolute
-//                   bottom-14
-//                   left-0
-//                   right-0
-//                   z-40
-//                   text-center
-//                   text-white
-//                 "
-//               >
-
-//                 <h3
-//                   className="
-//                     font-heading
-//                     text-4xl
-//                     font-bold
-//                     tracking-wide
-//                   "
-//                 >
-//                   {displayItems[active]
-//                     ?.title ||
-//                     displayItems[active]
-//                       ?.name ||
-//                     "Industry"}
-//                 </h3>
-
-
-//                 <p
-//                   className="
-//                     mt-3
-//                     font-body
-//                     text-sm
-//                     uppercase
-//                     tracking-[4px]
-//                   "
-//                 >
-//                   {displayItems[active]
-//                     ?.sub ||
-//                     displayItems[active]
-//                       ?.description ||
-//                     "Engineering Solutions"}
-//                 </p>
-
-//               </div>
-
-//             </div>
-
-//           </div>
-
-//         </div>
-
-//       </div>
-
-//     </section>
-
-//   );
-// }
-
 "use client";
 
 import {
-
-  useEffect,
-
-  useState,
-
+ useEffect,
+ useState
 } from "react";
 
 import Image from "next/image";
 
 import {
-
-  Factory,
-
-  Building2,
-
-  Settings,
-
-  Droplets,
-
-  Truck,
-
-  ArrowRight,
-
-  DraftingCompass,
-
+ Factory,
+ Building2,
+ Settings,
+ Droplets,
+ Truck,
+ ArrowRight,
+ DraftingCompass
 } from "lucide-react";
 
 import {
-
-  motion,
-
-  AnimatePresence,
-
+ motion,
+ AnimatePresence
 } from "framer-motion";
 
-interface SoftwareItem {
 
-  id: number;
+import oil from "../app/(website)/assets/images/oil.jpeg";
+import infrastructure from "../app/(website)/assets/images/infrastructure.jpeg";
+import steel from "../app/(website)/assets/images/steel.jpeg";
+import water from "../app/(website)/assets/images/water.jpeg";
+import transport from "../app/(website)/assets/images/transport.jpeg";
+import manufacturing from "../app/(website)/assets/images/manufacturing.jpeg";
 
-  title?: string;
 
-  name?: string;
+const industries = [
 
-  sub?: string;
+{
+ title:"OIL & GAS",
+ sub:"Energy Infrastructure",
+ image:oil
+},
 
-  description?: string;
+{
+ title:"INFRASTRUCTURE",
+ sub:"Building Connections",
+ image:infrastructure
+},
 
-  image?: string;
+{
+ title:"STEEL & METAL",
+ sub:"Industrial Solutions",
+ image:steel
+},
 
-  imageUrl?: string;
+{
+ title:"WATER TREATMENT",
+ sub:"Sustainable Resources",
+ image:water
+},
 
+{
+ title:"TRANSPORTATION",
+ sub:"Moving Forward",
+ image:transport
+},
+
+{
+ title:"MANUFACTURING",
+ sub:"Advanced Production",
+ image:manufacturing
 }
-
-interface IndustriesProps {
-
-  software: SoftwareItem[];
-
-}
-
-const icons = [
-
-  Factory,
-
-  Building2,
-
-  Settings,
-
-  Droplets,
-
-  Truck,
-
-  Factory,
 
 ];
 
-const circleCards = [
 
-  {
 
-    position: "top-5 left-1/2 -translate-x-1/2",
+const icons=[
+ Factory,
+ Building2,
+ Settings,
+ Droplets,
+ Truck,
+ Factory
+];
 
-    index: 0,
 
-  },
 
-  {
+const circleCards=[
 
-    position: "top-32 right-5",
+{
+ position:"top-5 left-1/2 -translate-x-1/2",
+ index:0
+},
 
-    index: 1,
+{
+ position:"top-32 right-5",
+ index:1
+},
 
-  },
+{
+ position:"top-32 left-5",
+ index:2
+},
 
-  {
+{
+ position:"bottom-32 left-5",
+ index:3
+},
 
-    position: "top-32 left-5",
+{
+ position:"bottom-32 right-5",
+ index:4
+},
 
-    index: 2,
-
-  },
-
-  {
-
-    position: "bottom-32 left-5",
-
-    index: 3,
-
-  },
-
-  {
-
-    position: "bottom-32 right-5",
-
-    index: 4,
-
-  },
-
-  {
-
-    position: "bottom-5 left-1/2 -translate-x-1/2",
-
-    index: 5,
-
-  },
+{
+ position:"bottom-5 left-1/2 -translate-x-1/2",
+ index:5
+}
 
 ];
 
-export default function Industries({
 
-  software,
 
-}: IndustriesProps) {
+export default function Industries(){
 
-  const [active, setActive] = useState(0);
 
-  /*
+const [active,setActive]=useState(0);
 
-   * Prevent active index from going
 
-   * outside API data length.
 
-   */
+useEffect(()=>{
 
-  useEffect(() => {
+const timer=setInterval(()=>{
 
-    if (
+setActive((prev)=>
+prev === industries.length-1
+?0
+:prev+1
+)
 
-      software?.length &&
+},4500);
 
-      active >= Math.min(software.length, 6)
 
-    ) {
+return()=>clearInterval(timer);
 
-      setActive(0);
 
-    }
+},[]);
 
-  }, [software, active]);
 
-  /*
 
-   * Auto change active item
+return(
 
-   */
+<section className="
+relative
+overflow-hidden
+bg-modura-off-white
+py-5
+lg:py-16
+">
 
-  useEffect(() => {
 
-    if (!software?.length) return;
+<div className="
+max-w-7xl
+mx-auto
+px-6
+lg:px-8
+">
 
-    const timer = setInterval(() => {
 
-      setActive((prev) =>
+<div className="
+grid
+lg:grid-cols-[400px_1fr]
+gap-16
+items-center
+">
 
-        prev === Math.min(software.length, 6) - 1
 
-          ? 0
 
-          : prev + 1
+{/* LEFT */}
 
-      );
+<div>
 
-    }, 4500);
 
-    return () => clearInterval(timer);
 
-  }, [software]);
 
-  if (!software?.length) {
+<div className="
+flex
+items-center
+gap-3
+font-body
+text-xs
+uppercase
+font-bold
+tracking-[5px]
+text-modura-secondary
+">
 
-    return null;
 
-  }
+<DraftingCompass
+size={20}
+strokeWidth={1.5}
+className="
+text-modura-secondary
+"
+/>
 
-  /*
 
-   * Keep your existing 6-card design.
+<span>
+OUR EXPERTISE
+</span>
 
-   * If API has more than 6 items,
 
-   * only first 6 are displayed in orbit.
+</div>
 
-   */
 
-  const displayItems = software.slice(0, 6);
 
-  return (
+<h2 className="
+mt-4
+font-heading
+text-5xl
+lg:text-6xl
+font-semibold
+text-modura-primary
+">
 
-    <section
+Industries 
 
-      className="
+<span className="
+block
+text-modura-secondary
+">
 
-        relative
+We Serve
 
-        overflow-hidden
+</span>
 
-        bg-modura-off-white
+</h2>
 
-        py-12
-        md:py-16
 
-      "
 
-    >
+<p className="
+font-body
+mt-8
+text-modura-gray-600
+leading-7
+max-w-sm
+">
 
-      <div
+Delivering innovative and sustainable engineering solutions across diverse industries worldwide.
 
-        className="
+</p>
 
-          mx-auto
 
-          max-w-full
 
-       px-4
-    md:px-6
-    lg:grid-cols-2
-    lg:gap-12
-    lg:px-10
-    xl:gap-16
-    2xl:px-16
 
-        "
+<div className="
+relative
+mt-12
+h-[520px]
+overflow-y-auto
+scrollbar-hide
+space-y-4
+pr-4
+">
 
-      >
 
-        <div
+<div className="
+absolute
+left-7
+top-5
+bottom-5
+w-px
+bg-modura-border
+"/>
 
-          className="
 
-            grid
 
-            items-center
+{
+industries.map((item,index)=>{
 
-            gap-16
+const Icon=icons[index];
 
-            lg:grid-cols-[400px_1fr]
 
-          "
+return(
 
-        >
+<motion.button
 
-          {/* LEFT */}
+key={index}
 
-          <div>
+onClick={()=>setActive(index)}
 
-            <div
+whileHover={{
+x:8
+}}
 
-              className="
+className={`
+relative
+z-10
+w-full
+flex
+items-center
+gap-5
+px-6
+py-5
+rounded-full
+transition-all
+duration-500
 
-                flex
+${
+active===index
+?
+"bg-modura-primary text-white shadow-xl"
+:
+"text-modura-primary hover:bg-white"
+}
 
-                items-center
+`}
 
-                gap-3
+>
 
-                font-body
 
-                text-xs
+<div className={`
+w-12
+h-12
+rounded-full
+flex
+items-center
+justify-center
+border
 
-                font-bold
+${
+active===index
+?
+"bg-[#c49a45] border-[#c49a45]"
+:
+"bg-white border-modura-border"
+}
 
-                uppercase
+`}>
 
-                tracking-[5px]
+<Icon size={22}/>
 
-                text-modura-secondary
+</div>
 
-              "
 
-            >
 
-              <DraftingCompass
+<div className="
+text-left
+">
 
-                size={20}
+<h4 className="
+font-heading
+text-lg
+font-semibold
+">
 
-                strokeWidth={1.5}
+{item.title}
 
-                className="
+</h4>
 
-                  text-modura-secondary
 
-                "
+<p className="
+font-body
+text-sm
+opacity-70
+">
 
-              />
+{item.sub}
 
-              <span>
+</p>
 
-                OUR EXPERTISE
 
-              </span>
+</div>
 
-            </div>
 
-            <h2
 
-              className="
+<ArrowRight
+size={20}
+className="ml-auto"
+/>
 
-                mt-4
 
-                font-heading
+</motion.button>
 
-                text-5xl
+)
 
-                font-semibold
+})
 
-                text-modura-primary
+}
 
-                lg:text-6xl
 
-              "
+</div>
 
-            >
 
-              Industries
+</div>
+{/* RIGHT SECTION */}
 
-              <span
 
-                className="
+<div className="
+relative
+h-[720px]
+flex
+items-center
+justify-center
+">
 
-                  block
 
-                  text-modura-secondary
 
-                "
+{/* CUSTOM ORBIT DESIGN */}
 
-              >
+<div className="
+absolute
+w-[560px]
+h-[560px]
+rounded-full
+border
+border-[#c49a45]/30
+">
 
-                We Serve
 
-              </span>
+<div className="
+absolute
+top-1/2
+left-0
+-translate-y-1/2
+w-3
+h-3
+rounded-full
+bg-[#c49a45]
+"/>
 
-            </h2>
 
-            <p
+<div className="
+absolute
+top-1/2
+right-0
+-translate-y-1/2
+w-3
+h-3
+rounded-full
+bg-[#c49a45]
+"/>
 
-              className="
 
-                mt-8
+</div>
 
-                max-w-sm
 
-                font-body
 
-                leading-7
+<div className="
+absolute
+w-[430px]
+h-[430px]
+rounded-full
+bg-white/60
+shadow-inner
+"/>
 
-                text-modura-gray-600
 
-              "
 
-            >
 
-              Delivering innovative and sustainable
 
-              engineering solutions across diverse
 
-              industries worldwide.
 
-            </p>
+{/* IMAGE CARDS */}
 
-            <div
 
-              className="
+{
+circleCards.map((card,index)=>(
 
-                scrollbar-hide
 
-                relative
+<motion.div
 
-                mt-12
 
-                h-[520px]
+key={index}
 
-                space-y-4
 
-                overflow-y-auto
+onClick={()=>setActive(card.index)}
 
-                pr-4
 
-              "
+whileHover={{
+scale:1.08,
+y:-8
+}}
 
-            >
 
-              <div
 
-                className="
+transition={{
+duration:.4
+}}
 
-                  absolute
 
-                  bottom-5
+className={`
 
-                  left-7
+absolute
 
-                  top-5
+${card.position}
 
-                  w-px
+w-[200px]
 
-                  bg-modura-border
+h-[140px]
 
-                "
+overflow-hidden
 
-              />
 
-              {displayItems.map(
+bg-white
 
-                (item, index) => {
 
-                  const Icon =
+shadow-xl
 
-                    icons[index] || Factory;
 
-                  const title =
+border-[6px]
 
-                    item.title ||
+border-white
 
-                    item.name ||
 
-                    "Industry";
+clip-industry
 
-                  const sub =
 
-                    item.sub ||
+cursor-pointer
 
-                    item.description ||
 
-                    "Engineering Solutions";
+z-20
 
-                  return (
+`}
 
-                    <motion.button
 
-                      key={item.id ?? index}
+>
 
-                      onClick={() =>
 
-                        setActive(index)
+<Image
 
-                      }
+src={industries[card.index].image}
 
-                      whileHover={{
+alt={industries[card.index].title}
 
-                        x: 8,
+fill
 
-                      }}
+sizes="200px"
 
-                      className={`
+className="
+object-cover
+"
 
-                        relative
+/>
 
-                        z-10
 
-                        flex
+</motion.div>
 
-                        w-full
 
-                        items-center
 
-                        gap-5
+))
 
-                        rounded-full
+}
 
-                        px-6
 
-                        py-5
 
-                        transition-all
+{/* CENTER IMAGE AREA */}
 
-                        duration-500
 
-                        ${
 
-                          active === index
+<div className="
 
-                            ? "bg-modura-primary text-white shadow-xl"
+relative
 
-                            : "text-modura-primary hover:bg-white"
+w-[370px]
 
-                        }
+h-[370px]
 
-                      `}
 
-                    >
+rounded-full
 
-                      <div
 
-                        className={`
+overflow-hidden
 
-                          flex
 
-                          h-12
+border-[12px]
 
-                          w-12
 
-                          shrink-0
+border-white
 
-                          items-center
 
-                          justify-center
+ring-8
 
-                          rounded-full
+ring-[#c49a45]/20
 
-                          border
 
-                          ${
+shadow-2xl
 
-                            active === index
 
-                              ? "border-[#c49a45] bg-[#c49a45]"
+z-30
 
-                              : "border-modura-border bg-white"
+">
 
-                          }
 
-                        `}
+<AnimatePresence mode="wait">
 
-                      >
 
-                        <Icon size={22} />
+<motion.div
 
-                      </div>
 
-                      <div className="min-w-0 text-left">
+key={active}
 
-                        <h4
 
-                          className="
+initial={{
 
-                            font-heading
+opacity:0,
 
-                            text-lg
+scale:1.15
 
-                            font-semibold
+}}
 
-                          "
 
-                        >
+animate={{
 
-                          {title}
+opacity:1,
 
-                        </h4>
+scale:1
 
-                        <p
+}}
 
-                          className="
 
-                            font-body
+transition={{
 
-                            text-sm
+duration:.7
 
-                            opacity-70
+}}
 
-                          "
 
-                        >
+className="
+absolute
+inset-0
+"
 
-                          {sub}
+>
 
-                        </p>
 
-                      </div>
+<Image
 
-                      <ArrowRight
+src={industries[active].image}
 
-                        size={20}
+alt={industries[active].title}
 
-                        className="ml-auto shrink-0"
+fill
 
-                      />
+sizes="370px"
 
-                    </motion.button>
+className="
+object-cover
+"
 
-                  );
+/>
 
-                }
 
-              )}
 
-            </div>
+<div className="
 
-          </div>
+absolute
 
-          {/* RIGHT SECTION */}
+inset-0
 
-          <div className="relative h-[300px] min-w-0 w-full overflow-hidden sm:h-[480px] md:h-[610px] lg:h-[690px] xl:h-[720px]">
-<div className="absolute left-1/2 top-1/2 flex h-[720px] w-[720px] -translate-x-1/2 -translate-y-1/2 scale-[0.40] sm:scale-[0.68] md:scale-[0.85] lg:scale-[0.95] xl:scale-100 items-center justify-center">
 
-            {/* CUSTOM ORBIT DESIGN */}
+bg-gradient-to-t
 
-            <div
+from-modura-primary/90
 
-              className="
+via-modura-primary/30
 
-                absolute
+to-transparent
 
-                h-[560px]
+"/>
 
-                w-[560px]
 
-                rounded-full
 
-                border
+</motion.div>
 
-                border-[#c49a45]/30
 
-              "
+</AnimatePresence>
 
-            >
 
-              <div
 
-                className="
 
-                  absolute
 
-                  left-0
+<div className="
 
-                  top-1/2
+absolute
 
-                  h-3
+bottom-14
 
-                  w-3
+left-0
 
-                  -translate-y-1/2
+right-0
 
-                  rounded-full
 
-                  bg-[#c49a45]
+text-center
 
-                "
 
-              />
+text-white
 
-              <div
 
-                className="
+z-40
 
-                  absolute
+">
 
-                  right-0
 
-                  top-1/2
+<h3 className="
 
-                  h-3
+font-heading
 
-                  w-3
+text-4xl
 
-                  -translate-y-1/2
+font-bold
 
-                  rounded-full
+tracking-wide
 
-                  bg-[#c49a45]
+">
 
-                "
 
-              />
+{industries[active].title}
 
-            </div>
 
-            <div
+</h3>
 
-              className="
 
-                absolute
 
-                h-[430px]
+<p className="
 
-                w-[430px]
+font-body
 
-                rounded-full
+mt-3
 
-                bg-white/60
+text-sm
 
-                shadow-inner
+uppercase
 
-              "
+tracking-[4px]
 
-            />
+">
 
-            {/* IMAGE CARDS */}
 
-            {circleCards.map(
+{industries[active].sub}
 
-              (card, index) => {
 
-                const item =
+</p>
 
-                  displayItems[card.index];
 
-                if (!item) return null;
+</div>
 
-                const image =
 
-                  item.imageUrl ||
 
-                  item.image ||
+</div>
 
-                  "";
 
-                const title =
+</div>
+</div>
 
-                  item.title ||
+</div>
 
-                  item.name ||
 
-                  "Industry";
+</section>
 
-                return (
-
-                  <motion.div
-
-                    key={
-
-                      item.id ??
-
-                      index
-
-                    }
-
-                    onClick={() =>
-
-                      setActive(card.index)
-
-                    }
-
-                    whileHover={{
-
-                      scale: 1.08,
-
-                      y: -8,
-
-                    }}
-
-                    transition={{
-
-                      duration: 0.4,
-
-                    }}
-
-                    className={`
-
-                      absolute
-
-                      ${card.position}
-
-                      z-20
-
-                      h-[140px]
-
-                      w-[200px]
-
-                      cursor-pointer
-
-                      overflow-hidden
-
-                      border-[6px]
-
-                      border-white
-
-                      bg-white
-
-                      shadow-xl
-
-                      clip-industry
-
-                    `}
-
-                  >
-
-                    <Image
-
-                      src={image}
-
-                      alt={title}
-
-                      fill
-
-                      sizes="200px"
-
-                      className="
-
-                        object-cover
-
-                      "
-
-                    />
-
-                  </motion.div>
-
-                );
-
-              }
-
-            )}
-
-            {/* CENTER IMAGE AREA */}
-
-            <div
-
-              className="
-
-                relative
-
-                z-30
-
-                h-[370px]
-
-                w-[370px]
-
-                overflow-hidden
-
-                rounded-full
-
-                border-[12px]
-
-                border-white
-
-                shadow-2xl
-
-                ring-8
-
-                ring-[#c49a45]/20
-
-              "
-
-            >
-
-              <AnimatePresence mode="wait">
-
-                <motion.div
-
-                  key={active}
-
-                  initial={{
-
-                    opacity: 0,
-
-                    scale: 1.15,
-
-                  }}
-
-                  animate={{
-
-                    opacity: 1,
-
-                    scale: 1,
-
-                  }}
-
-                  transition={{
-
-                    duration: 0.7,
-
-                  }}
-
-                  className="
-
-                    absolute
-
-                    inset-0
-
-                  "
-
-                >
-
-                  <Image
-
-                    src={
-
-                      displayItems[active]
-
-                        ?.imageUrl ||
-
-                      displayItems[active]
-
-                        ?.image ||
-
-                      ""
-
-                    }
-
-                    alt={
-
-                      displayItems[active]
-
-                        ?.title ||
-
-                      displayItems[active]
-
-                        ?.name ||
-
-                      "Industry"
-
-                    }
-
-                    fill
-
-                    sizes="370px"
-
-                    className="
-
-                      object-cover
-
-                    "
-
-                  />
-
-                  <div
-
-                    className="
-
-                      absolute
-
-                      inset-0
-
-                      bg-gradient-to-t
-
-                      from-modura-primary/90
-
-                      via-modura-primary/30
-
-                      to-transparent
-
-                    "
-
-                  />
-
-                </motion.div>
-
-              </AnimatePresence>
-
-              <div
-
-                className="
-
-                  absolute
-
-                  bottom-14
-
-                  left-0
-
-                  right-0
-
-                  z-40
-
-                  text-center
-
-                  text-white
-
-                "
-
-              >
-
-                <h3
-
-                  className="
-
-                    font-heading
-
-                    text-4xl
-
-                    font-bold
-
-                    tracking-wide
-
-                  "
-
-                >
-
-                  {displayItems[active]
-
-                    ?.title ||
-
-                    displayItems[active]
-
-                      ?.name ||
-
-                    "Industry"}
-
-                </h3>
-
-                <p
-
-                  className="
-
-                    mt-3
-
-                    font-body
-
-                    text-sm
-
-                    uppercase
-
-                    tracking-[4px]
-
-                  "
-
-                >
-
-                  {displayItems[active]
-
-                    ?.sub ||
-
-                    displayItems[active]
-
-                      ?.description ||
-
-                    "Engineering Solutions"}
-
-                </p>
-
-              </div>
-
-            </div>
-
-          </div>
-        </div>
-
-        </div>
-
-      </div>
-
-    </section>
-
-  );
+)
 
 }

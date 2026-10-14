@@ -498,9 +498,9 @@ export default function PortfolioCategoryPage() {
 
           <div className="flex justify-center px-4 py-8 md:px-6 lg:px-10 2xl:px-16">
 
-            <div className="flex w-full max-w-[400px] flex-col gap-3 sm:flex-row">
+            <div className="flex w-full max-w-[400px]  gap-3 flex-row">
 
-              {(["2d", "3d"] as const).map((type) => {
+              {(["3d", "2d"] as const).map((type) => {
 
                 const active = activeTab === type;
 

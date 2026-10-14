@@ -136,13 +136,16 @@ export default function ContactPage() {
 
     const { name, value } = e.target;
 
+   const cleanValue = name === "phone" ? value.replace(/\D/g, "").slice(0, 10) : value;
+
     setFormData((prev) => ({
 
       ...prev,
 
-      [name]: value,
+      [name]: cleanValue,
 
     }));
+
 
     setErrors((prev) => ({
 

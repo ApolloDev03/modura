@@ -575,7 +575,8 @@ const getShortDescription = (html: string, limit = 80) => {
         relative
         overflow-hidden
         bg-modura-off-white
-        py-16
+       py-10
+        lg:py-16
       "
     >
       <div

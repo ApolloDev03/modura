@@ -1,38 +1,38 @@
+"use client";
 import Image from "next/image";
+import DOMPurify from "dompurify";
 import Link from "next/link";
 import {
     ArrowRight,
     ArrowUpRight,
-    DraftingCompass,
     ChevronDown,
+    DraftingCompass,
 } from "lucide-react";
-
+import {
+    useLayoutEffect,
+    useEffect,
+    useRef,
+    useState,
+} from "react";
+import { motion } from "framer-motion";
+import gsap from "gsap";
+import {
+    ScrollTrigger,
+} from "gsap/ScrollTrigger";
 import Breadcrumb from "@/components/Breadcrumb";
-
-import ServiceDetailContent from "./ServiceDetailContent";
-
-import api from "@/lib/api";
+import { useParams } from "next/navigation";
 import { apiUrl } from "../../config";
-
-
+gsap.registerPlugin(
+    ScrollTrigger
+);
 /* =========================================================
    TYPES
 ========================================================= */
-
 type FAQ = {
     id?: number;
     question?: string;
     answer?: string;
 };
-
-type RelatedService = {
-    id: number;
-    title: string;
-    slug: string;
-    image?: string;
-    imageUrl?: string;
-};
-
 type Blog = {
     id: number;
     title: string;
@@ -40,10 +40,9 @@ type Blog = {
     image?: string;
     imageUrl?: string;
     author?: string;
-    description :string;
+    description:string;
     publishedAt?: string;
 };
-
 type ServiceDetail = {
     id: number;
     title: string;
@@ -60,25 +59,17 @@ type ServiceDetail = {
     headScript?: string;
     bodyScript?: string;
     status?: boolean;
-
     category?: {
         id: number;
         name: string;
         slug: string;
     };
-
     faqs?: FAQ[];
-
-    related?: RelatedService[];
-
     blogs?: Blog[];
 };
-
-
 /* =========================================================
    IMAGE URL
 ========================================================= */
-
 function getImageUrl(
     image?: string,
     imageUrl?: string
@@ -86,37 +77,31 @@ function getImageUrl(
     if (imageUrl) {
         return imageUrl;
     }
-
     if (!image) {
         return "/images/placeholder.jpg";
     }
-
     if (image.startsWith("http")) {
         return image;
     }
-
     return `https://mvnl.salexo.co.in${image}`;
 }
-
-
 /* =========================================================
-   DATE FORMAT
+   DATE
 ========================================================= */
-
 function formatDate(date?: string) {
-
     if (!date) {
         return "";
     }
-
-    const parsedDate =
+    const parsed =
         new Date(date);
-
-    if (Number.isNaN(parsedDate.getTime())) {
+    if (
+        Number.isNaN(
+            parsed.getTime()
+        )
+    ) {
         return "";
     }
-
-    return parsedDate.toLocaleDateString(
+    return parsed.toLocaleDateString(
         "en-US",
         {
             day: "2-digit",
@@ -125,191 +110,1110 @@ function formatDate(date?: string) {
         }
     );
 }
-
-
 /* =========================================================
-   API
+   COMPONENT
 ========================================================= */
-
-async function getServiceDetail(
-    slug: string
-): Promise<ServiceDetail | null> {
-
-    try {
-
-        const response =
-            await api.post(
-                `${apiUrl}/serviceDetail`,
-                {
-                    slug,
-                }
-            );
-
-
-        if (
-            response.data?.success &&
-            response.data?.data
-        ) {
-
-            return response.data.data;
-
-        }
-
-
-        return null;
-
-    } catch (error) {
-
-        console.error(
-            "Service Detail API Error:",
-            error
-        );
-
-        return null;
-
-    }
-
+/* SERVICE DESCRIPTION — Tailwind HTML element styling */
+const SERVICE_RICH_CONTENT_CLASSES = `
+  service-rich-html
+  min-w-0 w-full max-w-full break-words
+  font-body text-[14px] leading-[1.85] text-modura-gray-600
+  sm:text-[16px] sm:leading-[1.9]
+  [&_p]:mb-4 [&_p]:max-w-full [&_p]:break-words
+  [&_p]:text-[14px] [&_p]:leading-[1.85]
+  sm:[&_p]:text-[16px] sm:[&_p]:leading-[1.9]
+  [&_p:last-child]:mb-0
+  [&_.ql-align-justify]:text-justify
+  [&_.ql-align-center]:text-center
+  [&_.ql-align-right]:text-right
+  [&_h1]:mb-4 [&_h1]:mt-6 [&_h1]:break-words
+  [&_h1]:font-heading [&_h1]:text-[30px] [&_h1]:font-bold
+  [&_h1]:leading-[1.2] [&_h1]:text-modura-primary
+  sm:[&_h1]:text-[38px]
+  [&_h2]:mb-4 [&_h2]:mt-7 [&_h2]:break-words
+  [&_h2]:border-l-[3px] [&_h2]:border-modura-secondary
+  [&_h2]:pl-4 [&_h2]:font-heading [&_h2]:text-[24px]
+  [&_h2]:font-bold [&_h2]:leading-[1.3] [&_h2]:text-modura-primary
+  sm:[&_h2]:text-[30px]
+  [&_h3]:mb-3 [&_h3]:mt-6 [&_h3]:break-words
+  [&_h3]:font-heading [&_h3]:text-[21px] [&_h3]:font-bold
+  [&_h3]:leading-[1.35] [&_h3]:text-modura-secondary
+  sm:[&_h3]:text-[25px]
+  [&_h4]:mb-3 [&_h4]:mt-5 [&_h4]:font-heading
+  [&_h4]:text-[19px] [&_h4]:font-semibold [&_h4]:text-modura-primary
+  [&_h5]:mb-3 [&_h5]:mt-4 [&_h5]:font-heading
+  [&_h5]:text-[17px] [&_h5]:font-semibold [&_h5]:text-modura-primary
+  [&_h6]:mb-3 [&_h6]:mt-4 [&_h6]:font-heading
+  [&_h6]:text-[15px] [&_h6]:font-bold [&_h6]:text-modura-secondary
+  [&_ul]:mb-4 [&_ul]:mt-3 [&_ul]:list-disc [&_ul]:space-y-1
+  [&_ul]:pl-6 [&_ul]:marker:text-modura-secondary
+  sm:[&_ul]:pl-8
+  [&_ol]:mb-4 [&_ol]:mt-3 [&_ol]:list-decimal [&_ol]:space-y-1
+  [&_ol]:pl-6 [&_ol]:marker:font-bold [&_ol]:marker:text-modura-secondary
+  sm:[&_ol]:pl-8
+  [&_li]:break-words [&_li]:pl-1 [&_li]:leading-[1.8]
+  [&_li_p]:mb-1
+  [&_li_ul]:mb-2 [&_li_ol]:mb-2
+  [&_strong]:font-bold [&_strong]:text-modura-primary
+  [&_b]:font-bold [&_b]:text-modura-primary
+  [&_em]:italic [&_i]:italic
+  [&_u]:underline
+  [&_a]:break-all [&_a]:font-medium [&_a]:text-modura-secondary
+  [&_a]:underline [&_a]:underline-offset-4
+  hover:[&_a]:text-modura-primary
+  [&_blockquote]:my-5 [&_blockquote]:border-l-4
+  [&_blockquote]:border-modura-secondary [&_blockquote]:bg-modura-off-white
+  [&_blockquote]:px-5 [&_blockquote]:py-4 [&_blockquote]:italic
+  [&_blockquote]:text-modura-primary
+  [&_img]:my-5 [&_img]:block [&_img]:h-auto [&_img]:max-w-full
+  [&_figure]:my-5 [&_figure]:max-w-full
+  [&_figcaption]:mt-2 [&_figcaption]:text-center
+  [&_figcaption]:text-xs [&_figcaption]:text-modura-gray-500
+  [&_table]:my-6 [&_table]:block [&_table]:max-w-full
+  [&_table]:overflow-x-auto [&_table]:border-collapse
+  [&_th]:border [&_th]:border-modura-gray-200
+  [&_th]:bg-modura-primary [&_th]:px-4 [&_th]:py-3
+  [&_th]:text-left [&_th]:text-sm [&_th]:font-semibold [&_th]:text-white
+  [&_td]:border [&_td]:border-modura-gray-200
+  [&_td]:px-4 [&_td]:py-3 [&_td]:align-top
+  [&_hr]:my-8 [&_hr]:border-modura-gray-200
+  [&_pre]:my-5 [&_pre]:max-w-full [&_pre]:overflow-x-auto
+  [&_pre]:bg-modura-primary [&_pre]:p-5 [&_pre]:text-white
+  [&_code]:break-words [&_code]:font-mono
+  [&_code]:text-[13px]
+  [&_div]:max-w-full
+  [&_h1:first-child]:mt-0 [&_h2:first-child]:mt-0
+  [&_h3:first-child]:mt-0
+`;
+function getContentImageUrl(src: string) {
+    if (/^(https?:)?\/\//i.test(src) || /^(data:|blob:)/i.test(src)) return src;
+    return `https://mvnl.salexo.co.in/${src.replace(/^\/+/, "")}`;
 }
-
-
-/* =========================================================
-   PAGE
-========================================================= */
-
-export default async function ServiceDetailPage({
-    params,
+function ServiceRichHTML({ html, className = "" }: { html?: string; className?: string }) {
+  const [safeHtml, setSafeHtml] = useState("");
+  useEffect(() => {
+    // Render untrusted CMS HTML safely; presentation is controlled by Tailwind.
+    const sanitized = DOMPurify.sanitize(html || "", {
+      USE_PROFILES: { html: true },
+      FORBID_TAGS: ["style", "script", "iframe", "object", "embed", "form", "input", "button", "svg", "math"],
+      FORBID_ATTR: ["style", "srcset", "onerror", "onclick", "onload"],
+    });
+    // Relative assets from the API should resolve against the website, not localhost.
+    const template = document.createElement("template");
+    template.innerHTML = sanitized;
+  // React Quill can encode every gap as  , which prevents wrapping.
+  // Restore ordinary spaces so long paragraphs wrap on mobile screens.
+  const textWalker = document.createTreeWalker(template.content, NodeFilter.SHOW_TEXT);
+  let textNode: Node | null;
+  while ((textNode = textWalker.nextNode())) {
+    if (textNode.textContent?.includes("\u00a0")) {
+      textNode.textContent = textNode.textContent.replace(/\u00a0/g, " ");
+    }
+  }
+    template.content.querySelectorAll("img").forEach((img) => {
+      const src = img.getAttribute("src") || "";
+      if (src && !src.startsWith("data:")) img.setAttribute("src", getContentImageUrl(src));
+      img.setAttribute("loading", "lazy");
+      img.setAttribute("decoding", "async");
+    });
+    template.content.querySelectorAll("a").forEach((a) => {
+      const href = a.getAttribute("href") || "";
+      if (/^https?:\/\//i.test(href)) {
+        a.setAttribute("target", "_blank");
+        a.setAttribute("rel", "noopener noreferrer");
+      }
+    });
+    setSafeHtml(template.innerHTML);
+  }, [html]);
+  if (!safeHtml) return null;
+  return <div className={`${SERVICE_RICH_CONTENT_CLASSES} ${className}`} dangerouslySetInnerHTML={{ __html: safeHtml }} />;
+}
+function ServiceDetailContent({
+    service,
 }: {
-    params: Promise<{
-        slug: string;
-    }>;
+    service: ServiceDetail;
 }) {
-
-    const { slug } =
-        await params;
-
-
-    const service =
-        await getServiceDetail(slug);
-
-
+    const [activeFaq, setActiveFaq] =
+        useState<number | null>(
+            service.faqs &&
+            service.faqs.length > 0
+                ? 0
+                : null
+        );
+    const sectionRef =
+        useRef<HTMLDivElement | null>(
+            null
+        );
     /* =====================================================
-       ERROR
+       GSAP
     ===================================================== */
-
-    if (!service) {
-
-        return (
-
-            <main
+    useLayoutEffect(() => {
+        if (!service.blogs?.length || !sectionRef.current) return;
+        const ctx =
+            gsap.context(() => {
+                gsap.from(
+                    ".blog-card",
+                    {
+                        opacity: 0,
+                        y: 70,
+                        duration: 1,
+                        ease: "power3.out",
+                        stagger: 0.2,
+                        scrollTrigger: {
+                            trigger:
+                                sectionRef.current,
+                            start: "top 75%",
+                            once: true,
+                        },
+                    }
+                );
+                ScrollTrigger.refresh();
+            },
+            sectionRef);
+        return () =>
+            ctx.revert();
+    }, []);
+function cleanDescription(
+    text?: string,
+    maxLength = 90
+) {
+    if (!text) return "";
+    const cleanText = text
+        .replace(/<[^>]*>/g, " ")
+        .replace(/ /gi, " ")
+        .replace(/&/gi, "&")
+        .replace(/"/gi, '"')
+        .replace(/'/gi, "'")
+        .replace(/\s+/g, " ")
+        .trim();
+    if (cleanText.length <= maxLength) {
+        return cleanText;
+    }
+    return `${cleanText.substring(0, maxLength).trim()}...`;
+}
+    return (
+        <main
+            className="
+                min-h-screen
+                w-full
+                min-w-0
+                overflow-x-clip
+                bg-modura-off-white
+            "
+        >
+            {/* =================================================
+                BREADCRUMB
+            ================================================= */}
+            <Breadcrumb
+                title={service.title}
+                parent={service.category?.name || "Services"}
+                parentHref="/services"
+            />
+            {/* =================================================
+                HERO
+            ================================================= */}
+            <section
                 className="
-                    min-h-screen
+                    bg-white
+                "
+            >
+                <div
+                    className="
+                        mx-auto
+                        max-w-[1440px]
+                        px-5
+                        pb-7
+                        pt-8
+                        sm:px-8
+                        sm:pb-12
+                        sm:pt-10
+                        lg:px-12
+                        lg:pb-14
+                        lg:pt-10
+                    "
+                >
+                    <div
+                        className="
+                            grid
+                            gap-7
+                            lg:grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)]
+                            lg:items-end
+                            lg:gap-7
+                        "
+                    >
+                        {/* TITLE */}
+                        <div>
+                            <div
+                                className="
+                                    flex
+                                    items-center
+                                    gap-3
+                                "
+                            >
+                                <span
+                                    className="
+                                        h-[2px]
+                                        w-10
+                                        bg-modura-secondary
+                                    "
+                                />
+                                <span
+                                    className="
+                                        font-body
+                                        text-[13px]
+                                        font-bold
+                                        uppercase
+                                        tracking-[0.3em]
+                                        text-modura-secondary
+                                    "
+                                >
+                                    Service
+                                </span>
+                            </div>
+                            <h1
+                                className="
+                                    mt-6
+                                    max-w-[800px]
+                                    font-heading
+                                    text-[clamp(2.5rem,7vw,3.25rem)]
+                                    font-bold
+                                    leading-[0.9]
+                                    tracking-[-0.055em]
+                                    text-modura-primary
+                                    sm:text-[64px]
+                                    lg:text-[clamp(4rem,6vw,6.25rem)]
+                                "
+                            >
+                                {service.title}
+                            </h1>
+                        </div>
+                        {/* SHORT DESCRIPTION */}
+                        <p
+                            className="
+                                max-w-[580px]
+                                font-body
+                                text-base
+                                leading-8
+                                text-modura-gray-600
+                                lg:pb-2
+                                lg:text-lg
+                            "
+                        >
+                            {service.shortDescription ||
+                                "Professional engineering and architectural solutions tailored to your project requirements."}
+                        </p>
+                    </div>
+                    {/* IMAGE */}
+                    <div
+                        className="
+                            relative
+                            mt-6
+                            aspect-[4/3]
+                           sm:aspect-[16/9]
+                           lg:aspect-[16/7]
+                            overflow-hidden
+                            bg-modura-light
+                            sm:mt-10
+                        "
+                    >
+                        <Image
+                            src={getImageUrl(
+                                service.image,
+                                service.imageUrl
+                            )}
+                            alt={
+                                service.title
+                            }
+                            fill
+                            priority
+                            sizes="100vw"
+                            className="
+                                object-cover
+                                transition-transform
+                                duration-[1400ms]
+                                hover:scale-[1.025]
+                            "
+                        />
+                        <div
+                            className="
+                                absolute
+                                bottom-0
+                                left-0
+                                h-1
+                                w-36
+                                bg-modura-secondary
+                            "
+                        />
+                    </div>
+                </div>
+            </section>
+            {/* =================================================
+                FULL WIDTH CONTENT
+            ================================================= */}
+            <section
+                className="
                     bg-modura-off-white
                 "
             >
-
-                <Breadcrumb
-                    title="Service"
-                />
-
-
-                <section
+                <div
                     className="
-                        flex
-                        min-h-[500px]
-                        items-center
-                        justify-center
+                        mx-auto
+                        max-w-[1280px]
                         px-5
+                        py-10
+                        sm:px-8
+                        sm:py-10
+                        lg:px-10
                     "
                 >
-
+                    {/* INTRO */}
                     <div
                         className="
-                            text-center
+                            mb-8
+                            grid
+                            gap-6
+                            border-b
+                            border-modura-gray-300
+                            pb-7
+                            lg:grid-cols-[minmax(0,1fr)_minmax(0,0.65fr)]
+                            lg:items-end
                         "
                     >
-
-                        <span
-                            className="
-                                font-body
-                                text-[12px]
-                                font-bold
-                                uppercase
-                                tracking-[0.3em]
-                                text-modura-secondary
-                            "
-                        >
-                            Service
-                        </span>
-
-
-                        <h1
-                            className="
-                                mt-4
-                                font-heading
-                                text-4xl
-                                font-bold
-                                text-modura-primary
-                            "
-                        >
-                            Service Not Found
-                        </h1>
-
-
+                        <div>
+                            <span
+                                className="
+                                    font-body
+                                    text-[13px]
+                                    font-bold
+                                    uppercase
+                                    tracking-[0.3em]
+                                    text-modura-secondary
+                                "
+                            >
+                                Service Overview
+                            </span>
+                            <h2
+                                className="
+                                    mt-5
+                                    max-w-[800px]
+                                    font-heading
+                                    text-4xl
+                                    font-bold
+                                    leading-[0.95]
+                                    tracking-[-0.04em]
+                                    text-modura-primary
+                                    sm:text-5xl
+                                "
+                            >
+                                Professional solutions.
+                                <span
+                                    className="
+                                        text-modura-secondary
+                                    "
+                                >
+                                    {" "}
+                                    Built around your project.
+                                </span>
+                            </h2>
+                        </div>
                         <p
                             className="
-                                mt-4
+                                max-w-[400px]
+                                font-body
+                                text-sm
+                                leading-7
+                                text-modura-gray-500
+                            "
+                        >
+                            {service.shortDescription ||
+                                "A complete approach to professional project delivery, documentation and coordination."}
+                        </p>
+                    </div>
+                    {/* =================================================
+                        API DESCRIPTION
+                    ================================================= */}
+                    {service.description ? (
+                        <ServiceRichHTML html={service.description} />
+                    ) : (
+                        <p
+                            className="
                                 text-sm
                                 text-modura-gray-500
                             "
                         >
-                            The requested service
-                            could not be found.
+                            No description available.
                         </p>
-
-
-                        <Link
-                            href="/services"
+                    )}
+                </div>
+            </section>
+            {/* =================================================
+                FAQ
+            ================================================= */}
+            {service.faqs &&
+                service.faqs.length > 0 && (
+                    <section
+                        className="
+                            bg-modura-off-white
+                        "
+                    >
+                        <div
                             className="
-                                mt-7
-                                inline-flex
-                                h-[50px]
-                                items-center
-                                gap-3
-                                bg-modura-primary
-                                px-7
-                                text-[11px]
-                                font-bold
-                                uppercase
-                                tracking-[0.15em]
-                                text-white
+                                mx-auto
+                                max-w-5xl
+                                px-5
+                                py-10
+                                sm:px-8
+                                lg:px-10
                             "
                         >
-
-                            Back To Services
-
-                            <ArrowUpRight
-                                size={17}
-                            />
-
-                        </Link>
-
-                    </div>
-
-                </section>
-
-            </main>
-
-        );
-
-    }
-
-
-    return (
-
-        <ServiceDetailContent
-            service={service}
-        />
-
+                            {/* HEADER */}
+                            <div
+                                className="
+                                    mb-10
+                                    flex
+                                    flex-col
+                                    gap-5
+                                    md:flex-row
+                                    md:items-end
+                                    md:justify-center
+                                "
+                            >
+                                <div>
+                                    <div
+                                        className="
+                                            flex
+                                            items-center
+                                            justify-center
+                                            gap-3
+                                        "
+                                    >
+                                        <span
+                                            className="
+                                                flex
+                                                h-6
+                                                w-6
+                                                shrink-0
+                                                items-center
+                                                justify-center
+                                                text-modura-secondary
+                                            "
+                                        >
+                                            <DraftingCompass
+                                                size={19}
+                                                strokeWidth={1.5}
+                                            />
+                                        </span>
+                                        <span
+                                            className="
+                                                font-body
+                                                text-[12px]
+                                                font-bold
+                                                uppercase
+                                                tracking-[0.3em]
+                                                text-modura-secondary
+                                            "
+                                        >
+                                            FAQ
+                                        </span>
+                                    </div>
+                                    <h2
+                                        className="
+                                            mt-5
+                                            text-center
+                                            font-heading
+                                            text-4xl
+                                            font-bold
+                                            leading-[0.92]
+                                            tracking-[-0.045em]
+                                            text-modura-primary
+                                            sm:text-5xl
+                                            lg:text-6xl
+                                        "
+                                    >
+                                        Questions
+                                        <span
+                                            className="
+                                                text-modura-secondary
+                                            "
+                                        >
+                                            {" "}
+                                            explained.
+                                        </span>
+                                    </h2>
+                                </div>
+                            </div>
+                            {/* FAQ LIST */}
+                            <div
+                                className="
+                                    overflow-hidden
+                                    border-t
+                                    border-modura-primary
+                                    bg-white
+                                "
+                            >
+                                {service.faqs.map(
+                                    (
+                                        faq,
+                                        index
+                                    ) => {
+                                        const active =
+                                            activeFaq ===
+                                            index;
+                                        return (
+                                            <div
+                                                key={
+                                                    faq.id ??
+                                                    faq.question ??
+                                                    index
+                                                }
+                                                className={`
+                                                    relative
+                                                    border-b
+                                                    border-modura-gray-200
+                                                    transition-all
+                                                    duration-500
+                                                    ${
+                                                        active
+                                                            ? "bg-modura-light"
+                                                            : "bg-white"
+                                                    }
+                                                `}
+                                            >
+                                                {/* ACTIVE SIDE */}
+                                                <span
+                                                    className={`
+                                                        absolute
+                                                        left-0
+                                                        top-0
+                                                        h-full
+                                                        bg-modura-secondary
+                                                        transition-all
+                                                        duration-500
+                                                        ${
+                                                            active
+                                                                ? "w-[3px]"
+                                                                : "w-0"
+                                                        }
+                                                    `}
+                                                />
+                                                {/* QUESTION */}
+                                                <button
+                                                    type="button"
+                                                    onClick={() =>
+                                                        setActiveFaq(
+                                                            active
+                                                                ? null
+                                                                : index
+                                                        )
+                                                    }
+                                                    className="
+                                                        group
+                                                        flex
+                                                        min-h-[72px]
+                                                        w-full
+                                                        items-center
+                                                        gap-5
+                                                        px-5
+                                                        py-4
+                                                        text-left
+                                                        sm:min-h-[78px]
+                                                        sm:px-8
+                                                    "
+                                                >
+                                                    <span
+                                                        className={`
+                                                            relative
+                                                            flex
+                                                            h-7
+                                                            w-7
+                                                            shrink-0
+                                                            items-center
+                                                            justify-center
+                                                            border
+                                                            transition-all
+                                                            duration-500
+                                                            ${
+                                                                active
+                                                                    ? "rotate-45 border-modura-secondary bg-modura-secondary"
+                                                                    : "border-modura-gray-300 bg-white group-hover:border-modura-secondary"
+                                                            }
+                                                        `}
+                                                    >
+                                                        <span
+                                                            className={`
+                                                                absolute
+                                                                h-px
+                                                                w-3
+                                                                ${
+                                                                    active
+                                                                        ? "bg-white"
+                                                                        : "bg-modura-primary"
+                                                                }
+                                                            `}
+                                                        />
+                                                        <span
+                                                            className={`
+                                                                absolute
+                                                                h-3
+                                                                w-px
+                                                                transition-transform
+                                                                duration-300
+                                                                ${
+                                                                    active
+                                                                        ? "scale-y-0 bg-white"
+                                                                        : "bg-modura-primary"
+                                                                }
+                                                            `}
+                                                        />
+                                                    </span>
+                                                    <span
+                                                        className={`
+                                                            flex-1
+                                                            font-heading
+                                                            text-[15px]
+                                                            font-semibold
+                                                            leading-6
+                                                            transition-all
+                                                            duration-300
+                                                            sm:text-[17px]
+                                                            ${
+                                                                active
+                                                                    ? "translate-x-1 text-modura-primary"
+                                                                    : "text-modura-gray-700 group-hover:translate-x-1 group-hover:text-modura-primary"
+                                                            }
+                                                        `}
+                                                    >
+                                                        {
+                                                            faq.question
+                                                        }
+                                                    </span>
+                                                    <ChevronDown
+                                                        size={18}
+                                                        className={`
+                                                            transition-transform
+                                                            duration-300
+                                                            ${
+                                                                active
+                                                                    ? "rotate-180 text-modura-secondary"
+                                                                    : "text-modura-gray-400"
+                                                            }
+                                                        `}
+                                                    />
+                                                </button>
+                                                {/* ANSWER */}
+                                                <div
+                                                    className={`
+                                                        grid
+                                                        transition-all
+                                                        duration-500
+                                                        ease-[cubic-bezier(0.22,1,0.36,1)]
+                                                        ${
+                                                            active
+                                                                ? "grid-rows-[1fr] opacity-100"
+                                                                : "grid-rows-[0fr] opacity-0"
+                                                        }
+                                                    `}
+                                                >
+                                                    <div
+                                                        className="
+                                                            overflow-hidden
+                                                        "
+                                                    >
+                                                        <div
+                                                            className="
+                                                                flex
+                                                                gap-5
+                                                                px-5
+                                                                pb-6
+                                                                pl-[60px]
+                                                                sm:px-8
+                                                                sm:pb-7
+                                                                sm:pl-[76px]
+                                                            "
+                                                        >
+                                                            <div
+                                                                className="
+                                                                    max-w-[760px]
+                                                                    border-l
+                                                                    border-modura-secondary
+                                                                    pl-5
+                                                                "
+                                                            >
+                                                                <p
+                                                                    className="
+                                                                        font-body
+                                                                        text-[13px]
+                                                                        leading-6
+                                                                        text-modura-gray-600
+                                                                        sm:text-sm
+                                                                        sm:leading-7
+                                                                    "
+                                                                >
+                                                                    {
+                                                                        faq.answer
+                                                                    }
+                                                                </p>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        );
+                                    }
+                                )}
+                            </div>
+                        </div>
+                    </section>
+                )}
+            {/* =================================================
+                BLOGS
+            ================================================= */}
+            {service.blogs &&
+                service.blogs.length > 0 && (
+                    <section
+                        ref={sectionRef}
+                        className="
+                            relative
+                            overflow-hidden
+                            bg-modura-off-white
+                            py-10
+                        "
+                    >
+                        <div
+                            className="
+                                relative
+                                z-10
+                                mx-auto
+                                max-w-full
+                               px-4
+    md:px-6
+    lg:px-10
+    2xl:px-16
+                            "
+                        >
+                            {/* HEADER */}
+                            <div
+                                className="
+                                    mb-8
+                                    text-center
+                                "
+                            >
+                                <div
+                                    className="
+                                        flex
+                                        items-center
+                                        justify-center
+                                        gap-3
+                                        font-body
+                                        text-xs
+                                        font-bold
+                                        uppercase
+                                        tracking-[5px]
+                                        text-modura-secondary
+                                    "
+                                >
+                                    <DraftingCompass
+                                        size={20}
+                                        strokeWidth={1.5}
+                                    />
+                                    <span>
+                                        OUR BLOG
+                                    </span>
+                                </div>
+                                <h2
+                                    className="
+                                        mt-4
+                                        font-heading
+                                        text-5xl
+                                        font-semibold
+                                        text-modura-primary
+                                        lg:text-6xl
+                                    "
+                                >
+                                    Engineering
+                                    <span
+                                        className="
+                                            ml-2
+                                            text-modura-secondary
+                                        "
+                                    >
+                                        Insights
+                                    </span>
+                                </h2>
+                            </div>
+                            {/* BLOG GRID */}
+                            <div
+                                className="
+                                    grid
+                                    gap-6
+                                    md:grid-cols-2
+                                    lg:grid-cols-3
+                                "
+                            >
+                                {service.blogs.map(
+                                    (
+                                        blog
+                                    ) => (
+                                        <motion.article
+                                            key={
+                                                blog.id
+                                            }
+                                            whileHover={{
+                                                y: -12,
+                                            }}
+                                            transition={{
+                                                duration:
+                                                    0.35,
+                                            }}
+                                            className="
+                                                blog-card
+                                                overflow-hidden
+                                                bg-white
+                                                shadow-xl
+                                            "
+                                        >
+                                            {/* IMAGE */}
+                                            <Link
+                                                href={`/blogDetail/${blog.slug}`}
+                                            >
+                                                <div
+                                                    className="
+                                                        relative
+                                                        h-[200px]
+                                                       sm:h-[230px]
+                                                        overflow-hidden
+                                                    "
+                                                >
+                                                    <Image
+                                                        src={getImageUrl(
+                                                            blog.image,
+                                                            blog.imageUrl
+                                                        )}
+                                                        alt={
+                                                            blog.title
+                                                        }
+                                                        fill
+                                                        sizes="400px"
+                                                        className="
+                                                            object-cover
+                                                            transition-transform
+                                                            duration-700
+                                                            hover:scale-110
+                                                        "
+                                                    />
+                                                </div>
+                                            </Link>
+                                            {/* CONTENT */}
+                                            <div
+                                                className="
+                                                    px-8
+                                                    py-5
+                                                "
+                                            >
+                                                {/* DATE */}
+                                                <div
+                                                    className="
+                                                        mb-2
+                                                        font-heading
+                                                        text-sm
+                                                        font-bold
+                                                        uppercase
+                                                        tracking-wide
+                                                        text-modura-black
+                                                    "
+                                                >
+                                                    {
+                                                        formatDate(
+                                                            blog.publishedAt
+                                                        )
+                                                    }
+                                                </div>
+                                                {/* TITLE */}
+                                                <h3
+                                                    className="
+                                                        font-heading
+                                                        text-[20px]
+                                                        font-semibold
+                                                        leading-tight
+                                                        text-modura-secondary
+                                                    "
+                                                >
+                                                    {
+                                                        blog.title
+                                                    }
+                                                </h3>
+                                                {blog.description && (
+            <p
+                className="
+                    mt-3
+                    font-body
+                    text-sm
+                    leading-7
+                    text-modura-black
+                "
+            >
+                {cleanDescription(blog.description, 90)}
+            </p>
+        )}
+                                                {/* BUTTON */}
+                  <button
+                                 className="
+group
+relative
+mt-3
+flex
+h-[58px]
+w-[200px]
+items-center
+justify-between
+overflow-hidden
+bg-modura-white
+px-7
+font-body
+font-semibold
+text-modura-primary
+clip-read-btn
+transition-all
+duration-500
+border-2
+border-modura-secondary
+"
+                              >
+                                 {/* Hover Layer */}
+                                 <span
+                                    className="
+absolute
+inset-0
+bg-modura-secondary
+translate-y-full
+transition-transform
+duration-500
+ease-out
+group-hover:translate-y-0
+"
+                                 />
+                                 {/* Text */}
+                                 <span
+                                    className="
+relative
+z-10
+transition-all
+duration-500
+group-hover:tracking-wider
+"
+                                 >
+                                    Read More
+                                 </span>
+                                 {/* Arrow */}
+                                 <span
+                                    className="
+relative
+z-10
+flex
+h-10
+w-12
+items-center
+justify-center
+bg-modura-secondary
+text-modura-primary
+clip-arrow-box
+transition-all
+duration-500
+group-hover:rotate-12
+group-hover:translate-x-1
+group-hover:bg-modura-primary
+group-hover:text-white
+"
+                                 >
+                                    <ArrowRight
+                                       size={18}
+                                       className="
+transition-transform
+duration-500
+group-hover:translate-x-1
+"
+                                    />
+                                 </span>
+                              </button>
+                                            </div>
+                                        </motion.article>
+                                    )
+                                )}
+                            </div>
+                        </div>
+                    </section>
+                )}
+        </main>
     );
-
+}
+// Single-page route: fetch the selected service using its slug.
+type ServiceDetailResponse = {
+  success?: boolean;
+  message?: string;
+  data?: ServiceDetail | ServiceDetail[];
+};
+export default function ServiceDetailPage() {
+  const params = useParams<{ slug: string }>();
+  const slug = params?.slug || "";
+  const [service, setService] = useState<ServiceDetail | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+  useEffect(() => {
+    if (!slug) {
+      setService(null);
+      setLoading(false);
+      return;
+    }
+    const controller = new AbortController();
+    setLoading(true);
+    setService(null);
+    setError("");
+    async function loadService() {
+      try {
+        const res = await fetch(`${apiUrl}/serviceDetail`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ slug }),
+          cache: "no-store",
+          signal: controller.signal,
+        });
+        const result: ServiceDetailResponse = await res.json();
+        if (!res.ok || !result.success || !result.data) {
+          throw new Error(result.message || "Service not found.");
+        }
+        const record = Array.isArray(result.data)
+          ? result.data.find((item) => item.slug === slug)
+          : result.data;
+        if (!record) throw new Error("Service not found.");
+        if (!controller.signal.aborted) setService(record);
+      } catch (err) {
+        if (controller.signal.aborted) return;
+        setError(err instanceof Error ? err.message : "Unable to load service.");
+      } finally {
+        if (!controller.signal.aborted) setLoading(false);
+      }
+    }
+    void loadService();
+    return () => controller.abort();
+  }, [slug]);
+  if (loading) {
+    return (
+      <main className="flex min-h-[55vh] items-center justify-center bg-modura-off-white px-4 font-body text-modura-primary">
+        Loading service details...
+      </main>
+    );
+  }
+  if (!service) {
+    return (
+      <main className="min-h-[55vh] bg-modura-off-white">
+        <Breadcrumb title="Service" />
+        <div className="flex flex-col items-center justify-center gap-5 px-4 py-14 text-center">
+          <h1 className="font-heading text-3xl font-bold text-modura-primary">Service Not Found</h1>
+          <p className="text-modura-gray-600">{error || "The requested service could not be found."}</p>
+          <Link href="/services" className="bg-modura-primary px-6 py-3 font-body text-sm text-white">Back To Services</Link>
+        </div>
+      </main>
+    );
+  }
+  return <ServiceDetailContent key={service.slug} service={service} />;
 }

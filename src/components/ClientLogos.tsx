@@ -407,7 +407,8 @@ export default function ClientLogoSlider({
         relative
         overflow-hidden
         bg-white
-        py-16
+        py-10
+        lg:py-16
       "
     >
       {/* Background */}
