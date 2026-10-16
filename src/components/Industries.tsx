@@ -216,8 +216,8 @@ OUR EXPERTISE
 <h2 className="
 mt-4
 font-heading
-text-5xl
-lg:text-6xl
+text-lg
+lg:text-5xl
 font-semibold
 text-modura-primary
 ">

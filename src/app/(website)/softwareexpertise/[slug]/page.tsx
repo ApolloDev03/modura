@@ -1418,7 +1418,8 @@ export default function SoftwareDetailPage() {
 
               </div>
 
-              <h1 className="mt-5 break-words font-heading text-[clamp(32px,5vw,70px)] font-bold leading-[1.08] tracking-tight text-modura-primary">{software.title}</h1>
+              <h1 className="mt-5 break-words font-heading text-lg
+lg:text-5xl font-bold leading-[1.08] tracking-tight text-modura-primary">{software.title}</h1>
 
               {software.shortDescription && (
 
@@ -1614,15 +1615,13 @@ export default function SoftwareDetailPage() {
 
             font-heading
 
-            text-3xl
 
             font-semibold
 
             text-modura-primary
 
-            sm:text-5xl
-
-            lg:text-6xl
+            text-lg
+lg:text-5xl
 
           "
 

@@ -481,10 +481,11 @@ export default function ClientLogoSlider({
             className="
               mt-4
               font-heading
-              text-5xl
+              text-lg
+lg:text-5xl
               font-semibold
               text-modura-primary
-              lg:text-6xl
+            
             "
           >
             Trusted By

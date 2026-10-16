@@ -1,12 +1,14 @@
 import type { Metadata } from "next";
+import type { ReactNode } from "react";
 import { Manrope, Barlow_Condensed } from "next/font/google";
+
 import "./globals.css";
+
 import PageLoader from "../../components/PageLoader";
 import TopBar from "../../components/TopBar";
 import Header from "../../components/Header";
 import GetInTouch from "../../components/GetInTouch";
 import Footer from "../../components/footer";
-
 
 const manrope = Manrope({
   variable: "--font-manrope",
@@ -27,26 +29,32 @@ export const metadata: Metadata = {
     "Architecture, Engineering, BIM, Structural Design and Outsourcing Services.",
 };
 
-export default function RootLayout({
+export default function WebsiteLayout({
   children,
 }: Readonly<{
-  children: React.ReactNode;
+  children: ReactNode;
 }>) {
   return (
-    <html
-      lang="en"
-      className={`${manrope.variable} ${barlowCondensed.variable}`}
+    <div
+      className={`
+        ${manrope.variable}
+        ${barlowCondensed.variable}
+        min-h-screen
+        font-sans
+        antialiased
+      `}
     >
-      <body className="font-sans antialiased">
+      <PageLoader />
 
-        <PageLoader />
-        <TopBar />
-        <Header />
-        {children}
+      <TopBar />
 
-        <GetInTouch />
-        <Footer />
-      </body>
-    </html>
+      <Header />
+
+      {children}
+
+      <GetInTouch />
+
+      <Footer />
+    </div>
   );
 }

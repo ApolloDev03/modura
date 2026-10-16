@@ -21,24 +21,20 @@ export default function AdminLayout({
   children: ReactNode;
 }) {
   return (
-    <html lang="en">
-      <body>
-        <AuthProvider>
-          <AdminShell>
-            {children}
-          </AdminShell>
-        </AuthProvider>
+    <div className="min-h-screen">
+      <AuthProvider>
+        <AdminShell>{children}</AdminShell>
+      </AuthProvider>
 
-        <Toaster
-          position="top-right"
-          toastOptions={{
-            duration: 3000,
-            style: {
-              fontSize: 14,
-            },
-          }}
-        />
-      </body>
-    </html>
+      <Toaster
+        position="top-right"
+        toastOptions={{
+          duration: 3000,
+          style: {
+            fontSize: 14,
+          },
+        }}
+      />
+    </div>
   );
 }

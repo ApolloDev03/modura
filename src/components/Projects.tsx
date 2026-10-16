@@ -300,7 +300,8 @@ export default function Projects({ portfolios }: ProjectsProps) {
               />
               <span>Portfolio</span>
             </div>
-            <h2 className="mt-4 font-heading text-[36px] font-semibold leading-[1.05] text-modura-primary min-[400px]:text-[42px] sm:text-5xl lg:text-6xl">
+            <h2 className="mt-4 font-heading text-lg
+lg:text-5xl font-semibold leading-[1.05] text-modura-primary">
               Our <span className="text-modura-secondary">Projects</span>
             </h2>
           </div>
@@ -379,7 +380,7 @@ export default function Projects({ portfolios }: ProjectsProps) {
                         </p>
                         <span className="h-px w-6 shrink-0 bg-modura-secondary sm:w-8" />
                       </div>
-                      <h3 className="mt-2 break-words font-heading text-[21px] font-semibold leading-[1.1] text-modura-primary sm:mt-3 sm:text-2xl lg:text-3xl">
+                      <h3 className="mt-2 break-words font-heading text-[21px] font-semibold leading-[1.1] text-modura-primary sm:mt-3 sm:text-lg lg:text-xl">
                         {item.title}
                       </h3>
                     </div>

@@ -163,9 +163,8 @@ export default function Testimonials({
               leading-[1.05]
               text-modura-primary
               min-[400px]:text-[42px]
-              sm:text-5xl
-              lg:text-[52px]
-              xl:text-6xl
+              text-lg
+lg:text-5xl
             "
           >
             Trusted By
