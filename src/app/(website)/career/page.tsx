@@ -100,7 +100,8 @@ export default function CareerSection() {
                   <span>Careers</span>
                 </div>
                 <h1
-                  className="mt-6 font-heading text-[clamp(38px,10vw,60px)] font-semibold uppercase leading-[0.95] text-modura-primary sm:text-6xl md:text-7xl lg:text-[90px] [overflow-wrap:anywhere]"
+                  className="mt-6 font-heading text-lg
+lg:text-5xl font-semibold uppercase leading-[0.95] text-modura-primary sm:text-6xl md:text-7xl lg:text-[90px] [overflow-wrap:anywhere]"
                 >
                   Build{" "}
                   <span className="text-modura-secondary">
@@ -195,7 +196,8 @@ export default function CareerSection() {
                   <span>Opportunities</span>
                 </div>
                 <h2
-                  className="mt-5 break-words font-heading text-[clamp(32px,8.5vw,48px)] font-semibold uppercase leading-[0.98] text-modura-primary sm:text-5xl md:text-7xl"
+                  className="mt-5 break-words  font-heading text-[clamp(32px,8.5vw,48px)] font-semibold uppercase leading-[0.98] text-modura-primary text-lg
+lg:text-6xl"
                 >
                   Current
                   <span className="ml-3 text-modura-secondary">

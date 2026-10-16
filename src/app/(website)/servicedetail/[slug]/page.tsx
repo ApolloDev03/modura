@@ -380,8 +380,7 @@ function cleanDescription(
                                     leading-[0.9]
                                     tracking-[-0.055em]
                                     text-modura-primary
-                                    sm:text-[64px]
-                                    lg:text-[clamp(4rem,6vw,6.25rem)]
+                                    sm:text-[50px]
                                 "
                             >
                                 {service.title}
@@ -621,13 +620,13 @@ function cleanDescription(
                                             mt-5
                                             text-center
                                             font-heading
-                                            text-4xl
+                                            
                                             font-bold
                                             leading-[0.92]
                                             tracking-[-0.045em]
                                             text-modura-primary
-                                            sm:text-5xl
-                                            lg:text-6xl
+                                            text-lg
+lg:text-5xl
                                         "
                                     >
                                         Questions
@@ -924,10 +923,11 @@ function cleanDescription(
                                     className="
                                         mt-4
                                         font-heading
-                                        text-5xl
+                                       
                                         font-semibold
                                         text-modura-primary
-                                        lg:text-6xl
+                                        text-lg
+lg:text-5xl
                                     "
                                 >
                                     Engineering

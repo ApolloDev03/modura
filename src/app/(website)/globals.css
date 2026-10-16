@@ -689,7 +689,7 @@ clip-path:polygon(
 
 .clip-breadcrumb-parent {
   clip-path: polygon(
-    8% 0,
+    5% 0,
     100% 0,
     92% 100%,
     0 100%
@@ -698,9 +698,9 @@ clip-path:polygon(
 
 .clip-breadcrumb-current {
   clip-path: polygon(
-    8% 0,
+    5% 0,
     100% 0,
-    92% 100%,
+    95% 100%,
     0 100%
   );
 }

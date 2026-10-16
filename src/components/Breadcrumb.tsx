@@ -33,13 +33,13 @@ export default function Breadcrumb({
       <div className="relative z-10 mx-auto flex min-h-[240px] w-full max-w-full items-center px-4 py-9 sm:min-h-[290px] sm:py-12 md:px-6 lg:min-h-[360px] lg:px-10 lg:py-16 2xl:px-16">
         <div className="w-full min-w-0">
           {/* SMALL LABEL */}
-          <div className="flex min-w-0 items-center gap-2 font-body text-[9px] font-bold uppercase tracking-[1.5px] text-modura-secondary sm:gap-4 sm:text-[10px] sm:tracking-[4px]">
+          <div className="flex min-w-0 items-center gap-2 font-body text-[10px] font-bold uppercase tracking-[1.5px] text-modura-secondary sm:gap-4 sm:text-[10px] sm:tracking-[4px]">
             <span className="h-[2px] w-8 shrink-0 bg-modura-secondary sm:w-14" />
             <span className="break-words">Architecture / Engineering</span>
           </div>
 
           {/* TITLE */}
-          <h1 className="mt-4 max-w-3xl break-words font-heading text-[clamp(32px,8vw,48px)] font-semibold leading-[1.05] text-modura-primary sm:mt-6 sm:text-6xl sm:leading-[0.95] lg:text-8xl lg:leading-[0.88] [overflow-wrap:anywhere]">
+          <h1 className="mt-4 max-w-3xl break-words font-heading  font-semibold leading-[1.05] text-modura-primary sm:mt-6 sm:text-5xl [overflow-wrap:anywhere]">
             {title}
           </h1>
 
@@ -51,7 +51,7 @@ export default function Breadcrumb({
             >
               <span className="pointer-events-none absolute inset-[4px] z-0 border border-white/20 opacity-0 transition-all duration-500 group-hover:inset-[7px] group-hover:opacity-100" />
               <span className="absolute left-0 top-0 z-10 h-full w-[3px] origin-bottom scale-y-0 bg-modura-secondary transition-transform duration-500 ease-out group-hover:scale-y-100" />
-              <span className="relative z-20 font-heading text-sm font-semibold transition-all duration-500 group-hover:-translate-x-1 group-hover:text-modura-secondary sm:text-lg sm:group-hover:-translate-x-2">
+              <span className="relative z-20 font-heading text-sm font-semibold transition-all duration-500 group-hover:-translate-x-1 group-hover:text-modura-secondary sm:text-[16px] sm:group-hover:-translate-x-2">
                 Home
               </span>
               <span className="relative z-20 ml-2 flex h-5 w-5 items-center justify-center border border-white/30 transition-all duration-500 group-hover:translate-x-1 group-hover:border-modura-secondary group-hover:bg-modura-secondary group-hover:text-white sm:ml-3 sm:h-6 sm:w-6 sm:group-hover:translate-x-2">
@@ -68,7 +68,7 @@ export default function Breadcrumb({
               <>
                 <Link
                   href={parentHref}
-                  className="flex min-h-10 max-w-full items-center break-words bg-white px-3 font-heading text-sm font-semibold uppercase tracking-[1px] text-modura-gray-600 shadow-sm transition-all duration-300 hover:text-modura-secondary clip-breadcrumb-parent sm:min-h-11 sm:px-5 sm:text-lg sm:tracking-[2px] [overflow-wrap:anywhere]"
+                  className="flex min-h-10 max-w-full items-center break-words bg-white px-3 font-heading text-sm font-semibold uppercase tracking-[1px] text-modura-gray-600 shadow-sm transition-all duration-300 hover:text-modura-secondary clip-breadcrumb-parent sm:min-h-11 sm:px-5 sm:text-[15px] sm:tracking-[2px] [overflow-wrap:anywhere]"
                 >
                   {parent}
                 </Link>
@@ -78,7 +78,7 @@ export default function Breadcrumb({
               </>
             )}
 
-            <div aria-current="page" className="flex min-h-10 max-w-full min-w-0 items-center break-words bg-modura-secondary px-3 font-heading text-sm font-bold uppercase tracking-[1px] text-white shadow-sm clip-breadcrumb-current sm:min-h-11 sm:px-6 sm:text-lg sm:tracking-[2px] [overflow-wrap:anywhere]">
+            <div aria-current="page" className="flex min-h-10 max-w-full min-w-0 items-center break-words bg-modura-secondary px-3 font-heading text-sm font-bold uppercase tracking-[1px] text-white shadow-sm clip-breadcrumb-current sm:min-h-11 sm:px-6 sm:text-[15px] sm:tracking-[2px] [overflow-wrap:anywhere]">
               {title}
             </div>
           </nav>
