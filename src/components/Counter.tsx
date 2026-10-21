@@ -1,0 +1,128 @@
+
+"use client";
+
+import { useEffect, useRef, useState } from "react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+gsap.registerPlugin(ScrollTrigger);
+
+interface CounterData {
+  projectCompleted?: number;
+  happyClient?: number;
+  qualifiedEngineers?: number;
+  yearsExperience?: number;
+  countriesServed?: number;
+}
+
+interface StatsCounterProps {
+  counter?: CounterData | null;
+}
+
+interface Stat {
+  value: number;
+  title: string;
+  desc: string;
+}
+
+function CounterNumber({ value }: { value: number }) {
+  const [count, setCount] = useState(0);
+
+  useEffect(() => {
+    let start = 0;
+    const duration = 2000;
+    const increment = value / (duration / 20);
+
+    if (value <= 0) {
+      setCount(0);
+      return;
+    }
+
+    const timer = setInterval(() => {
+      start += increment;
+
+      if (start >= value) {
+        setCount(value);
+        clearInterval(timer);
+      } else {
+        setCount(Math.floor(start));
+      }
+    }, 20);
+
+    return () => clearInterval(timer);
+  }, [value]);
+
+  return <>{count.toLocaleString()}</>;
+}
+
+export default function StatsCounter({ counter }: StatsCounterProps) {
+  const sectionRef = useRef<HTMLDivElement>(null);
+
+  const stats: Stat[] = [
+    { value: Number(counter?.projectCompleted ?? 0), title: "Projects Completed", desc: "Commercial & Industrial" },
+    { value: Number(counter?.happyClient ?? 0), title: "Happy Clients", desc: "Worldwide Partners" },
+    { value: Number(counter?.qualifiedEngineers ?? 0), title: "Qualified Engineers", desc: "BIM & Structural Team" },
+    { value: Number(counter?.yearsExperience ?? 0), title: "Years Experience", desc: "Engineering Excellence" },
+    { value: Number(counter?.countriesServed ?? 0), title: "Countries Served", desc: "Global Delivery" },
+  ];
+
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      gsap.fromTo(
+        ".stat-panel",
+        { opacity: 0, y: 70, scale: 0.92 },
+        {
+          opacity: 1,
+          y: 0,
+          scale: 1,
+          duration: 1,
+          stagger: 0.15,
+          ease: "power3.out",
+          scrollTrigger: {
+            trigger: sectionRef.current,
+            start: "top 80%",
+            toggleActions: "play none none none",
+          },
+        }
+      );
+
+      ScrollTrigger.refresh();
+    }, sectionRef);
+
+    return () => ctx.revert();
+  }, []);
+
+  return (
+    <section ref={sectionRef} className="relative overflow-hidden bg-modura-primary py-16">
+      <div className="absolute inset-0 scale-110 bg-[url('https://images.unsplash.com/photo-1503387762-592deb58ef4e?w=1600&q=90')] bg-cover bg-center opacity-30" />
+
+      <div className="relative z-10 mx-auto max-w-full px-4 md:px-6 lg:grid-cols-2 lg:gap-12 lg:px-10 xl:gap-16 2xl:px-16">
+        <div className="grid grid-cols-1 items-center gap-6 sm:grid-cols-2 lg:grid-cols-5">
+          {stats.map((item, index) => (
+            <div
+              key={item.title}
+              className={`stat-panel group relative h-[210px] overflow-hidden border border-white/20 bg-white/10 p-7 backdrop-blur-xl will-change-transform transition-all duration-700 hover:-translate-y-5 hover:bg-white/20 ${index % 2 === 0 ? "lg:mt-0" : "lg:mt-12"}`}
+            >
+              <div className="absolute left-0 top-0 h-[2px] w-0 bg-modura-secondary-light transition-all duration-700 group-hover:w-full" />
+
+              <div className="absolute right-0 top-0 h-0 w-[2px] bg-modura-secondary-light transition-all duration-700 group-hover:h-full" />
+
+              <h3 className="relative font-heading text-6xl font-bold text-white transition-all duration-500 group-hover:text-modura-secondary-light">
+                <CounterNumber value={item.value} />
+                <span className="text-modura-secondary-light">+</span>
+              </h3>
+
+              <div className="mt-5 h-[2px] w-10 bg-modura-secondary-light transition-all duration-500 group-hover:w-20" />
+
+              <p className="mt-5 font-body text-xs uppercase leading-5 tracking-[3px] text-white">{item.title}</p>
+
+              <p className="mt-2 font-body text-[11px] text-white/60">{item.desc}</p>
+
+              <div className="absolute bottom-0 left-0 h-10 w-10 border-b border-l border-modura-secondary-light" />
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
