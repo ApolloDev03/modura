@@ -1,8 +1,3 @@
-/* ============================================================
-   Shared types for the MVNL admin panel
-   ============================================================ */
-
-/* ---------- API responses (backend helpers/response.js) ---------- */
 
 export interface ApiResponse<T> {
   success: boolean;

@@ -12,7 +12,7 @@ import BlogSection from "../../components/BlogSection";
 
 import api from "@/lib/api";
 import { apiUrl } from "./config";
-import { buildPageMetadata, extractJsonLd, getPageSeo } from "@/components/pageSeo";
+import { buildPageMetadata, extractJsonLd, getPageSeo } from "@/lib/pageSeo";
 
 
 // Always generate fresh server HTML and metadata.

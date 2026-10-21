@@ -219,7 +219,11 @@ export default function InquiryPage() {
                   uppercase
                   leading-none
                   text-modura-primary
+<<<<<<< HEAD
+                  lg:text-3xl
+=======
                   md:text-5xl
+>>>>>>> origin/main
                 "
               >
                 Tell Us About Your Project

@@ -2,7 +2,7 @@ import axios, { AxiosError, type AxiosResponse, type InternalAxiosRequestConfig 
 import type { ApiErrorBody, FieldErrors } from '@/types';
 
 export const TOKEN_KEY = 'mvnl_admin_token';
-export const API_URL = (process.env.NEXT_PUBLIC_API_URL || 'https://mvnl.salexo.co.in/api/v1').replace(/\/+$/, '');
+export const API_URL = (process.env.NEXT_PUBLIC_API_URL || 'https://admin.mvnlengineering.in/api/v1').replace(/\/+$/, '');
 
 export const getToken = (): string | null => (typeof window === 'undefined' ? null : window.localStorage.getItem(TOKEN_KEY));
 export const setToken = (t: string): void => window.localStorage.setItem(TOKEN_KEY, t);

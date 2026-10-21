@@ -221,17 +221,9 @@ sustainable and future-ready spaces.
         title="Learn More"
     />
 </div>
-
-
 </div>
-
-
 </div>
-
-
 </div>
-
-
 </section>
 
 )
