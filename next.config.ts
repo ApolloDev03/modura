@@ -1,11 +1,6 @@
-<<<<<<< HEAD
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-=======
-/** @type {import('next').NextConfig} */
-const nextConfig = {
->>>>>>> origin/main
   images: {
     remotePatterns: [
       {
@@ -18,7 +13,6 @@ const nextConfig = {
       },
       {
         protocol: "https",
-<<<<<<< HEAD
         hostname: "admin.mvnlengineering.in",
         pathname: "/uploads/**",
       },
@@ -29,8 +23,6 @@ const nextConfig = {
       },
       {
         protocol: "https",
-=======
->>>>>>> origin/main
         hostname: "mvnl.salexo.co.in",
         pathname: "/uploads/**",
       },
@@ -38,8 +30,4 @@ const nextConfig = {
   },
 };
 
-<<<<<<< HEAD
 export default nextConfig;
-=======
-export default nextConfig;
->>>>>>> origin/main
