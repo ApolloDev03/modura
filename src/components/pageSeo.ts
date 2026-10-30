@@ -1,16 +1,9 @@
 
 import "server-only";
 import type { Metadata } from "next";
+import { apiUrl } from "@/app/(website)/config";
 
-const API_BASE = (
-  process.env.NEXT_PUBLIC_API_URL ||
-  "https://mvnl.salexo.co.in/api/v1"
-).replace(/\/+$/, "");
 
-const SITE_URL = (
-  process.env.NEXT_PUBLIC_SITE_URL ||
-  "https://mvnl.salexo.co.in"
-).replace(/\/+$/, "");
 
 export type SeoPageKey =
   | "home"
@@ -114,7 +107,7 @@ function getCanonical(html: string): string {
 
 function absoluteUrl(url: string): string {
   try {
-    return new URL(url, SITE_URL).toString();
+    return new URL(url, apiUrl).toString();
   } catch {
     return "";
   }
@@ -136,7 +129,7 @@ export async function getPageSeo(
   pageKey: SeoPageKey
 ): Promise<SeoData | null> {
   try {
-    const response = await fetch(`${API_BASE}/seopageKey`, {
+    const response = await fetch(`${apiUrl}/seopageKey`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
